@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+  <meta name="theme-color" content="#1a1f2e">
+  <title>Rezumat Manager Transport Marfă</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    :root {
+      --sb: #1a1f2e;
+      --acc: #2563eb;
+      --bg: #f8f9fa;
+      --txt: #1e293b;
+      --bdr: #e2e8f0;
+      --h1c: #1e3a5f;
+      --h2c: #1e40af;
+      --h3c: #1d4ed8;
+      --mark: #fef08a;
+      --markcur: #f97316;
+      --nou: #1a56db;
+      --sw: 300px;
+      --topbar: 56px;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      line-height: 1.75;
+      display: flex;
+      min-height: 100vh
+    }
+
+    #sb {
+      width: var(--sw);
+      min-width: var(--sw);
+      background: var(--sb);
+      color: #c9d1e0;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+      overflow: hidden;
+    }
+
+    #sb-head {
+      padding: 14px 14px 10px;
+      background: rgba(0, 0, 0, .28);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      flex-shrink: 0
+    }
+
+    #sb-logo {
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    #srch-wrap {
+      position: relative;
+      margin-bottom: 5px
+    }
+
+    #srch {
+      width: 100%;
+      padding: 11px 42px 11px 14px;
+      background: rgba(255, 255, 255, .11);
+      border: 1.5px solid rgba(255, 255, 255, .18);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: background .18s, border-color .18s;
+    }
+
+    #srch::placeholder {
+      color: rgba(255, 255, 255, .38)
+    }
+
+    #srch:focus {
+      background: rgba(255, 255, 255, .17);
+      border-color: #4a9eff
+    }
+
+    #srch-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255, 255, 255, .5);
+      font-size: 17px;
+      border-radius: 0 10px 10px 0;
+      transition: color .15s;
+    }
+
+    #srch-btn:hover {
+      color: #fff
+    }
+
+    #srch-info {
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, .42);
+      min-height: 17px;
+      padding: 1px 2px 3px;
+      text-align: right
+    }
+
+    #srch-nav {
+      display: none;
+      gap: 6px;
+      margin-top: 2px
+    }
+
+    #srch-nav button {
+      flex: 1;
+      padding: 10px 4px;
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 9px;
+      color: rgba(255, 255, 255, .8);
+      font-size: 13px;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      transition: background .15s;
+    }
+
+    #srch-nav button:active {
+      background: rgba(255, 255, 255, .24)
+    }
+
+    #toc {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 0 12px;
+      overscroll-behavior: contain
+    }
+
+    #toc::-webkit-scrollbar {
+      width: 4px
+    }
+
+    #toc::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .14);
+      border-radius: 4px
+    }
+
+    #toc ul {
+      list-style: none
+    }
+
+    #toc a {
+      display: flex;
+      align-items: center;
+      color: #c9d1e0;
+      text-decoration: none;
+      font-size: 13px;
+      padding: 7px 14px;
+      border-left: 2px solid transparent;
+      transition: background .12s, color .12s, border-color .12s;
+      line-height: 1.35;
+      min-height: 44px;
+    }
+
+    #toc a:active {
+      background: rgba(255, 255, 255, .14)
+    }
+
+    #toc a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .08);
+      border-left-color: #4a9eff
+    }
+
+    #toc .t1 a {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      padding: 9px 14px;
+      min-height: 46px;
+      border-top: 1px solid rgba(255, 255, 255, .07);
+      margin-top: 4px;
+    }
+
+    #toc .t1:first-child a {
+      border-top: none;
+      margin-top: 0
+    }
+
+    #toc .t2 a {
+      padding-left: 28px;
+      color: #a5b4fc;
+      font-weight: 600;
+      font-size: 12.5px;
+      min-height: 42px;
+    }
+
+    #toc .t3 a {
+      padding-left: 42px;
+      color: #94a3b8;
+      font-size: 12px;
+      min-height: 40px;
+    }
+
+    #ov {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .58);
+      z-index: 150;
+      backdrop-filter: blur(2px);
+    }
+
+    #ov.show {
+      display: block
+    }
+
+    #main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column
+    }
+
+    #top {
+      position: sticky;
+      top: 0;
+      height: var(--topbar);
+      background: rgba(248, 249, 250, .97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--bdr);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    #menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--txt);
+      padding: 0;
+      border-radius: 9px;
+      font-size: 24px;
+      min-width: 44px;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #top-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--h1c);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    #cnt {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 32px 24px 100px;
+      width: 100%
+    }
+
+    .ch1 {
+      font-size: clamp(18px, 3.5vw, 25px);
+      font-weight: 800;
+      color: var(--h1c);
+      margin: 44px 0 16px;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #dbeafe, #eff6ff);
+      border-radius: 12px;
+      border-left: 5px solid var(--acc);
+      scroll-margin-top: calc(var(--topbar)+10px);
+      line-height: 1.3;
+    }
+
+    .ch1:first-child {
+      margin-top: 0
+    }
+
+    h2 {
+      font-size: clamp(15px, 2.8vw, 19px);
+      font-weight: 700;
+      color: var(--h2c);
+      margin: 30px 0 12px;
+      padding-bottom: 7px;
+      border-bottom: 2px solid #dbeafe;
+      scroll-margin-top: calc(var(--topbar)+10px);
+      line-height: 1.35;
+    }
+
+    h3 {
+      font-size: clamp(14px, 2.3vw, 16px);
+      font-weight: 700;
+      color: var(--h3c);
+      margin: 22px 0 9px;
+      scroll-margin-top: calc(var(--topbar)+10px);
+    }
+
+    p {
+      margin-bottom: 11px;
+      text-align: justify;
+      hyphens: auto
+    }
+
+    ul,
+    ol {
+      margin: 8px 0 13px 22px
+    }
+
+    li {
+      margin-bottom: 6px;
+      line-height: 1.6
+    }
+
+    .obs {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin: 12px 0;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .obs strong {
+      color: #92400e
+    }
+
+    .attn {
+      background: #fef2f2;
+      border-left: 4px solid #ef4444;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    .attn strong {
+      color: #991b1b
+    }
+
+    .tbl {
+      overflow-x: auto;
+      margin: 14px 0;
+      -webkit-overflow-scrolling: touch
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13.5px;
+      min-width: 300px
+    }
+
+    th,
+    td {
+      border: 1px solid var(--bdr);
+      padding: 9px 12px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.5
+    }
+
+    th {
+      background: var(--acc);
+      color: #fff;
+      font-weight: 600
+    }
+
+    tr:nth-child(even) td {
+      background: #f1f5f9
+    }
+
+    .nou {
+      color: var(--nou);
+      font-weight: 500
+    }
+
+    .nou-b {
+      color: var(--nou)
+    }
+
+    mark {
+      background: var(--mark);
+      border-radius: 2px;
+      padding: 0 2px
+    }
+
+    mark.cur {
+      background: var(--markcur);
+      color: #fff;
+      border-radius: 3px
+    }
+
+    #btt {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      background: var(--acc);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, .45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 90;
+      transition: transform .15s;
+    }
+
+    #btt.v {
+      display: flex
+    }
+
+    #btt:active {
+      transform: scale(.9)
+    }
+
+    @media(max-width:768px) {
+      #sb {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        transition: transform .26s cubic-bezier(.4, 0, .2, 1);
+        width: min(88vw, 340px);
+        min-width: unset;
+      }
+
+      #sb.open {
+        transform: translateX(0)
+      }
+
+      #toc a {
+        font-size: 14px;
+        min-height: 48px;
+        padding: 8px 14px
+      }
+
+      #toc .t1 a {
+        font-size: 14px;
+        min-height: 50px;
+        padding: 10px 14px
+      }
+
+      #toc .t2 a {
+        font-size: 13.5px;
+        min-height: 46px;
+        padding-left: 26px
+      }
+
+      #toc .t3 a {
+        font-size: 13px;
+        min-height: 44px;
+        padding-left: 40px
+      }
+
+      #srch {
+        font-size: 16px;
+        padding: 13px 44px 13px 14px
+      }
+
+      #srch-btn {
+        width: 48px
+      }
+
+      #srch-nav button {
+        min-height: 48px;
+        font-size: 14px
+      }
+
+      #menu-btn {
+        display: flex
+      }
+
+      #cnt {
+        padding: 20px 16px 90px
+      }
+
+      #top {
+        padding: 0 14px 0 8px
+      }
+
+      .ch1 {
+        padding: 14px 16px;
+        margin: 32px 0 14px
+      }
+    }
+
+    @media(min-width:769px) {
+      #menu-btn {
+        display: none !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Buton pentru întoarcerea la Index -->
+  <div style="position:fixed; top:12px; right:12px; z-index:9999;">
+    <a href="index.html"
+      style="display:flex; align-items:center; gap:6px; background:#0a2540; color:#fff; text-decoration:none; padding:8px 16px; border-radius:40px; font-size:13px; font-weight:600; font-family:sans-serif; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.2s;">
+      🏠 Index
+    </a>
+  </div>
+  <div id="ov" onclick="closeSb()"></div>
+  <nav id="sb" aria-label="Cuprins">
+    <div id="sb-head">
+      <div id="sb-logo">📦 Rezumat Transport Marfă</div>
+      <div id="srch-wrap">
+        <input id="srch" type="search" inputmode="search" placeholder="Caută: CMR, ADR, debitor…" autocomplete="off"
+          autocorrect="off" autocapitalize="off" spellcheck="false">
+        <button id="srch-btn" aria-label="Caută">🔍</button>
+      </div>
+      <div id="srch-info"></div>
+      <div id="srch-nav">
+        <button onclick="navS(-1)">▲ Anterior</button>
+        <button onclick="navS(1)">▼ Următor</button>
+      </div>
+    </div>
+    <div id="toc">
+      <ul>
+        <li class="t1"><a href="#c1">1. Clasificarea transporturilor</a></li>
+        <li class="t1"><a href="#c2">2. Operator transport rutier</a></li>
+        <li class="t2"><a href="#c2a">Cerințe de acces + excepții complete</a></li>
+        <li class="t2"><a href="#c2b">Buna reputație — fapte grave</a></li>
+        <li class="t2"><a href="#c2c">Capacitate financiară</a></li>
+        <li class="t2"><a href="#c2d">Competență profesională</a></li>
+        <li class="t2"><a href="#c2e">Licența comunitară</a></li>
+        <li class="t2"><a href="#c2f">Mărfuri periculoase — ARR</a></li>
+        <li class="t1"><a href="#c3">3. Transport în cont propriu</a></li>
+        <li class="t1"><a href="#c4">4. Documente obligatorii</a></li>
+        <li class="t2"><a href="#c4a">La sediu</a></li>
+        <li class="t2"><a href="#c4b">La bordul autovehiculului</a></li>
+        <li class="t1"><a href="#c5">5. Obligații operatori</a></li>
+        <li class="t2"><a href="#c5a">Licență / certificat</a></li>
+        <li class="t2"><a href="#c5b">Tahograf și limitator</a></li>
+        <li class="t2"><a href="#c5c">Arimare încărcătură</a></li>
+        <li class="t2"><a href="#c5d">Vehicule rutiere</a></li>
+        <li class="t2"><a href="#c5e">Personal</a></li>
+        <li class="t1"><a href="#c6">6. Scrisoarea CMR</a></li>
+        <li class="t1"><a href="#c7">7. Tahograf și limitator viteză</a></li>
+        <li class="t2"><a href="#c7a">Cartele tahografice</a></li>
+        <li class="t2"><a href="#c7b">Digital vs. analog</a></li>
+        <li class="t1"><a href="#c8">8. Timpi conducere și odihnă</a></li>
+        <li class="t2"><a href="#c8t">Tabel sinoptic</a></li>
+        <li class="t2"><a href="#c8d">Drept social — lucrător mobil</a></li>
+        <li class="t1"><a href="#c9">9. Transport agabaritic</a></li>
+        <li class="t1"><a href="#c10">10. RNTR</a></li>
+        <li class="t1"><a href="#c11">11. ADR — Mărfuri periculoase</a></li>
+        <li class="t1"><a href="#c12">12. Carnet TIR și ATP</a></li>
+        <li class="t1"><a href="#c13">13. Cabotaj și autorizații internaționale</a></li>
+        <li class="t1"><a href="#c14">14. Calificarea conducătorilor auto</a></li>
+        <li class="t1"><a href="#c15">15. Categorii vehicule și norme Euro</a></li>
+        <li class="t1"><a href="#c16">16. INCOTERMS</a></li>
+        <li class="t1"><a href="#c17">17. Mărfuri speciale</a></li>
+        <li class="t1"><a href="#c18">18. Management și marketing</a></li>
+        <li class="t1"><a href="#c19">19. Drept civil și comercial</a></li>
+        <li class="t2"><a href="#c19a">Titluri de credit</a></li>
+        <li class="t2"><a href="#c19b">Contracte în transport</a></li>
+        <li class="t1"><a href="#c20">20. Gestiune financiară</a></li>
+        <li class="t2"><a href="#c20a">Asigurări în transport</a></li>
+        <li class="t2"><a href="#c20b">Calculul prețului de cost</a></li>
+        <li class="t1"><a href="#c21">21. Contabilitate</a></li>
+        <li class="t1"><a href="#c22">22. Drept fiscal</a></li>
+        <li class="t2"><a href="#c22a">TVA în transport</a></li>
+        <li class="t2"><a href="#c22b">Accize</a></li>
+        <li class="t2"><a href="#c22c">Impozit vehicule</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="main">
+    <header id="top">
+      <button id="menu-btn" onclick="openSb()" aria-label="Deschide meniu">☰</button>
+      <div id="top-title">Rezumat complet — Manager Transport Marfă</div>
+    </header>
+    <div id="cnt">
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 1: CLASIFICAREA TRANSPORTURILOR RUTIERE           -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c1">1. Clasificarea transporturilor rutiere</h1>
+      <p><strong>Din punct de vedere al ariei de desfășurare:</strong> național / internațional.</p>
+      <p><strong>Din punct de vedere al caracterului comercial:</strong> contra cost / în cont propriu.</p>
+      <p><strong>Tipuri transport mărfuri:</strong> mărfuri generale, perisabile, periculoase, deșeuri, animale vii,
+        agabaritic.</p>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 2: OPERATOR DE TRANSPORT RUTIER (CONTRA COST)      -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c2">2. Operator de transport rutier (contra cost)</h1>
+
+      <h2 id="c2a">Cerințe de acces</h2>
+      <p>Pentru a avea acces la ocupația de operator de transport rutier, întreprinderea trebuie să îndeplinească
+        cumulativ următoarele condiții (art. 9 OG 27/2011):</p>
+      <ul>
+        <li><strong>sediu real și stabil</strong> pe teritoriul României;</li>
+        <li><strong>bună reputație</strong> – a managerului și a întreprinderii;</li>
+        <li><strong>capacitate financiară</strong> adecvată numărului de vehicule;</li>
+        <li><strong>competență profesională</strong> – manager de transport cu certificat valabil.</li>
+      </ul>
+
+      <h3>Condiția privind sediul</h3>
+      <p>Se consideră îndeplinită dacă întreprinderea:</p>
+      <ul>
+        <li>are sediul pe teritoriul României, unde păstrează documentele de lucru (contracte, documente contabile, de
+          personal, tahograf, cabotaj);</li>
+        <li>dispune de unul sau mai multe vehicule înmatriculate în România;</li>
+        <li>desfășoară operațiunile de transport efectiv și permanent cu echipamente tehnice corespunzătoare, într-un
+          centru de exploatare situat în România.</li>
+      </ul>
+
+      <h2 id="c2b">Excepții de la accesul la profesie (lista completă)</h2>
+      <p>Prevederile privind accesul la ocupația de operator de transport <strong>nu se aplică</strong> întreprinderilor
+        angajate exclusiv în următoarele tipuri de transport rutier național (art. 11 OG 27/2011):</p>
+      <ol>
+        <li>transporturi poștale în cadrul unui serviciu universal;</li>
+        <li>transportul necomercial de vehicule defecte sau avariate;</li>
+        <li>transportul de mărfuri în regim de taxi;</li>
+        <li>transportul de medicamente, aparate și echipamente medicale necesare în situații de urgență (catastrofe
+          naturale);</li>
+        <li>transporturi funerare;</li>
+        <li>deplasări efectuate cu <strong>vehicule istorice</strong> (fabricație cu cel puțin 30 de ani în urmă);</li>
+        <li>transporturi cu vehicule special destinate serviciilor medicale de urgență;</li>
+        <li>transporturi cu vehicule ale <strong>forțelor armate</strong>, protecție civile, pompieri, ordine publică;
+        </li>
+        <li>transporturi cu vehicule cu viteza maximă autorizată ≤ <strong>40 km/h</strong>;</li>
+        <li>transporturi cu vehicule de <strong>încercări</strong> pentru îmbunătățire tehnologică;</li>
+        <li>transporturi cu <strong>tractoare agricole sau forestiere</strong>;</li>
+        <li>transporturi în interes personal ale persoanelor fizice cu vehicule proprii;</li>
+        <li>transporturi cu autovehicule construite pentru cel mult <strong>9 persoane</strong>, inclusiv conducătorul
+          auto;</li>
+        <li>transporturi necomerciale de <strong>lapte și stupi de albine</strong>;</li>
+        <li>transportul școlar cu autobuze inscripționate „transport școlar”.</li>
+      </ol>
+
+      <h2 id="c2c">Buna reputație — fapte grave care duc la pierderea ei</h2>
+      <p>Conform <strong>Anexei IV din Regulamentul CE nr. 1071/2009</strong>, printre încălcările grave care duc la
+        declararea managerului ca inapt:</p>
+      <ul>
+        <li>depășirea duratei maxime de conducere zilnică/săptămânală cu <strong>peste 25%</strong>;</li>
+        <li>depășirea, pe parcursul unei zile, a limitei maxime de conducere cu <strong>50% sau mai mult</strong> fără
+          pauză sau repaus de cel puțin 4,5 ore;</li>
+        <li>lipsa tahografului sau utilizarea unui <strong>dispozitiv fraudulos</strong> pentru modificarea
+          înregistrărilor;</li>
+        <li><strong>falsificarea</strong> foilor de înregistrare sau a datelor descărcate de pe tahograf;</li>
+        <li>efectuarea de transporturi fără <strong>licență comunitară</strong> valabilă;</li>
+        <li>conducerea cu un <strong>permis de conducere nevalabil</strong> sau fără <strong>certificat de calificare
+            profesională (CPC)</strong>;</li>
+        <li>efectuarea transportului cu un vehicul fără <strong>ITP valabil</strong>, prezentând pericol iminent;</li>
+        <li>depășirea maselor maxime admise cu <strong>≥ 20%</strong> (pentru vehicule > 12 tone) sau ≥ 25% (pentru
+          vehicule ≤ 12 tone);</li>
+        <li>transportul de mărfuri periculoase fără documentele sau vehiculele ADR corespunzătoare, punând în pericol
+          vieți sau mediul;</li>
+        <li>operațiuni de <strong>cabotaj ilegale</strong>.</li>
+      </ul>
+      <div class="attn"><strong>Reabilitare:</strong> Managerul declarat inapt se poate reabilita după cel puțin
+        <strong>1 an</strong> de la pierderea bunei reputații, dacă promovează un nou examen de competență profesională.
+        Certificatul de competență profesională <strong>își pierde valabilitatea în toate statele membre</strong> până
+        la reabilitare.
+      </div>
+
+      <h2 id="c2d">Capacitatea financiară</h2>
+      <ul>
+        <li><strong>9.000 EUR</strong> pentru primul vehicul utilizat (MMA &gt; 3,5 t);</li>
+        <li><strong>5.000 EUR</strong> pentru fiecare vehicul suplimentar (MMA &gt; 3,5 t);</li>
+        <li><strong>900 EUR</strong> pentru fiecare vehicul suplimentar (MMA între 2,5 și 3,5 t).</li>
+      </ul>
+      <p>Se demonstrează prin conturi anuale certificate de <strong>auditor financiar/expert independent</strong>.
+        Alternativ: <strong>garanție bancară sau asigurare de răspundere profesională</strong>.</p>
+      <div class="obs"><strong>Obs.:</strong> Întreprinderea nu trebuie să fie în stare de faliment, insolvență fără
+        plan aprobat, dizolvare sau lichidare.</div>
+
+      <h2 id="c2e">Competența profesională — obligații periodice</h2>
+      <ul>
+        <li>Managerul de transport trebuie să urmeze cursuri de pregătire profesională periodică la intervale de cel
+          mult <strong>10 ani</strong>, finalizate cu o evaluare de actualizare a cunoștințelor.</li>
+        <li>Dacă nu a mai condus o întreprindere de transport în ultimii <strong>5 ani</strong> — obligat să urmeze
+          cursuri de pregătire periodică.</li>
+        <li>O persoană fizică poate fi manager la o singură întreprindere, sau la maximum <strong>4
+            întreprinderi</strong> cu un parc de maxim <strong>50 de vehicule combinate</strong> (dacă este persoană
+          externă desemnată).</li>
+        <li>Orice modificare privind managerul de transport se comunică la A.R.R. în cel mult <strong>15 zile</strong>.
+        </li>
+      </ul>
+
+      <h2 id="c2f">Licența comunitară și copiile conforme</h2>
+      <ul>
+        <li>Valabilitate licență comunitară: <strong>10 ani</strong> — la sediul operatorului.</li>
+        <li>Copii conforme: valabilitate <strong>minim 1 an</strong> — la bordul autovehiculelor.</li>
+        <li>Documente nominale, <strong>netransmisibile</strong>, personalizate cu nr. de înmatriculare.</li>
+        <li>Nr. maxim copii conforme = nr. vehicule pentru care e îndeplinită <strong>condiția de capacitate
+            financiară</strong>.</li>
+      </ul>
+      <p><strong>Documente necesare pentru obținerea licenței comunitare:</strong></p>
+      <ul>
+        <li>document doveditor privind deținerea sediului;</li>
+        <li>document privind asigurarea întreținerii tehnice a vehiculelor;</li>
+        <li>cazierul judiciar al managerului de transport;</li>
+        <li>cazierul judiciar al întreprinderii;</li>
+        <li>document privind îndeplinirea condiției de capacitate financiară;</li>
+        <li>certificatul de competență profesională al managerului de transport.</li>
+      </ul>
+      <div class="obs"><strong>Obs.:</strong> Operatorul titular al licenței comunitare poate efectua și transport
+        <strong>în cont propriu</strong> fără a deține certificat de transport în cont propriu separat.
+      </div>
+
+      <h2 id="c2g">Documente suplimentare la ARR pentru mărfuri periculoase</h2>
+      <ul>
+        <li>dovada angajării + decizia de numire + certificatul de atestare al <strong>consilierului de
+            siguranță</strong>;</li>
+        <li>certificatul de agreare eliberat de <strong>RAR</strong>;</li>
+        <li>certificatul de atestare al conducătorului auto, specific mărfii periculoase;</li>
+        <li>autorizație de la <strong>Comisia Națională pentru Controlul Activităților Nucleare</strong> (clasa 7);</li>
+        <li>certificatul de inspecție tehnică pentru suprastructuri specializate (gaze lichefiate).</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 3: TRANSPORTUL RUTIER ÎN CONT PROPRIU              -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c3">3. Transportul rutier în cont propriu</h1>
+      <p>Activitate <strong>auxiliară</strong> ansamblului de activități ale întreprinderii. Cerințe: <strong>bună
+          reputație + competență profesională</strong> (nu se cere capacitate financiară).</p>
+      <p><strong>Documentul de transport:</strong> național = avizul de expediție; internațional = scrisoarea CMR.</p>
+      <p>Certificat de transport în cont propriu: valabilitate <strong>10 ani</strong>, la sediu. Copii conforme:
+        <strong>minim 1 an</strong>, la bord.
+      </p>
+      <div class="obs"><strong>Obs.:</strong> Notificarea schimbării sediului: <strong>15 zile</strong> pentru
+        operatorii contra cost; <strong>28 de zile</strong> pentru transport în cont propriu (de fapt, 15 zile – conform
+        OG 27/2011).</div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 4: DOCUMENTELE OBLIGATORII                        -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c4">4. Documentele obligatorii</h1>
+      <h2 id="c4a">A. Documente la sediu</h2>
+      <ul>
+        <li>cărțile de identitate ale vehiculelor (original/copie);</li>
+        <li>avizele medicale și psihologice valabile ale personalului cu funcții de siguranță;</li>
+        <li>documentele privind angajarea legală a personalului cu funcții de siguranță;</li>
+        <li>scrisorile de transport CMR — anul în curs și precedent;</li>
+        <li>tichetele de cântar pentru mărfuri divizibile + autorizații speciale pentru mărfuri indivizibile;</li>
+        <li>documente privind întreținerea vehiculelor — <strong>18 luni</strong>;</li>
+        <li>formularul de expediție/transport pentru deșeuri — anul în curs și precedent.</li>
+      </ul>
+      <h2 id="c4b">B. Documente la bordul autovehiculului</h2>
+      <div class="tbl">
+        <table>
+          <tr>
+            <th>Transport contra cost</th>
+            <th>Transport în cont propriu</th>
+          </tr>
+          <tr>
+            <td>Copia conformă a licenței comunitare</td>
+            <td>Copia conformă a certificatului de transport în cont propriu</td>
+          </tr>
+          <tr>
+            <td>Documentul de transport (CMR)</td>
+            <td>Național: avizul de expediție; Internațional: CMR</td>
+          </tr>
+          <tr>
+            <td>Legitimația de serviciu a conducătorului auto</td>
+            <td>Idem</td>
+          </tr>
+          <tr>
+            <td>Certificatul de competență profesională al conducătorului auto</td>
+            <td>Idem</td>
+          </tr>
+          <tr>
+            <td>Contractul de închiriere/leasing (original sau copie conformă)</td>
+            <td>Idem</td>
+          </tr>
+          <tr>
+            <td>Atestatul conducător auto (art. 5 Reg. CE 1072/2009) dacă nu e resortisant UE</td>
+            <td>Idem</td>
+          </tr>
+          <tr>
+            <td>Autorizația de transport internațional (trafic internațional)</td>
+            <td>Idem</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 5: OBLIGAȚIILE OPERATORILOR DE TRANSPORT          -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c5">5. Obligațiile operatorilor de transport rutier</h1>
+      <h2 id="c5a">1. Obligații referitoare la licență / certificat</h2>
+      <ul>
+        <li>pierdere/sustragere/deteriorare → anunțat la A.R.R. în max. <strong>15 zile</strong>;</li>
+        <li>schimbare sediu → notificat în <strong>15 zile</strong>;</li>
+        <li>capacitate financiară insuficientă → depunerea copiilor conforme în exces în <strong>10 zile</strong>;</li>
+        <li>suspendare → depunerea documentelor la I.S.C.T.R. în <strong>5 zile lucrătoare</strong>.</li>
+      </ul>
+      <h2 id="c5b">2. Tahograf și limitator de viteză</h2>
+      <ul>
+        <li>montare doar prin <strong>agenți economici autorizați</strong>;</li>
+        <li>interzis plecarea în cursă cu tahograful/limitatorul <strong>defect sau nesigilat</strong>;</li>
+        <li>planificarea transporturilor pentru respectarea timpilor de odihnă și repaus.</li>
+      </ul>
+      <h2 id="c5c">3. Arimare (fixarea încărcăturii)</h2>
+      <ul>
+        <li>centrul de greutate al mărfii — cât mai aproape de centrul vehiculului;</li>
+        <li>ambalaj suficient de rezistent; ușile, obloanele, prelatele — bine fixate;</li>
+        <li>fixare conform <em>Recomandărilor europene privind cele mai bune practici</em>;</li>
+        <li>forțe de rezistență: <strong>0,8×g</strong> față / <strong>0,5×g</strong> spate / <strong>0,5×g</strong>
+          lateral.</li>
+      </ul>
+      <h2 id="c5d">4. Vehicule rutiere</h2>
+      <ul>
+        <li>ITP valabil; anvelope de iarnă pe gheață/zăpadă; parcare numai în locuri amenajate.</li>
+      </ul>
+      <h2 id="c5e">5. Personal</h2>
+      <ul>
+        <li>atestate/certificate profesionale valabile; desemnarea consilierului de siguranță pentru mărfuri
+          periculoase;</li>
+        <li>comunicarea modificărilor privind conducătorii auto în <strong>15 zile</strong> la A.R.R.</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 6: SCRISOAREA DE TRANSPORT CMR                    -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c6">6. Scrisoarea de transport CMR</h1>
+      <ul>
+        <li>Prova contractului de transport în trafic național și internațional.</li>
+        <li>Conținut obligatoriu: numele expeditorului, destinatarului, locul și data primirii și eliberării, denumirea
+          mărfii, numărul coletelor, greutatea brută, cheltuielile de transport.</li>
+        <li>La cerere: valoarea declarată a mărfii, interzicerea transbordării, termenul convenit de livrare.</li>
+        <li>Regulile CMR se aplică la <strong>întreaga cursă</strong> dacă marfa nu e transbordată (transport combinat –
+          feribot, tren, avion).</li>
+        <li>Se aplică tuturor mărfurilor generale (inclusiv perisabile); <strong>nu</strong> transporturilor poștale
+          internaționale.</li>
+        <li><strong>3 exemplare</strong>: expeditor / însoțește marfa / transportator.</li>
+        <li>La primire, transportatorul verifică exactitatea mențiunilor, starea mărfii și ambalajului; poate face
+          rezerve motivate.</li>
+        <li>Transportatorul răspunde pentru pierdere/avarie între primire și eliberare, cu exonerări limitate (viciu
+          propriu, culpă a persoanei cu drept de dispoziție, caz fortuit).</li>
+        <li>Conducătorul auto răspunde de <strong>arimare</strong> (încărcare, repartizare, asigurare, fixare).</li>
+        <li>Rezerve pentru întârziere la livrare: în scris, în cel mult <strong>21 de zile</strong> de la punerea mărfii
+          la dispoziție.</li>
+        <li>Despăgubirea pentru pierdere totală/parțială: valoarea mărfii la locul și momentul primirii, dar nu mai mult
+          de <strong>2,5 USD/kg</strong> greutate brută lipsă (pentru transportul național, echivalentul în lei).</li>
+        <li>Mărfuri periculoase: expeditorul trebuie să semnaleze natura exactă a pericolului; în caz contrar,
+          transportatorul poate descărca, distruge sau face inofensive mărfurile fără despăgubire.</li>
+      </ul>
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 7: TAHOGRAF ȘI LIMITATOR DE VITEZĂ                -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c7">7. Tahograf și limitator de viteză</h1>
+      <ul>
+        <li>Obligatoriu pentru vehicule cu MMA <strong>&gt; 3,5 tone</strong> (mărfuri) sau &gt; 9 locuri (persoane).
+        </li>
+        <li>Verificare tahograf la fiecare <strong>2 ani</strong>.</li>
+        <li>Interzis să plece în cursă cu tahograful <strong>defect sau desigilat</strong>.</li>
+        <li>Înainte de plecare: <strong>nume, dată, localitate plecare, kilometraj</strong> pe diagramă.</li>
+        <li>Defectare în cursă → notare pe <strong>verso-ul diagramei</strong> a timpilor de conducere și odihnă.</li>
+        <li>Schimbare autovehicul → <strong>aceeași diagramă</strong> cu noul nr. înmatriculare, kilometraj și oră pe
+          verso.</li>
+        <li>Discurile trebuie să înregistreze continuu cel puțin <strong>24 de ore</strong>.</li>
+        <li>La control → diagrame pentru ultimele <strong>28 de zile</strong> + ziua în curs sau <strong>cartela
+            tahografică</strong> (valabilă <strong>5 ani</strong>).</li>
+        <li>Vârfuri ascuțite repetate pe diagramă = <strong>conducere neeconomică</strong>.</li>
+        <li>Limitator de viteză: <strong>90 km/h</strong> pentru mărfuri, <strong>100 km/h</strong> pentru persoane.
+        </li>
+      </ul>
+
+      <h2 id="c7a">Cartele tahografice — tipuri</h2>
+      <div class="tbl">
+        <table>
+          <tr>
+            <th>Tip cartelă</th>
+            <th>Culoare</th>
+            <th>Utilizator</th>
+            <th>Valabilitate</th>
+          </tr>
+          <tr>
+            <td><strong>Cartela conducătorului auto</strong></td>
+            <td>Albă</td>
+            <td>Conducătorul auto — stochează activitățile sale</td>
+            <td><strong>5 ani</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Cartela întreprinderii</strong></td>
+            <td>Galbenă</td>
+            <td>Operatorul de transport — accesează datele vehiculelor proprii</td>
+            <td><strong>5 ani</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Cartela atelierului</strong></td>
+            <td>Roșie</td>
+            <td>Agentul economic autorizat — calibrare și montaj tahograf</td>
+            <td><strong>1 an</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Cartela de control</strong></td>
+            <td>Albastră</td>
+            <td>Inspectorii ARR/ISCTR — citire date pentru control</td>
+            <td><strong>5 ani</strong></td>
+          </tr>
+        </table>
+      </div>
+
+      <h2 id="c7b">Tahograf digital vs. analog — diferențe esențiale</h2>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Aspect</th>
+          <th>Tahograf analog</th>
+          <th>Tahograf digital</th>
+        </tr>
+        <tr>
+          <td>Suport înregistrare</td>
+          <td>Disc/diagramă de hârtie</td>
+          <td>Cartelă tahografică + memorie internă</td>
+        </tr>
+        <tr>
+          <td>Obligativitate</td>
+          <td>Vehicule înmatriculate <strong>înainte de 01.01.2007</strong></td>
+          <td>Vehicule înmatriculate <strong>după 01.01.2007</strong></td>
+        </tr>
+        <tr>
+          <td>Descărcarea datelor card șofer</td>
+          <td>—</td>
+          <td>Cel puțin o dată la <strong>28 de zile</strong></td>
+        </tr>
+        <tr>
+          <td>Descărcarea datelor tahograf</td>
+          <td>—</td>
+          <td>Cel puțin o dată la <strong>3 luni (90 zile)</strong></td>
+        </tr>
+        <tr>
+          <td rowspan="2">Simboluri activități</td>
+          <td rowspan="2">Înregistrare grafică continuă</td>
+          <td>🚗 <strong>Conducere</strong> — automat la mișcare</td>
+        </tr>
+        <tr>
+          <td>⚙️ <strong>Altă muncă</strong> — încărcare, descărcare, întreținere</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>⏸ <strong>Disponibilitate</strong> — așteptare (feribot, vamă)</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>🛏 <strong>Repaus/Pauză</strong></td>
+        </tr>
+        </table>
+      </div>
+      <div class="obs"><strong>Obs.:</strong> Vehiculele înmatriculate după <strong>01.01.2007</strong> sunt obligate cu
+        tahograf digital. Descărcarea datelor din cartelă la cel mult <strong>28 de zile</strong> și din unitatea
+        vehiculului la cel mult <strong>3 luni</strong> este obligatorie pentru operator. Datele descărcate se păstrează
+        cel puțin <strong>1 an</strong>.</div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 8: TIMPI DE CONDUCERE ȘI ODIHNĂ (REG. 561/2006)   -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c8">8. Regulamentul (CE) nr. 561/2006 — Timpi de conducere și odihnă</h1>
+      <div class="obs"><strong>Obs.:</strong> Acordul <strong>AETR</strong> se aplică în afara spațiului UE cu
+        reglementări similare.</div>
+
+      <h2 id="c8t">Tabel sinoptic — timpi de conducere</h2>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Indicator</th>
+          <th>Limita</th>
+        </tr>
+        <tr>
+          <td>Conducere zilnică</td>
+          <td>Max. <strong>9 ore</strong>; extensibil la <strong>10 ore</strong> de max. <strong>2
+              ori/săptămână</strong></td>
+        </tr>
+        <tr>
+          <td>Conducere săptămânală</td>
+          <td>Max. <strong>56 de ore</strong></td>
+        </tr>
+        <tr>
+          <td>Conducere 2 săptămâni consecutive</td>
+          <td>Max. <strong>90 de ore</strong> (12 perioade de conducere)</td>
+        </tr>
+        <tr>
+          <td>Pauză după 4h 30min conducere</td>
+          <td>Min. <strong>45 min</strong> neîntrerupt SAU 15 min + 30 min</td>
+        </tr>
+        <tr>
+          <td>Conducere continuă pe timp de noapte (22:00–06:00)</td>
+          <td>Max. <strong>3 ore</strong> (exceptie echipaj)</td>
+        </tr>
+        </td>
+      </div>
+
+      <h2>Tabel sinoptic — repaus (odihnă)</h2>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Indicator</th>
+          <th>Limita</th>
+        </tr>
+        <tr>
+          <td>Repaus zilnic normal</td>
+          <td>Min. <strong>11 ore</strong> consecutive (sau 3h + 9h)</td>
+        </tr>
+        <tr>
+          <td>Repaus zilnic redus</td>
+          <td>Min. <strong>9 ore</strong> (max. <strong>3 ori/săptămână</strong>; diferența până la 11h <strong>nu se
+              compensează</strong>)</td>
+        </tr>
+        <tr>
+          <td>Repaus săptămânal normal</td>
+          <td>Min. <strong>45 de ore</strong></td>
+        </tr>
+        <tr>
+          <td>Repaus săptămânal redus</td>
+          <td>Min. <strong>24 de ore</strong> (diferența până la 45h se compensează în max. <strong>3
+              săptămâni</strong>)</td>
+        </tr>
+        <tr>
+          <td>Conducere în echipaj (2 conducători)</td>
+          <td>Repaus min. <strong>9 ore</strong> consecutive în interval de <strong>30 de ore</strong></td>
+        </tr>
+        <tr>
+          <td>Perioadă săptămânală de odihnă</td>
+          <td>Urmează după <strong>6 perioade zilnice consecutive</strong> de conducere</td>
+        </tr>
+        <tr>
+          <td>Echipaj – repaus în mers</td>
+          <td>Cel de-al doilea conducător (care nu conduce) <strong>NU</strong> poate efectua repaus zilnic în timpul
+            mersului — vehiculul trebuie oprit</td>
+        </tr>
+        </table>
+      </div>
+      <ul>
+        <li>Repausul zilnic se poate lua la bordul vehiculului <strong>staționat</strong> dacă e dotat cu cabină de
+          dormit.</li>
+        <li>Întreruperea repausului zilnic este permisă <strong>numai</strong> la îmbarcarea pe feribot sau tren, de
+          max. 2 ori, cu durata totală ≤ 1 oră.</li>
+        <li>Abaterea de la regulament este permisă <strong>numai</strong> pentru siguranța persoanelor, vehiculului sau
+          încărcăturii (se menționează manual pe diagramă).</li>
+        <li>Nerespectarea → <strong>amendă + imobilizarea vehiculului</strong> de inspectorii ARR/ISCTR.</li>
+      </ul>
+
+      <h2 id="c8d">Drept social — Lucrătorul mobil (Directiva 2002/15/CE)</h2>
+      <p><strong>Lucrătorul mobil</strong> = orice lucrător care face parte din personalul de deplasare al unei
+        întreprinderi care efectuează servicii de transport rutier (inclusiv stagiarii și ucenicii).</p>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Indicator</th>
+          <th>Limita</th>
+        </tr>
+        <tr>
+          <td>Timp de lucru săptămânal mediu</td>
+          <td>Max. <strong>48 de ore</strong> (media pe 4 luni consecutive)</td>
+        </tr>
+        <tr>
+          <td>Timp de lucru săptămânal maxim absolut</td>
+          <td>Max. <strong>60 de ore</strong> (dacă media pe 4 luni ≤ 48h)</td>
+        </tr>
+        <tr>
+          <td>Timp de lucru nocturn (22:00–06:00)</td>
+          <td>Max. <strong>10 ore</strong> în 24 de ore (dacă se lucrează noaptea)</td>
+        </tr>
+        <tr>
+          <td>Pauza în cursul zilei</td>
+          <td>Min. <strong>30 min</strong> dacă ziua de lucru &gt; 6h; min. <strong>45 min</strong> dacă &gt; 9h</td>
+        </tr>
+        <tr>
+      </div>
+      <div class="obs"><strong>Obligații angajator:</strong> Trebuie să înregistreze și să păstreze evidența timpului de
+        muncă al lucrătorilor mobili (cel puțin 2 ani) și să o pună la dispoziția autorităților de control la cerere. Nu
+        se poate remunera șoferul în funcție de distanța parcursă sau cantitatea transportată dacă aceasta periclitează
+        siguranța rutieră.</div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 9: TRANSPORT AGABARITIC                           -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c9">9. Transport agabaritic</h1>
+      <ul>
+        <li>Efectuat pe baza <strong>autorizației speciale de transport (AST)</strong> eliberate de
+          <strong>C.N.A.D.N.R.</strong> (tarife suplimentare).
+        </li>
+        <li>Se eliberează pentru încărcături <strong>indivizibile</strong> (nu pot fi divizate fără cheltuieli
+          nejustificate sau risc de deteriorare).</li>
+        <li>Vehiculele trebuie echipate cu: plăcuțe <strong>fluorescent-reflectorizante</strong> (fond alb, chenar roșu,
+          montate stânga-față) + semnal cu <strong>lumină galbenă</strong> + dispozitiv de arimare.</li>
+        <li>Masa totală max. pentru mărfuri divizibile (excepțional) – max. 50 tone; lungime max. +3m; lățime max. 3m.
+        </li>
+        <li>Categorii drumuri: <strong>europene reabilitate, europene modernizate, pietruite</strong>.</li>
+        <li>Taxa de utilizare drumuri naționale = <strong>rovinietă</strong> (obligatorie pentru toate vehiculele).</li>
+        <li>Conducătorii auto: apți medical și psihologic, vârsta minimă <strong>21 de ani</strong>.</li>
+        <li>Pe polei/gheață/zăpadă — circulația vehiculelor agabaritice <strong>nu este permisă</strong>.</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 10: REGLEMENTĂRI NAȚIONALE (RNTR)                -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c10">10. Reglementări naționale în transporturile rutiere (RNTR)</h1>
+      <ul>
+        <li><strong>RNTR 1</strong> — siguranța circulației rutiere, protecția mediului, categoria de folosință.</li>
+        <li><strong>RNTR 2</strong> — omologarea de tip a vehiculelor rutiere.</li>
+        <li><strong>RNTR 3</strong> — condiții tehnice suplimentare pentru vehicule care transportă mărfuri periculoase.
+        </li>
+        <li>ITP — executată în stații autorizate RAR: <strong>12 luni</strong> (mărfuri &gt;3,5t, inclusiv remorci
+          &gt;3,5t); <strong>6 luni</strong> (persoane &gt;9 locuri, taxi, autoutilitare &lt;3,5t).</li>
+        <li>La ITP cu motoare diesel se verifică <strong>opacitatea gazelor de evacuare</strong>.</li>
+        <li>Pante lungi: sisteme de <strong>frânare de încetinire (retarder)</strong>; blocare roți:
+          <strong>ABS</strong>.
+        </li>
+        <li>Transport internațional: cap tractor înmatriculat în România + semiremorcă în străinătate —
+          <strong>permis</strong>.
+        </li>
+        <li>Omologarea individuală se efectuează dacă vehiculul a suferit modificări prin care au fost afectate
+          caracteristicile din cartea de identitate.</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 11: ADR — MĂRFURI PERICULOASE                     -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c11">11. ADR — Transportul rutier internațional al mărfurilor periculoase</h1>
+      <ul>
+        <li>Operatorul desemnează <strong>unul sau mai mulți consilieri de siguranță</strong>.</li>
+        <li>Consilierul de siguranță — curs ADR de perfecționare la fiecare <strong>5 ani</strong>.</li>
+        <li>Conducătorii auto — vârsta minimă <strong>21 de ani</strong> + <strong>certificat de atestare
+            profesională</strong> specific clasei de marfă.</li>
+        <li>La bordul vehiculului — <strong>fișele de siguranță</strong> (instrucțiunile scrise, cap. 5.4 ADR) pentru
+          toate mărfurile periculoase.</li>
+        <li>Semnalizare — <strong>panouri portocalii</strong> (față și spate): superior = nr. de identificare al
+          pericolului (cod Kemler); inferior = nr. ONU.</li>
+        <li>Mărfuri <strong>clasa 7</strong> (radioactive) — autorizație de la Comisia Națională pentru Controlul
+          Activităților Nucleare.</li>
+        <li>Vehiculele care transportă mărfuri periculoase în <strong>cisternă</strong> necesită certificat de agreare
+          de la RAR.</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 12: CARNETUL TIR ȘI ACORDUL ATP                   -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c12">12. Carnetul TIR și Acordul ATP</h1>
+      <h2>Carnetul TIR</h2>
+      <ul>
+        <li>Document care permite reducerea și simplificarea formalităților și controalelor vamale în trafic
+          internațional (în afara UE, ex. Turcia).</li>
+        <li>Valabil pentru <strong>o singură călătorie</strong>; se întocmește pentru fiecare vehicul/container.</li>
+        <li>Numărul maxim birouri vamale de plecare + destinație = <strong>4</strong>.</li>
+        <li>Ruperea sigiliului → conducătorul auto se adresează <strong>autorităților vamale</strong> sau, în lipsa
+          acestora, altor autorități competente din țara în care se găsește.</li>
+        <li>Controlul vamal al mărfurilor TIR — <strong>nu se face de regulă</strong>, ci doar dacă <strong>organele
+            vamale consideră necesar</strong> (excepțional, la suspiciuni).</li>
+        <li>Carnetul TIR este valabil până în ultima zi stabilită de <strong>asociația garantă</strong>.</li>
+      </ul>
+      <h2>Acordul ATP (mărfuri perisabile)</h2>
+      <ul>
+        <li>Stabilește condițiile pentru transportul frigorific internațional al mărfurilor perisabile.</li>
+        <li>Certificatul de agreare ATP: valabilitate max. <strong>6 ani</strong>, cu inspecții la fiecare 3 ani.</li>
+        <li>Clase echipamente frigorifice: <strong>IN, IR</strong> (izoterme), <strong>FRC, FRF, FRG, FRH, FRIJ</strong>
+          (frigorifice cu motor).</li>
+        <li>La bordul vehiculului trebuie să se afle <strong>certificatul de agreare ATP</strong> valabil.</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 13: CABOTAJ ȘI AUTORIZAȚII INTERNAȚIONALE         -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c13">13. Cabotajul și autorizațiile de transport internațional</h1>
+      <h3>Cabotajul (Reg. CE 1072/2009)</h3>
+      <p><strong>Definiție:</strong> Transportul național contra cost, în numele unui terț, efectuat
+        <strong>temporar</strong> de un operator nerezident pe teritoriul unui stat membru gazdă, <strong>după un
+          transport internațional</strong> în acel stat.
+      </p>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Regulă</th>
+          <th>Detaliu</th>
+        </tr>
+        <tr>
+          <td>Număr maxim operațiuni</td>
+          <td>Maximum <strong>3 operațiuni de cabotaj</strong> în termen de <strong>7 zile</strong> de la descărcarea
+            mărfii aduse din alt stat</td>
+        </tr>
+        <tr>
+          <td>Interdicție după cabotaj</td>
+          <td>Operatorul nerezident <strong>nu poate efectua alt cabotaj</strong> cu același vehicul timp de <strong>4
+              zile</strong></td>
+        </tr>
+        <tr>
+          <td>Documente obligatorii</td>
+          <td>Dovada transportului internațional precedent + documentele fiecărei operațiuni de cabotaj (nume expeditor,
+            transportator, destinatar, loc/data preluării/livrării, descriere marfă, nr. înmatriculare)</td>
+        </tr>
+        <tr>
+          <td>Cabotaj pentru operatori non-UE</td>
+          <td><strong>Interzis</strong> dacă acordurile bilaterale nu prevăd altfel</td>
+        </tr>
+        </table>
+      </div>
+
+      <h3>Autorizații CEMT/ECMT</h3>
+      <ul>
+        <li>Autorizații pentru transport multilateral în statele membre CEMT (inclusiv Rusia, Turcia, Serbia etc.).</li>
+        <li>Se eliberează operatorilor care dețin vehicule cu normă de poluare <strong>Euro IV, Euro V, EEV sau Euro
+            VI</strong>.</li>
+        <li>Tipuri: <strong>anuală</strong> (verde, valabilă un an calendaristic) și <strong>pe termen scurt</strong>
+          (galbenă, 30 zile).</li>
+        <li>Autorizația trebuie însoțită de <strong>carnetul de drum</strong> completat corespunzător.</li>
+        <li>Utilizare insuficientă (sub 2 curse/lună sau sub 2.000 km/lună) poate duce la retragerea autorizației de
+          Comisia CEMT.</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 14: CALIFICAREA CONDUCĂTORILOR AUTO (CPI/CPC)     -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c14">14. Calificarea profesională a conducătorilor auto</h1>
+      <p>Conducătorii auto pentru transport marfă (categoriile <strong>C1, C1E, C, CE</strong>) au obligația să dețină,
+        pe lângă permis, un <strong>Certificat de Calificare Profesională</strong> (art. 68 OG 27/2011).</p>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Tip certificat</th>
+          <th>Mod obținere</th>
+          <th>Valabilitate</th>
+        </tr>
+        <tr>
+          <td><strong>CPI</strong> (Calificare Profesională Inițială)</td>
+          <td>Curs 280 ore + examen SAU curs accelerat 140 ore (pentru anumite categorii) + examen</td>
+          <td><strong>5 ani</strong> (cod <strong>95</strong> pe permis)</td>
+        </tr>
+        <tr>
+          <td><strong>CPC</strong> (Calificare Profesională Continuă)</td>
+          <td>Curs periodic de <strong>35 de ore</strong> (5 module × 7 ore) la un centru autorizat</td>
+          <td><strong>5 ani</strong> (se reînnoiește prin alt CPC)</td>
+        </tr>
+        </table>
+      </div>
+      <div class="obs"><strong>Obs.:</strong> Codul <strong>95</strong> menționat pe permisul de conducere atestă că
+        șoferul deține calificarea profesională valabilă. Fără CPC valabil, conducătorul auto nu poate efectua transport
+        comercial. Certificatele emise de alte state membre UE sunt recunoscute în România.</div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 15: CATEGORII VEHICULE ȘI NORME EURO              -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c15">15. Categorii de vehicule și norme de emisii Euro</h1>
+      <h3>Categoriile de vehicule (Directiva 2007/46/CE)</h3>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Categorie</th>
+          <th>Descriere</th>
+          <th>MMA (acolo unde e cazul)</th>
+        </tr>
+        <tr>
+          <td><strong>M1</strong></td>
+          <td>Autoturisme — max. 9 locuri, inclusiv conducătorul auto</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>M2</strong></td>
+          <td>Autobuze mici — peste 9 locuri</td>
+          <td>≤ 5 tone</td>
+        </tr>
+        <tr>
+          <td><strong>M3</strong></td>
+          <td>Autobuze mari — peste 9 locuri</td>
+          <td>&gt; 5 tone</td>
+        </tr>
+        <tr>
+          <td><strong>N1</strong></td>
+          <td>Vehicule de marfă ușoare</td>
+          <td>≤ 3,5 tone</td>
+        </tr>
+        <tr>
+          <td><strong>N2</strong></td>
+          <td>Vehicule de marfă medii</td>
+          <td>3,5 – 12 tone</td>
+        </tr>
+        <tr>
+          <td><strong>N3</strong></td>
+          <td>Vehicule de marfă grele</td>
+          <td>&gt; 12 tone</td>
+        </tr>
+        <tr>
+          <td><strong>O1</strong></td>
+          <td>Remorci ușoare</td>
+          <td>≤ 0,75 tone</td>
+        </tr>
+        <tr>
+          <td><strong>O2</strong></td>
+          <td>Remorci</td>
+          <td>0,75 – 3,5 tone</td>
+        </tr>
+        <tr>
+          <td><strong>O3</strong></td>
+          <td>Remorci medii</td>
+          <td>3,5 – 10 tone</td>
+        </tr>
+        <tr>
+          <td><strong>O4</strong></td>
+          <td>Remorci grele (semiremorci TIR)</td>
+          <td>&gt; 10 tone</td>
+        </tr>
+        </table>
+      </div>
+      <h3>Norme de emisii Euro (pentru vehicule diesel grele)</h3>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Normă</th>
+          <th>An intrare în vigoare (vehicule noi)</th>
+          <th>Caracteristică</th>
+        </tr>
+        <tr>
+          <td>Euro 3</td>
+          <td>2000</td>
+          <td>Prima normă strictă pentru camioane</td>
+        </tr>
+        <tr>
+          <td>Euro 4</td>
+          <td>2005</td>
+          <td>Reducere semnificativă NOₓ și particule</td>
+        </tr>
+        <tr>
+          <td>Euro 5</td>
+          <td>2008</td>
+          <td>Reducere suplimentară particule fine</td>
+        </tr>
+        <tr>
+          <td><strong>Euro 6</strong></td>
+          <td>2013</td>
+          <td>Cel mai strict standard actual; limite NOₓ: 0,4 g/kWh</td>
+        </tr>
+        </table>
+      </div>
+      <div class="obs"><strong>Obs.:</strong> Norma Euro influențează accesul în zonele cu restricții de trafic din
+        marile orașe europene și valoarea rovinietei/taxelor de drum în unele state.</div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 16: INCOTERMS                                     -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c16">16. INCOTERMS — Regulile internaționale de comerț</h1>
+      <p>INCOTERMS (International Commercial Terms) definesc <strong>obligațiile vânzătorului și cumpărătorului</strong>
+        privind livrarea mărfurilor, transferul riscurilor și costurilor. Versiunea actuală: <strong>INCOTERMS
+          2020</strong>.</p>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Regulă</th>
+          <th>Denumire</th>
+          <th>Cine suportă transportul</th>
+          <th>Transfer risc</th>
+        </tr>
+        <tr>
+          <td><strong>EXW</strong></td>
+          <td>Ex Works (la poarta fabricii)</td>
+          <td>Cumpărătorul — plătește tot</td>
+          <td>La ridicarea mărfii de la vânzător</td>
+        </tr>
+        <tr>
+          <td><strong>FCA</strong></td>
+          <td>Free Carrier (franco transportator)</td>
+          <td>Vânzătorul până la transportator; cumpărătorul de acolo</td>
+          <td>La predarea mărfii transportatorului desemnat de cumpărător</td>
+        <tr>
+        <tr>
+          <td><strong>CPT</strong></td>
+          <td>Carriage Paid To (transport plătit până la)</td>
+          <td>Vânzătorul plătește transportul până la destinație</td>
+          <td>La predarea mărfii primului transportator</td>
+        </tr>
+        <tr>
+          <td><strong>CIP</strong></td>
+          <td>Carriage &amp; Insurance Paid (transport + asigurare)</td>
+          <td>Vânzătorul plătește transport + asigurare</td>
+          <td>La predarea primului transportator</td>
+        </tr>
+        <tr>
+          <td><strong>DAP</strong></td>
+          <td>Delivered at Place (livrat la destinație)</td>
+          <td>Vânzătorul până la destinație, nedescărcat</td>
+          <td>La sosirea la destinație, înainte de descărcare</td>
+        </tr>
+        <tr>
+          <td><strong>DPU</strong></td>
+          <td>Delivered at Place Unloaded (livrat descărcat)</td>
+          <td rowspan="2">Vânzătorul plătește tot până la destinație (inclusiv descărcarea)</td>
+          <td rowspan="2">La destinație, după descărcare (DPU) / La destinație, vămuită, nedescărcată (DDP)</td>
+        </tr>
+        <tr>
+          <td><strong>DDP</strong></td>
+          <td>Delivered Duty Paid (livrat cu taxe vamale plătite)</td>
+        </tr>
+        <tr>
+          <td><strong>FAS</strong></td>
+          <td>Free Alongside Ship (franco de-a lungul navei)</td>
+          <td rowspan="2">Cumpărătorul — de la navă/bord</td>
+          <td rowspan="2">Când marfa ajunge de-a lungul navei / la bordul navei</td>
+          </td>
+        <tr>
+          <td><strong>FOB</strong></td>
+          <td>Free On Board (franco la bord)</td>
+        </tr>
+        <tr>
+          <td><strong>CFR</strong></td>
+          <td>Cost and Freight (cost și navlu)</td>
+          <td rowspan="2">Vânzătorul — transport maritim până la destinație</td>
+          <td rowspan="2">La îmbarcarea mărfii pe navă</td>
+        </tr>
+        <tr>
+          <td><strong>CIF</strong></td>
+          <td>Cost Insurance and Freight (cost, asigurare, navlu)</td>
+        </tr>
+        </table>
+      </div>
+      <div class="obs"><strong>Memotehnic:</strong> EXW = maxim pentru cumpărător; DDP = maxim pentru vânzător. FCA,
+        CPT, CIP, DAP, DPU — trepte intermediare cu responsabilități crescânde ale vânzătorului.</div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 17: MĂRFURI SPECIALE                              -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c17">17. Transportul mărfurilor speciale</h1>
+
+      <h3>Mărfuri perisabile — Acordul ATP</h3>
+      <p>Acordul ATP (Agreement on the international carriage of Perishable foodstuffs) stabilește condițiile pentru
+        transportul frigorific internațional.</p>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Clasa echipament</th>
+          <th>Descriere</th>
+          <th>Temperaturi caracteristice</th>
+        </tr>
+        <tr>
+          <td><strong>IN / IR</strong></td>
+          <td>Vehicul izoterm normal / ranforsat</td>
+          <td>Diferență max. 7°C / 12°C față de exterior</td>
+        </tr>
+        <tr>
+          <td><strong>FRC</strong> (clasa C)</td>
+          <td rowspan="5">Frigorific cu motor agregat propriu</td>
+          <td>≤ +12°C (semiremorcă ≤ +7°C)</td>
+        </tr>
+        <tr>
+          <td><strong>FRF</strong> (clasa F)</td>
+          <td>≤ 0°C</td>
+        </tr>
+        <tr>
+          <td><strong>FRG</strong> (clasa G)</td>
+          <td>≤ –10°C</td>
+        </tr>
+        <tr>
+          <td><strong>FRH</strong> (clasa H)</td>
+          <td>≤ –20°C</td>
+        </tr>
+        <tr>
+          <td><strong>FRIJ</strong> (clasa J)</td>
+          <td>≤ –20°C (condiții ranforsate)</td>
+        </tr>
+        </table>
+      </div>
+      <ul>
+        <li>Certificatul de agreare ATP are valabilitatea de maxim <strong>6 ani</strong>, cu inspecții la fiecare 3
+          ani.</li>
+        <li>La bordul vehiculului trebuie să se afle <strong>certificatul de agreare ATP</strong> valabil.</li>
+      </ul>
+
+      <h3>Mărfuri divizibile — reguli specifice</h3>
+      <ul>
+        <li>Mărfurile divizibile (ex. materiale de construcții, nisip, pietriș) trebuie transportate cu
+          <strong>respectarea strictă a masei maxime autorizate</strong>.
+        </li>
+        <li>La transportul mărfurilor divizibile care depășesc masa maximă admisă se emite <strong>autorizație specială
+            C.N.A.D.N.R.</strong> și se plătesc tarife suplimentare.</li>
+        <li><strong>Tichetele de cântar</strong> trebuie păstrate la sediu pentru <strong>anul în curs și
+            precedent</strong>.</li>
+        <li>Cântărirea se efectuează la cântarele autorizate, înainte de plecarea în cursă.</li>
+      </ul>
+
+      <h3>Mărfuri indivizibile agabaritice</h3>
+      <ul>
+        <li>Mărfuri care, prin natura lor, <strong>nu pot fi divizate sau manipulate</strong> fără deteriorare (utilaje,
+          turbine, traverse de cale ferată etc.).</li>
+        <li>Transport pe baza <strong>autorizației speciale AST</strong> C.N.A.D.N.R. + escortă (dacă depășirile sunt
+          semnificative).</li>
+        <li>Vehiculele trebuie echipate cu semnalizare specifică agabaritic (plăcuțe reflectorizante, lumină galbenă).
+        </li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 18: MANAGEMENT ȘI MARKETING                        -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c18">18. Management și marketing</h1>
+      <p><strong>Societăți comerciale</strong> — Legea 31/1990 — <strong>5 tipuri</strong>: S.R.L., S.A., comandită
+        simplă, comandită pe acțiuni, SNC (societate în nume colectiv).</p>
+      <ul>
+        <li><strong>AGA (Adunarea Generală a Acționarilor):</strong> alege/revocă membrii CA și cenzorii; aprobă
+          bilanțul; adoptă modificări la statut prin <strong>act adițional</strong>.</li>
+        <li><strong>CA (Consiliul de Administrație):</strong> număr <strong>impar</strong> de membri; max. 5 cenzori (nu
+          pot fi cenzori rudele și afinii până la gradul IV).</li>
+        <li><strong>Marketing:</strong> maximizarea eficienței economice = funcție obiectiv. Mijloace strategice:
+          <strong>produsul, prețul, distribuția, promovarea (marketing mix)</strong>. Selecționarea clienților =
+          segmentarea pieței. Reducerile de prețuri = promovare a vânzărilor.
+        </li>
+        <li><strong>Funcțiile marketingului:</strong> cercetare de piață, segmentare, poziționare, planificare,
+          organizare, coordonare, control.</li>
+        <li>Compartimentul de marketing se află în relații funcționale cu <strong>conducerea întreprinderii</strong>.
+        </li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 19: DREPT CIVIL ȘI COMERCIAL                     -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c19">19. Drept civil și comercial</h1>
+
+      <h2 id="c19a">Titluri de credit — instrumente de plată</h2>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Instrument</th>
+          <th>Descriere</th>
+          <th>Caracteristici esențiale</th>
+        </tr>
+        <tr>
+          <td><strong>Cambia (trata)</strong></td>
+          <td>Ordin de plată scris prin care trăgătorul ordonă trasului să plătească o sumă beneficiarului la scadență
+          </td>
+          <td>3 persoane: trăgător, tras, beneficiar; instrument negociabil prin gir (andosare)</td>
+        </tr>
+        <tr>
+          <td><strong>Biletul la ordin</strong></td>
+          <td>Promisiune scrisă de plată a unei sume la o dată specificată (2 persoane: emitent + beneficiar)</td>
+          <td>Mai simplu decât cambia, transmisibil prin gir</td>
+        </tr>
+        <tr>
+          <td><strong>Cecul</strong></td>
+          <td>Ordin scris prin care titularul unui cont bancar (trăgătorul) dispune băncii (trasul) să plătească o sumă
+            beneficiarului</td>
+          <td>3 persoane; <strong>plătibil la vedere</strong>; necesită provizion (disponibil în cont); emiterea fără
+            acoperire = infracțiune</td>
+        </tr>
+        <tr>
+          <td><strong>Acreditivul documentar</strong></td>
+          <td colspan="2">Angajamentul băncii importatorului de a plăti exportatorului la prezentarea documentelor de
+            transport (cel mai sigur în comerțul internațional)</td>
+        </tr>
+        </table>
+      </div>
+
+      <h2 id="c19b">Contracte utilizate în transport</h2>
+      <ul>
+        <li><strong>Contractul de transport</strong> — cărăușul se obligă să transporte marfa contra unui tarif; proba =
+          scrisoarea CMR.</li>
+        <li><strong>Contractul de expediție</strong> — expeditorul (intermediarul) organizează transportul în numele
+          clientului.</li>
+        <li><strong>Contractul de închiriere (locațiune)</strong> — locatorul transmite dreptul de folosință a
+          vehiculului (fără conducător auto) pe perioadă determinată, contra cost.</li>
+        <li><strong>Contractul de leasing</strong> — utilizatorul folosește bunul și plătește rate; la final poate
+          cumpăra bunul la valoarea reziduală. Tipuri: <strong>financiar</strong> (transferă riscurile și beneficiile)
+          și <strong>operațional</strong> (nu transferă riscurile).</li>
+        <li><strong>Contractul de mandat</strong> — mandatarul execută în numele mandantului acte juridice; mandatarul =
+          persoana care are obligația de a executa mandatul.</li>
+        <li><strong>Contractul de intermediere</strong> — intermediarul se obligă să pună în legătură clientul cu un
+          terț în vederea încheierii unui contract.</li>
+      </ul>
+      <div class="obs"><strong>Debitor</strong> = cumpărătorul (datorează bani). <strong>Creditor</strong> = vânzătorul
+        (i se datorează bani). Principala obligație a vânzătorului = a preda lucrul vândut; a cumpărătorului = a plăti
+        prețul.</div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 20: GESTIUNE FINANCIARĂ                           -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c20">20. Gestiune financiară</h1>
+
+      <h2 id="c20a">Asigurări în transport</h2>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Tip asigurare</th>
+          <th>Ce acoperă</th>
+          <th>Obligatorie?</th>
+        </tr>
+        <tr>
+          <td><strong>RCA</strong> (Răspundere Civilă Auto)</td>
+          <td>Daune produse terților prin accidente rutiere (obligatorie pentru orice vehicul înmatriculat)</td>
+          <td><strong>Da</strong> — obligatorie</td>
+        </tr>
+        <tr>
+          <td><strong>Asigurare Cargo / CMR</strong></td>
+          <td>Răspunderea transportatorului față de marfă conform Convenției CMR</td>
+          <td>Nu obligatorie legal, dar <strong>esențială comercial</strong> (solicitată de clienți)</td>
+        </tr>
+        <tr>
+          <td><strong>Casco</strong></td>
+          <td>Daune proprii ale vehiculului (furt, accidente, calamități)</td>
+          <td>Nu — facultativă</td>
+        </tr>
+        <tr>
+          <td><strong>Carte Verde</strong></td>
+          <td>Dovada asigurării RCA valabilă în statele membre ale sistemului (pentru transport internațional)</td>
+          <td><strong>Da</strong> — pentru transport internațional</td>
+        </tr>
+        <tr>
+          <td><strong>Asigurare de sănătate șofer</strong></td>
+          <td>Cheltuieli medicale în transport internațional</td>
+          <td>Recomandată pentru transport internațional</td>
+        </tr>
+        </table>
+      </div>
+
+      <h2 id="c20b">Calculul prețului de cost pe cursă</h2>
+      <p>Formula de bază pentru prețul de cost al unei curse dus-întors:</p>
+      <ul>
+        <li><strong>Cost combustibil</strong> = distanță (km) × consum (L/100km) / 100 × preț/litru;</li>
+        <li><strong>Cost ulei, service, anvelope</strong> = distanță × tarif €/km (cost variabil);</li>
+        <li><strong>Salariu conducător auto</strong> = distanță × tarif €/km (sau timp de lucru);</li>
+        <li><strong>Costuri fixe alocate</strong> = cotă parte din cheltuielile fixe totale (amortisment, chirie,
+          asigurări, impozite);</li>
+        <li><strong>Total cheltuieli</strong> = suma tuturor costurilor;</li>
+        <li><strong>Preț total cursă</strong> = Total cheltuieli × (1 + marja de profit%);</li>
+        <li><strong>Preț/km</strong> = Preț total cursă / distanță totală.</li>
+      </ul>
+      <div class="obs"><strong>Cheltuieli suplimentare transport internațional:</strong> cazare șofer, diurnă, asigurare
+        sănătate, roviniete externe, autorizații internaționale, carnet TIR, carte verde.</div>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 21: CONTABILITATE                                 -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c21">21. Contabilitate</h1>
+      <ul>
+        <li><strong>Bilanțul contabil</strong> = activ + pasiv la o dată dată. <strong>Active</strong> = bunurile
+          patrimoniale ale societății. <strong>Pasive</strong> = toate datoriile societății.</li>
+        <li><strong>Valoare netă</strong> = active − pasive (capital propriu).</li>
+        <li><strong>Capital utilizat</strong> = active fixe + active circulante.</li>
+        <li><strong>Indice curent (lichiditate curentă)</strong> = active curente / pasive curente (măsoară capacitatea
+          de plată pe termen scurt).</li>
+        <li><strong>Indice de lichiditate imediată</strong> = (active curente − stocuri) / pasive curente (lichiditate
+          mai strictă).</li>
+        <li><strong>Contul de profit și pierderi</strong> = evidența veniturilor și cheltuielilor pe o perioadă
+          (diferența = profit sau pierdere).</li>
+        <li><strong>Cheltuieli fixe (de regie)</strong>: chiria sediului, amortismentul autovehiculelor, salariile
+          administrative.</li>
+        <li><strong>Cheltuieli variabile de exploatare</strong>: combustibil, anvelope, întreținere, reparații — intră
+          în calculul tarifului.</li>
+        <li><strong>Imobilizări necorporale</strong>: cheltuieli cu înființarea/dezvoltarea/fuziunea societății
+          (brevete, licențe, programe).</li>
+        <li><strong>Imobilizări corporale</strong> = active fixe tangibile (clădiri, vehicule, utilaje).</li>
+        <li><strong>Imobilizări financiare</strong> = depozite pe termen lung, titluri de participare, împrumuturi
+          acordate.</li>
+        <li>Cost variabil cu distanța = <strong>combustibilul</strong>. Inflație → creșterea <strong>dobânzilor</strong>
+          afectează costurile de finanțare.</li>
+        <li>Provizioane = <strong>datorii probabile</strong> (litigii, amenzi, despăgubiri).</li>
+        <li>Capital circulant = fondul de bani disponibil pentru funcționarea zilnică a societății.</li>
+        <li>Certificarea bilanțului = datoria <strong>experților contabili</strong>.</li>
+        <li>Problemă financiară rezolvată în favoarea clientului → <strong>notă de credit</strong> (se emite de
+          furnizor).</li>
+        <li>Comanda de transport marfă trebuie să conțină: <strong>felul și greutatea mărfii, nr. colete, modul de
+            ambalare</strong>.</li>
+      </ul>
+
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <!-- CAPITOLUL 22: DREPT FISCAL                                  -->
+      <!-- ═══════════════════════════════════════════════════════════ -->
+      <h1 class="ch1" id="c22">22. Drept fiscal</h1>
+
+      <h2 id="c22a">TVA în transport</h2>
+      <div class="tbl">
+        表
+        <tr>
+          <th>Tip transport</th>
+          <th>Regim TVA</th>
+          <th>Observație</th>
+        </tr>
+        <tr>
+          <td>Transport rutier național de mărfuri</td>
+          <td><strong>19%</strong> (cota standard)</td>
+          <td>Redus de la 24% la 20% în 2016, la 19% în 2017</td>
+          </td>
+        <tr>
+          <td>Transport internațional de mărfuri (UE sau extra-UE)</td>
+          <td><strong>0% — scutit cu drept de deducere</strong></td>
+          <td>Operatorul nu colectează TVA de la client, dar <strong>își deduce TVA-ul</strong> aferent cheltuielilor
+            (combustibil, reparații, achiziții)</td>
+        </tr>
+        <tr>
+          <td>Transport internațional de persoane</td>
+          <td><strong>0% — scutit cu drept de deducere</strong></td>
+          <td>Se aplică porțiunii internaționale a cursei</td>
+        </tr>
+        </table>
+      </div>
+      <div class="obs"><strong>Scutire cu drept de deducere</strong> = operatorul NU adaugă TVA pe factură către client,
+        dar ÎȘI deduce TVA-ul plătit pentru cheltuielile proprii. Factura trebuie să menționeze temeiul scutirii (ex.
+        art. 294 Cod Fiscal).</div>
+
+      <h2 id="c22b">Accize pentru carburanți</h2>
+      <ul>
+        <li><strong>Acciza</strong> = taxă specială de consum aplicată carburanților (motorină, benzină, GPL), inclusă
+          în prețul de la pompă.</li>
+        <li>Accizele sunt <strong>armonizate la nivel UE</strong> (Directiva 2003/96/CE) și stabilite prin Codul Fiscal.
+        </li>
+        <li>Se plătesc de <strong>antrepozitarii autorizați</strong> (producători, importatori), nu direct de
+          transportatori.</li>
+        <li>Motorina destinată <strong>transportatorilor rutieri profesioniști</strong> poate beneficia de
+          <strong>rambursare parțială a accizelor</strong> (pentru vehicule cu MMA ≥ 7,5 tone), în condițiile stabilite
+          de ANAF.
+        </li>
+      </ul>
+
+      <h2 id="c22c">Impozitul pe mijloacele de transport (taxa pe vehicule)</h2>
+      <ul>
+        <li>Se datorează bugetelor locale (primăriei) de către persoanele fizice și juridice care dețin vehicule
+          înmatriculate în România.</li>
+        <li>Pentru autovehicule de marfă, impozitul se calculează în funcție de <strong>capacitatea cilindrică sau masa
+            totală maximă autorizată</strong> a vehiculului.</li>
+        <li>Vehiculele cu MMA &gt; 12 tone plătesc impozit suplimentar, calculat în funcție de nr. de axe și tipul
+          suspensiei.</li>
+        <li>Se plătește în <strong>două rate egale</strong>: până la 31 martie și până la 30 septembrie ale fiecărui an.
+        </li>
+        <li>Reducere de <strong>50%</strong> pentru vehiculele care respectă norma de poluare <strong>Euro 5 sau Euro
+            6</strong>.</li>
+      </ul>
+
+      <h2 id="c22d">Rovinieta (tariful de utilizare a drumurilor naționale)</h2>
+      <ul>
+        <li>Obligatorie pentru <strong>toate vehiculele</strong> care utilizează rețeaua de drumuri naționale din
+          România (autostrăzi, drumuri expres, drumuri naționale europene E).</li>
+        <li>Cuantumul depinde de <strong>tipul vehiculului, MMA și norma de poluare (Euro)</strong> — normele mai
+          ridicate beneficiază de tarife mai mici.</li>
+        <li>Se poate achiziționa pentru perioade: <strong>zi, 7 zile, 30 zile, 90 zile, 6 luni sau 12 luni</strong>.
+        </li>
+        <li>Nedeținerea rovinietei valide se sancționează cu <strong>amendă contravențională</strong>.</li>
+      </ul>
+
+    </div><!-- /cnt -->
+
+  </div><!-- /main -->
+  <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Sus">↑</button>
+  <script>
+    function openSb() { document.getElementById('sb').classList.add('open'); document.getElementById('ov').classList.add('show'); document.body.style.overflow = 'hidden' }
+    function closeSb() { document.getElementById('sb').classList.remove('open'); document.getElementById('ov').classList.remove('show'); document.body.style.overflow = '' }
+    document.querySelectorAll('#toc a').forEach(a => { a.addEventListener('click', () => { if (window.innerWidth <= 768) closeSb() }) });
+    window.addEventListener('scroll', () => { document.getElementById('btt').classList.toggle('v', scrollY > 500) }, { passive: true });
+    let hits = [], cur = -1;
+    const srch = document.getElementById('srch'), info = document.getElementById('srch-info'), nav2 = document.getElementById('srch-nav');
+    function clrMarks() { document.querySelectorAll('#cnt mark').forEach(m => { m.parentNode.replaceChild(document.createTextNode(m.textContent), m) }); document.querySelectorAll('#cnt *').forEach(n => n.normalize && n.normalize()) }
+    function getNodes() { const w = document.createTreeWalker(document.getElementById('cnt'), NodeFilter.SHOW_TEXT, { acceptNode(n) { const t = n.parentElement?.tagName; return ['SCRIPT', 'STYLE', 'BUTTON', 'A'].includes(t) ? NodeFilter.FILTER_REJECT : (n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT) } }); const r = []; let n; while (n = w.nextNode()) r.push(n); return r; }
+    function doSearch(q) { clrMarks(); hits = []; cur = -1; if (!q || q.length < 2) { info.textContent = ''; nav2.style.display = 'none'; return } const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'); getNodes().forEach(nd => { if (!re.test(nd.nodeValue)) return; re.lastIndex = 0; const fr = document.createDocumentFragment(); let last = 0, m; while ((m = re.exec(nd.nodeValue)) !== null) { if (m.index > last) fr.appendChild(document.createTextNode(nd.nodeValue.slice(last, m.index))); const mk = document.createElement('mark'); mk.textContent = m[0]; hits.push(mk); fr.appendChild(mk); last = m.index + m[0].length; } if (last < nd.nodeValue.length) fr.appendChild(document.createTextNode(nd.nodeValue.slice(last))); nd.parentNode.replaceChild(fr, nd); }); if (hits.length) { info.textContent = hits.length + ' rezultate'; nav2.style.display = 'flex'; navS(1) } else { info.textContent = 'Niciun rezultat'; nav2.style.display = 'none' } }
+    function navS(d) { if (!hits.length) return; if (cur >= 0 && cur < hits.length) hits[cur].classList.remove('cur'); cur = ((cur + d) + hits.length) % hits.length; hits[cur].classList.add('cur'); hits[cur].scrollIntoView({ behavior: 'smooth', block: 'center' }); info.textContent = (cur + 1) + ' / ' + hits.length + ' rezultate'; }
+    document.getElementById('srch-btn').addEventListener('click', () => { doSearch(srch.value.trim()) });
+    let st; srch.addEventListener('input', function () { clearTimeout(st); st = setTimeout(() => doSearch(this.value.trim()), 240) });
+    srch.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); navS(e.shiftKey ? -1 : 1); } if (e.key === 'Escape') { this.value = ''; clrMarks(); info.textContent = ''; nav2.style.display = 'none'; } });
+  </script>
+</body>
+
+</html>

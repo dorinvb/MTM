@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrisoare de Transport CMR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET & BASE ── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 11px;
+      background: #e8e8e8;
+      color: #111;
+    }
+
+    /* ── LEGEND COLORS ── */
+    /* OBLIGATORIU = roșu */
+    .obl label,
+    .obl .field-title {
+      color: #c0392b !important;
+      font-weight: 700;
+    }
+
+    .obl .box-header {
+      background: #fdf0ef;
+      border-color: #e74c3c;
+    }
+
+    .obl input,
+    .obl textarea,
+    .obl select {
+      border-color: #e74c3c !important;
+      background: #fff9f9 !important;
+    }
+
+    /* OPȚIONAL = verde */
+    .opt label,
+    .opt .field-title {
+      color: #1a7a3a !important;
+      font-weight: 600;
+    }
+
+    .opt .box-header {
+      background: #f0fbf4;
+      border-color: #27ae60;
+    }
+
+    .opt input,
+    .opt textarea,
+    .opt select {
+      border-color: #27ae60 !important;
+      background: #f8fdfb !important;
+    }
+
+    /* SEMNĂTURĂ/ȘTAMPILĂ = albastru */
+    .sig label,
+    .sig .field-title {
+      color: #1a4fa0 !important;
+      font-weight: 700;
+    }
+
+    .sig .box-header {
+      background: #eff4ff;
+      border-color: #2563eb;
+    }
+
+    .sig .sig-area {
+      border: 2px dashed #2563eb;
+      background: #f4f7ff;
+      border-radius: 4px;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2563eb;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ── TOOLBAR ── */
+    #toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: #1a1a2e;
+      color: white;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .toolbar-title {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: #f0c040;
+      margin-right: 8px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .leg-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+    }
+
+    .leg-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .toolbar-btns {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+
+    .tbtn {
+      padding: 6px 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .tbtn-print {
+      background: #f0c040;
+      color: #1a1a2e;
+    }
+
+    .tbtn-print:hover {
+      background: #ffd84d;
+    }
+
+    .tbtn-clear {
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .tbtn-clear:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── PAGE ── */
+    #page-wrap {
+      max-width: 980px;
+      margin: 70px auto 40px;
+      padding: 0 16px;
+    }
+
+    /* ── CMR DOCUMENT ── */
+    .cmr-doc {
+      background: white;
+      border: 2px solid #333;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ── HEADER ── */
+    .cmr-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: stretch;
+      border-bottom: 2px solid #333;
+    }
+
+    .cmr-header-left {
+      padding: 10px 14px;
+      border-right: 2px solid #333;
+    }
+
+    .cmr-title-main {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #111;
+      text-transform: uppercase;
+    }
+
+    .cmr-title-sub {
+      font-size: 9px;
+      color: #555;
+      margin-top: 2px;
+      font-style: italic;
+    }
+
+    .cmr-convention {
+      font-size: 8px;
+      color: #777;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .cmr-header-right {
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      min-width: 160px;
+    }
+
+    .copies-info {
+      font-size: 8px;
+      color: #555;
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    .copy-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 9px;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    .copy-1 {
+      background: #ffeaea;
+      color: #c0392b;
+      border: 1px solid #e74c3c;
+    }
+
+    .copy-2 {
+      background: #e8f5ff;
+      color: #1a4fa0;
+      border: 1px solid #2563eb;
+    }
+
+    .copy-3 {
+      background: #eafaf1;
+      color: #1a7a3a;
+      border: 1px solid #27ae60;
+    }
+
+    /* ── GRID LAYOUT ── */
+    .cmr-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    /* Each box */
+    .cmr-box {
+      border-right: 1px solid #333;
+      border-bottom: 1px solid #333;
+      padding: 0;
+      position: relative;
+    }
+
+    .cmr-box:nth-child(3n) {
+      border-right: none;
+    }
+
+    .cmr-box.full-row {
+      grid-column: 1 / -1;
+      border-right: none;
+    }
+
+    .cmr-box.two-thirds {
+      grid-column: span 2;
+    }
+
+    .cmr-box.one-third {
+      grid-column: span 1;
+    }
+
+    .box-header {
+      padding: 3px 6px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .box-num {
+      font-size: 8px;
+      font-weight: 800;
+      color: #999;
+      min-width: 14px;
+      flex-shrink: 0;
+    }
+
+    .field-title {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      line-height: 1.3;
+    }
+
+    .field-sub {
+      font-size: 8px;
+      color: #888;
+      font-style: italic;
+      font-weight: normal;
+    }
+
+    .box-body {
+      padding: 4px 6px;
+    }
+
+    /* ── INPUTS ── */
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #bbb;
+      border-radius: 3px;
+      padding: 4px 6px;
+      font-size: 11px;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #111;
+      background: white;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      resize: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+      z-index: 1;
+      position: relative;
+    }
+
+    textarea {
+      line-height: 1.5;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 3px;
+    }
+
+    .input-row input {
+      flex: 1;
+    }
+
+    label {
+      display: block;
+      font-size: 8px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .field-group {
+      margin-bottom: 5px;
+    }
+
+    /* ── GOODS TABLE ── */
+    .goods-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+    }
+
+    .goods-table th {
+      font-size: 8px;
+      font-weight: 700;
+      color: #555;
+      text-transform: uppercase;
+      padding: 3px 4px;
+      border: 1px solid #ddd;
+      background: #f9f9f9;
+      text-align: left;
+    }
+
+    .goods-table td {
+      padding: 2px;
+      border: 1px solid #ddd;
+    }
+
+    .goods-table input {
+      border: none !important;
+      background: transparent !important;
+      padding: 3px 4px;
+      font-size: 10px;
+      border-radius: 0;
+    }
+
+    .goods-table input:focus {
+      background: #fff9e6 !important;
+      box-shadow: none;
+    }
+
+    /* ── SECTION DIVIDERS ── */
+    .section-divider {
+      grid-column: 1 / -1;
+      background: #1a1a2e;
+      color: #f0c040;
+      padding: 3px 10px;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #333;
+    }
+
+    /* ── CHARGES TABLE ── */
+    .charges-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .charges-table th {
+      font-size: 8px;
+      color: #555;
+      font-weight: 700;
+      padding: 2px 4px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+      background: #f9f9f9;
+    }
+
+    .charges-table td {
+      padding: 2px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+
+    .charges-table td label {
+      font-size: 8px;
+      text-align: left;
+      color: #444;
+    }
+
+    .charges-table input {
+      font-size: 10px;
+      text-align: right;
+      padding: 2px 4px;
+    }
+
+    /* ── FOOTER BOXES ── */
+    .cmr-footer-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-top: 2px solid #333;
+    }
+
+    .footer-box {
+      padding: 8px;
+      border-right: 1px solid #333;
+    }
+
+    .footer-box:last-child {
+      border-right: none;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body {
+        background: white;
+        font-size: 10px;
+      }
+
+      #toolbar {
+        display: none !important;
+      }
+
+      #page-wrap {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .cmr-doc {
+        box-shadow: none;
+        border: 1.5px solid #333;
+      }
+
+      input,
+      textarea,
+      select {
+        border-color: #bbb !important;
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .box-header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .section-divider {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .obl .box-header {
+        background: #fdf0ef !important;
+      }
+
+      .opt .box-header {
+        background: #f0fbf4 !important;
+      }
+
+      .sig .box-header {
+        background: #eff4ff !important;
+      }
+
+      .sig .sig-area {
+        background: #f4f7ff !important;
+      }
+
+      .obl input,
+      .obl textarea {
+        background: #fff9f9 !important;
+      }
+
+      .opt input,
+      .opt textarea {
+        background: #f8fdfb !important;
+      }
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 8mm;
+    }
+  </style>
+</head>
+
+<body>
+
+  </a>
+  </div>
+  <!-- TOOLBAR -->
+  <div id="toolbar">
+    <span class="toolbar-title">CMR · SCRISOARE DE TRANSPORT</span>
+    <div class="legend">
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#fdf0ef;border:2px solid #e74c3c"></div>
+        <span style="color:#e74c3c;font-weight:700">OBLIGATORIU (Art. 6§1 CMR)</span>
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#f0fbf4;border:2px solid #27ae60"></div>
+        <span style="color:#27ae60;font-weight:700">OPȚIONAL (Art. 6§2 CMR)</span>
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#eff4ff;border:2px solid #2563eb"></div>
+        <span style="color:#2563eb;font-weight:700">SEMNĂTURĂ / ȘTAMPILĂ</span>
+      </div>
+    </div>
+    <div class="toolbar-btns">
+      <!-- Buton pentru întoarcerea la Index -->
+      <div>
+        <a href="index.html"
+          style="display:flex; align-items:center; gap:6px; background:#0a2540; color:#fff; text-decoration:none; padding:8px 16px; border-radius:40px; font-size:13px; font-weight:600; font-family:sans-serif; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.2s;">
+          🏠 Index
+        </a>
+      </div>
+      <button class="tbtn tbtn-clear" onclick="clearForm()">🗑 Șterge tot</button>
+      <button class="tbtn tbtn-print" onclick="window.print()">🖨 Tipărește</button>
+    </div>
+  </div>
+
+  <!-- PAGE WRAP -->
+  <div id="page-wrap">
+    <div class="cmr-doc">
+
+      <!-- ══ HEADER ══ -->
+      <div class="cmr-header">
+        <div class="cmr-header-left">
+          <div class="cmr-title-main">C M R</div>
+          <div class="cmr-title-sub">Scrisoare de transport internațional · International Consignment Note</div>
+          <div class="cmr-convention">
+            Convenția de la Geneva, 19 mai 1956 · Protocol adițional 1978<br>
+            Convention relative au contrat de transport international de marchandises par route
+          </div>
+        </div>
+        <div class="cmr-header-right">
+          <div class="copies-info">
+            Emis în 3 exemplare originale:<br>
+            <span class="copy-badge copy-1">EXEMPLAR 1 · Expeditor (Roșu)</span><br>
+            <span class="copy-badge copy-2">EXEMPLAR 2 · Destinatar (Albastru)</span><br>
+            <span class="copy-badge copy-3">EXEMPLAR 3 · Transportator (Verde)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BODY GRID ══ -->
+      <div class="cmr-body">
+
+        <!-- SECTION 1: PARTIES -->
+        <div class="section-divider">1. Datele Părților · Party Details</div>
+
+        <!-- BOX 1: Expeditor — OBLIGATORIU -->
+        <div class="cmr-box obl">
+          <div class="box-header">
+            <span class="box-num">1</span>
+            <span class="field-title">Expeditor (Sender / Expéditeur) <span class="field-sub">—
+                OBLIGATORIU</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Denumire / Nume complet</label>
+              <input type="text" placeholder="SC Transport SRL / Ion Popescu">
+            </div>
+            <div class="field-group">
+              <label>Adresă</label>
+              <input type="text" placeholder="Str. Exemplu nr. 10">
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Localitate</label>
+                <input type="text" placeholder="București">
+              </div>
+              <div style="flex:1">
+                <label>Cod poștal</label>
+                <input type="text" placeholder="010101">
+              </div>
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Țara</label>
+                <input type="text" placeholder="România">
+              </div>
+              <div style="flex:1">
+                <label>Tel / Fax</label>
+                <input type="text" placeholder="+40 21 000 0000">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 2: Destinatar — OBLIGATORIU -->
+        <div class="cmr-box obl">
+          <div class="box-header">
+            <span class="box-num">2</span>
+            <span class="field-title">Destinatar (Consignee / Destinataire) <span class="field-sub">—
+                OBLIGATORIU</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Denumire / Nume complet</label>
+              <input type="text" placeholder="Buyer GmbH / Jan Müller">
+            </div>
+            <div class="field-group">
+              <label>Adresă</label>
+              <input type="text" placeholder="Hauptstrasse 5">
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Localitate</label>
+                <input type="text" placeholder="München">
+              </div>
+              <div style="flex:1">
+                <label>Cod poștal</label>
+                <input type="text" placeholder="80000">
+              </div>
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Țara</label>
+                <input type="text" placeholder="Germania">
+              </div>
+              <div style="flex:1">
+                <label>Tel / Fax</label>
+                <input type="text" placeholder="+49 89 000 000">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 3: Loc livrare — OBLIGATORIU -->
+        <div class="cmr-box obl">
+          <div class="box-header">
+            <span class="box-num">3</span>
+            <span class="field-title">Locul prevăzut pentru livrare <span class="field-sub">— OBLIGATORIU</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Localitate / Oraș</label>
+              <input type="text" placeholder="München">
+            </div>
+            <div class="field-group">
+              <label>Adresa exactă de livrare</label>
+              <input type="text" placeholder="Hauptstrasse 5, Depozit A">
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Țara</label>
+                <input type="text" placeholder="Germania">
+              </div>
+              <div style="flex:1">
+                <label>Cod poștal</label>
+                <input type="text" placeholder="80000">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 4: Loc și dată preluare — OBLIGATORIU -->
+        <div class="cmr-box obl">
+          <div class="box-header">
+            <span class="box-num">4</span>
+            <span class="field-title">Loc și dată preluare marfă <span class="field-sub">— OBLIGATORIU</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Localitate / Adresa de încărcare</label>
+              <input type="text" placeholder="Str. Exemplu nr. 10, București">
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Țara</label>
+                <input type="text" placeholder="România">
+              </div>
+              <div style="flex:1">
+                <label>Data preluării</label>
+                <input type="date">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 5: Documente anexate — OPȚIONAL -->
+        <div class="cmr-box opt">
+          <div class="box-header">
+            <span class="box-num">5</span>
+            <span class="field-title">Documente anexate <span class="field-sub">— OPȚIONAL</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Lista documentelor (factură, certificat sanitar, etc.)</label>
+              <textarea rows="3"
+                placeholder="ex: Factură nr. 1234/2025&#10;Certificat fitosanitar&#10;Packing list"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 6: Transportator — OBLIGATORIU -->
+        <div class="cmr-box obl">
+          <div class="box-header">
+            <span class="box-num">6</span>
+            <span class="field-title">Transportator (Carrier / Transporteur) <span class="field-sub">—
+                OBLIGATORIU</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Denumire firmă transportator</label>
+              <input type="text" placeholder="SC Rapid Trans SRL">
+            </div>
+            <div class="field-group">
+              <label>Adresă</label>
+              <input type="text" placeholder="Str. Șoselei nr. 2, Ploiești">
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Țara</label>
+                <input type="text" placeholder="România">
+              </div>
+              <div style="flex:1">
+                <label>Licență CMR / Nr. reg.</label>
+                <input type="text" placeholder="RO12345678">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: GOODS -->
+        <div class="section-divider">2. Descrierea Mărfii · Goods Description</div>
+
+        <!-- BOX 7+8+9+10+11+12+13 — GOODS TABLE — OBLIGATORIU -->
+        <div class="cmr-box obl full-row">
+          <div class="box-header">
+            <span class="box-num">7–13</span>
+            <span class="field-title">Descrierea mărfii / Goods Details <span class="field-sub">— OBLIGATORIU (Art. 6§1
+                CMR)</span></span>
+          </div>
+          <div class="box-body">
+            <table class="goods-table">
+              <thead>
+                <tr>
+                  <th style="width:5%">Nr.<br>Crt.</th>
+                  <th style="width:6%">Nr. Colete<br>(Buc./Plt.)</th>
+                  <th style="width:12%">Marcaje și Numere<br>(Marks &amp; Numbers)</th>
+                  <th style="width:25%">Natura mărfii / Descriere<br>(Nature of Goods)</th>
+                  <th style="width:10%">Tip ambalaj<br>(Packing)</th>
+                  <th style="width:8%">Nr. statistică<br>(Stat. No.)</th>
+                  <th style="width:8%">Greutate brută<br>(Gross kg)</th>
+                  <th style="width:8%">Volum<br>(m³)</th>
+                  <th style="width:8%">Valoare declarată<br>(Value)</th>
+                  <th style="width:10%">Mărfuri periculoase<br>(Dangerous – ADR)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" value="1"></td>
+                  <td><input type="number" placeholder="24"></td>
+                  <td><input type="text" placeholder="AB-001"></td>
+                  <td><input type="text" placeholder="Piese auto / Auto parts"></td>
+                  <td><input type="text" placeholder="Paletă"></td>
+                  <td><input type="text" placeholder="8708"></td>
+                  <td><input type="number" placeholder="1250"></td>
+                  <td><input type="number" placeholder="3.5"></td>
+                  <td><input type="text" placeholder="€ 8.000"></td>
+                  <td><input type="text" placeholder="–"></td>
+                </tr>
+                <tr>
+                  <td><input type="text" value="2"></td>
+                  <td><input type="number"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="number"></td>
+                  <td><input type="number"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                </tr>
+                <tr>
+                  <td><input type="text" value="3"></td>
+                  <td><input type="number"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="number"></td>
+                  <td><input type="number"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                </tr>
+                <tr>
+                  <td><input type="text" value="4"></td>
+                  <td><input type="number"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                  <td><input type="number"></td>
+                  <td><input type="number"></td>
+                  <td><input type="text"></td>
+                  <td><input type="text"></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr style="background:#fafafa">
+                  <td colspan="5"
+                    style="padding:3px 4px;font-size:9px;font-weight:700;color:#555;border:1px solid #ddd">TOTALURI:
+                  </td>
+                  <td><input type="text" placeholder="—" style="border:1px solid #ddd;font-weight:700"></td>
+                  <td><input type="number" placeholder="0" style="border:1px solid #ddd;font-weight:700"></td>
+                  <td><input type="number" placeholder="0" style="border:1px solid #ddd;font-weight:700"></td>
+                  <td colspan="2" style="border:1px solid #ddd;padding:3px 4px;font-size:8px;color:#888">Total coloanele
+                    de mai sus</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- SECTION 3: INSTRUCTIONS & CHARGES -->
+        <div class="section-divider">3. Instrucțiuni și Costuri · Instructions &amp; Charges</div>
+
+        <!-- BOX 14: Instrucțiuni expeditor — OPȚIONAL -->
+        <div class="cmr-box opt two-thirds">
+          <div class="box-header">
+            <span class="box-num">14</span>
+            <span class="field-title">Instrucțiunile expeditorului (franco, vamă, asigurare) <span class="field-sub">—
+                OPȚIONAL</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Instrucțiuni speciale / Condiții de transport</label>
+              <textarea rows="3"
+                placeholder="ex: A nu se răsturna. A se feri de umezeală. Temperatura: +5°C / +20°C.&#10;Interzisă transbordarea.&#10;Termen de livrare: 5 zile lucrătoare de la preluare."></textarea>
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Condiții INCOTERMS</label>
+                <select>
+                  <option value="">— Alege —</option>
+                  <option>EXW – Ex Works</option>
+                  <option>FCA – Free Carrier</option>
+                  <option>CPT – Carriage Paid To</option>
+                  <option>CIP – Carriage and Insurance Paid</option>
+                  <option>DAP – Delivered At Place</option>
+                  <option>DPU – Delivered at Place Unloaded</option>
+                  <option>DDP – Delivered Duty Paid</option>
+                  <option>FOB – Free on Board</option>
+                  <option>CFR – Cost and Freight</option>
+                  <option>CIF – Cost Insurance Freight</option>
+                </select>
+              </div>
+              <div style="flex:1">
+                <label>Interdicție transbordare</label>
+                <select>
+                  <option value="">— Alege —</option>
+                  <option>DA – Transbordarea permisă</option>
+                  <option>NU – Interzisă transbordarea</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 15: Ramburs la livrare — OPȚIONAL -->
+        <div class="cmr-box opt one-third">
+          <div class="box-header">
+            <span class="box-num">15</span>
+            <span class="field-title">Ramburs la livrare (Cash on Delivery) <span class="field-sub">—
+                OPȚIONAL</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Suma de rambursat</label>
+              <input type="text" placeholder="ex: € 0,00">
+            </div>
+            <div class="field-group">
+              <label>Moneda</label>
+              <input type="text" placeholder="EUR / RON / USD">
+            </div>
+            <div class="field-group">
+              <label>Mod de plată</label>
+              <select>
+                <option value="">— —</option>
+                <option>Numerar / Cash</option>
+                <option>Transfer bancar / Wire transfer</option>
+                <option>Cec / Cheque</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 16: Transportator — dacă diferit de 6 — OPȚIONAL -->
+        <div class="cmr-box opt">
+          <div class="box-header">
+            <span class="box-num">16</span>
+            <span class="field-title">Transportatori succesivi <span class="field-sub">— OPȚIONAL</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Transportator 2 (dacă există)</label>
+              <input type="text" placeholder="Firma transportator 2">
+            </div>
+            <div class="field-group">
+              <label>Adresă / Țara</label>
+              <input type="text" placeholder="Adresă, Țara">
+            </div>
+            <div class="field-group">
+              <label>Transportator 3 (dacă există)</label>
+              <input type="text" placeholder="Firma transportator 3">
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 17: Vehicul — OPȚIONAL -->
+        <div class="cmr-box opt">
+          <div class="box-header">
+            <span class="box-num">17</span>
+            <span class="field-title">Date vehicul / Vehicle Details <span class="field-sub">— OPȚIONAL
+                (uzual)</span></span>
+          </div>
+          <div class="box-body">
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Nr. înmatriculare cap tractor</label>
+                <input type="text" placeholder="B 123 ABC">
+              </div>
+              <div style="flex:1">
+                <label>Nr. înmatriculare remorcă</label>
+                <input type="text" placeholder="B 456 XYZ">
+              </div>
+            </div>
+            <div class="input-row">
+              <div style="flex:1">
+                <label>Tip vehicul / Capacitate</label>
+                <input type="text" placeholder="TIR / 24t / Frig">
+              </div>
+              <div style="flex:1">
+                <label>Țara înmatriculare</label>
+                <input type="text" placeholder="RO">
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Șofer / Driver (Nume)</label>
+              <input type="text" placeholder="Ion Ionescu">
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 18: Rezerve transportator — OPȚIONAL -->
+        <div class="cmr-box opt">
+          <div class="box-header">
+            <span class="box-num">18</span>
+            <span class="field-title">Rezervele și observațiile transportatorului <span class="field-sub">—
+                OPȚIONAL</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Observații la preluarea mărfii (stare ambalaj, lipsuri, etc.)</label>
+              <textarea rows="4"
+                placeholder="ex: Ambalaj deteriorat la colețul nr. 3.&#10;Greutatea neconfirmată la cântar.&#10;Mărfuri preluate fără posibilitate de verificare a conținutului."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: FREIGHT CHARGES -->
+        <div class="section-divider">4. Costuri și Plata Transportului · Freight Charges</div>
+
+        <!-- BOX 19: Tarif transport — OPȚIONAL -->
+        <div class="cmr-box opt two-thirds">
+          <div class="box-header">
+            <span class="box-num">19</span>
+            <span class="field-title">Convenții speciale / Tarife &amp; Plata transportului <span class="field-sub">—
+                OPȚIONAL (Art. 6§2 CMR)</span></span>
+          </div>
+          <div class="box-body">
+            <table class="charges-table">
+              <thead>
+                <tr>
+                  <th style="text-align:left;width:40%">Tip cheltuială</th>
+                  <th>Plată de Expeditor</th>
+                  <th>Plată de Destinatar</th>
+                  <th>Sumă (monedă)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><label>Tarif transport (freight)</label></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td><input type="text" placeholder="€ 1.500,00"></td>
+                </tr>
+                <tr>
+                  <td><label>Reduceri</label></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td><input type="text" placeholder="–"></td>
+                </tr>
+                <tr>
+                  <td><label>Cheltuieli suplimentare</label></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td><input type="text" placeholder="–"></td>
+                </tr>
+                <tr>
+                  <td><label>Taxe vamale / Customs</label></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td><input type="text" placeholder="–"></td>
+                </tr>
+                <tr>
+                  <td><label>Alte cheltuieli</label></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td style="text-align:center"><input type="checkbox"></td>
+                  <td><input type="text" placeholder="–"></td>
+                </tr>
+                <tr style="font-weight:700">
+                  <td><label style="font-weight:800;color:#111">TOTAL</label></td>
+                  <td></td>
+                  <td></td>
+                  <td><input type="text" placeholder="€ 0,00" style="font-weight:700"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- BOX 20: Valoare specială declarată — OPȚIONAL -->
+        <div class="cmr-box opt one-third">
+          <div class="box-header">
+            <span class="box-num">20</span>
+            <span class="field-title">Valoare declarată a mărfii <span class="field-sub">— OPȚIONAL</span></span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Valoare declarată (depășire limită 8.33 SDR/kg)</label>
+              <input type="text" placeholder="ex: € 50.000,00">
+            </div>
+            <div class="field-group">
+              <label>Interes special la livrare</label>
+              <input type="text" placeholder="ex: € 5.000,00">
+            </div>
+            <div class="field-group">
+              <label>Instrucțiuni asigurare de la expeditor</label>
+              <textarea rows="2" placeholder="ex: Asigurați marfa pentru suma de €50.000 all risks."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 5: SIGNATURES -->
+        <div class="section-divider">5. Semnături și Ștampile · Signatures &amp; Stamps</div>
+
+        <!-- BOX 21: Loc și dată emitere — OBLIGATORIU -->
+        <div class="cmr-box obl">
+          <div class="box-header">
+            <span class="box-num">21</span>
+            <span class="field-title">Locul și data întocmirii <span class="field-sub">— OBLIGATORIU</span></span>
+          </div>
+          <div class="box-body">
+            <div class="input-row">
+              <div style="flex:2">
+                <label>Locul întocmirii (oraș)</label>
+                <input type="text" placeholder="București">
+              </div>
+              <div style="flex:1">
+                <label>Data</label>
+                <input type="date">
+              </div>
+            </div>
+            <div style="margin-top:6px;font-size:8px;color:#888;font-style:italic">
+              Scrisoarea CMR a fost întocmită conform Convenției din 19 mai 1956 și protocolului din 1978.
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 22: Semnătură expeditor — SEMNĂTURĂ -->
+        <div class="cmr-box sig">
+          <div class="box-header">
+            <span class="box-num">22</span>
+            <span class="field-title">Semnătura și ștampila Expeditorului</span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Nume semnatar (Expeditor)</label>
+              <input type="text" placeholder="Ion Popescu – Director">
+            </div>
+            <div class="sig-area">ȘTAMPILĂ &amp; SEMNĂTURĂ EXPEDITOR</div>
+          </div>
+        </div>
+
+        <!-- BOX 23: Semnătură transportator — SEMNĂTURĂ -->
+        <div class="cmr-box sig">
+          <div class="box-header">
+            <span class="box-num">23</span>
+            <span class="field-title">Semnătura și ștampila Transportatorului</span>
+          </div>
+          <div class="box-body">
+            <div class="field-group">
+              <label>Nume șofer / reprezentant transportator</label>
+              <input type="text" placeholder="Ion Ionescu – Șofer">
+            </div>
+            <div class="sig-area">ȘTAMPILĂ &amp; SEMNĂTURĂ TRANSPORTATOR</div>
+          </div>
+        </div>
+
+        <!-- BOX 24: Marfa primită de destinatar — SEMNĂTURĂ -->
+        <div class="cmr-box sig full-row">
+          <div class="box-header">
+            <span class="box-num">24</span>
+            <span class="field-title">Marfa primită (Goods received) – Semnătura și ștampila Destinatarului</span>
+          </div>
+          <div class="box-body" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <div>
+              <div class="field-group">
+                <label>Data primirii mărfii</label>
+                <input type="date">
+              </div>
+              <div class="field-group">
+                <label>Ora primirii</label>
+                <input type="text" placeholder="ex: 14:30">
+              </div>
+              <div class="field-group">
+                <label>Observații la primire (rezerve)</label>
+                <textarea rows="2"
+                  placeholder="ex: Colet nr. 2 deteriorat. / Marfă primită în bune condiții."></textarea>
+              </div>
+            </div>
+            <div>
+              <div class="field-group">
+                <label>Nume semnatar (Destinatar)</label>
+                <input type="text" placeholder="Jan Müller – Gestionar">
+              </div>
+              <div class="sig-area" style="min-height:60px">ȘTAMPILĂ &amp; SEMNĂTURĂ DESTINATAR</div>
+            </div>
+            <div style="display:flex;flex-direction:column;justify-content:center">
+              <div
+                style="font-size:8px;color:#888;font-style:italic;line-height:1.7;padding:8px;background:#f8f9ff;border-radius:4px;border:1px solid #d0d8ff">
+                <strong>Important (Art. 30 CMR):</strong><br>
+                • Pierderi/avarii <em>aparente</em>: rezervă în momentul livrării<br>
+                • Pierderi/avarii <em>neaparente</em>: în scris în 7 zile de la primire (fără duminici și sărbători
+                legale)<br>
+                • Întârziere la livrare: rezervă în scris în <strong>21 de zile</strong> de la punerea la dispoziție
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end cmr-body -->
+
+      <!-- ══ FOOTER INFO ══ -->
+      <div
+        style="background:#1a1a2e;color:#aaa;padding:6px 14px;font-size:8px;display:flex;justify-content:space-between;align-items:center;gap:20px">
+        <span>📌 <strong style="color:#f0c040">Câmpuri ROȘII = Obligatorii conform Art. 6§1 Convenție CMR</strong>
+          &nbsp;|&nbsp; <strong style="color:#4ade80">Câmpuri VERZI = Opționale conform Art. 6§2 CMR</strong>
+          &nbsp;|&nbsp; <strong style="color:#93c5fd">Câmpuri ALBASTRE = Semnătură / Ștampilă</strong></span>
+        <span style="white-space:nowrap">Convenția CMR, Geneva 19 mai 1956 · Protocol 1978 · 58 state semnatare</span>
+      </div>
+
+    </div><!-- end cmr-doc -->
+  </div><!-- end page-wrap -->
+
+  <script>
+    function clearForm() {
+      if (!confirm('Ești sigur că vrei să ștergi toate datele completate?')) return;
+      document.querySelectorAll('input[type="text"], input[type="date"], input[type="number"], textarea').forEach(el => {
+        el.value = '';
+      });
+      document.querySelectorAll('select').forEach(el => {
+        el.selectedIndex = 0;
+      });
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+        el.checked = false;
+      });
+    }
+
+    // Auto-set today's date on load for box 21
+    window.addEventListener('load', () => {
+      const today = new Date().toISOString().split('T')[0];
+      const dateInputs = document.querySelectorAll('input[type="date"]');
+      if (dateInputs.length > 0) {
+        dateInputs[0].value = today; // Box 4 date
+        if (dateInputs[1]) dateInputs[1].value = today; // Box 21
+      }
+    });
+  </script>
+
+</body>
+
+</html>

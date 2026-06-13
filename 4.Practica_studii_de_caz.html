@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Transporturi Marfă — Studii de Caz</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2433;
+      --border: #30363d;
+      --accent: #e8a838;
+      --accent2: #4fa3e0;
+      --green: #3fb950;
+      --red: #f85149;
+      --text: #e6edf3;
+      --text2: #8b949e;
+      --text3: #6e7681;
+      --radius: 12px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 16px;
+    }
+
+    .logo {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1rem;
+      color: var(--accent);
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+
+    .logo span {
+      color: var(--accent2);
+    }
+
+    .header-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text2);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: all .15s;
+    }
+
+    .tab-btn:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #111;
+      border-color: var(--accent);
+    }
+
+    /* ── SCOREBOARD STRIP ── */
+    .scoreboard {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .score-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text2);
+    }
+
+    .score-num {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .score-num.green {
+      color: var(--green);
+    }
+
+    .score-num.red {
+      color: var(--red);
+    }
+
+    .score-num.blue {
+      color: var(--accent2);
+    }
+
+    .score-num.gold {
+      color: var(--accent);
+    }
+
+    .progress-wrap {
+      flex: 1;
+      min-width: 120px;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transition: width .4s ease;
+    }
+
+    .pct-label {
+      font-size: 0.78rem;
+      color: var(--text3);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── STUDY VIEW ── */
+    #view-studiu {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .controls-bar {
+      padding: 12px 24px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ctrl-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .15s;
+    }
+
+    .ctrl-btn:hover {
+      border-color: var(--accent2);
+      color: var(--text);
+    }
+
+    .ctrl-btn.danger:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .filter-select {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    .nav-counter-inline {
+      font-size: 0.8rem;
+      color: var(--text3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── CARD AREA ── */
+    .card-area {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 28px 20px 40px;
+    }
+
+    .card-wrap {
+      width: 100%;
+      max-width: 760px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0, 0, 0, .4);
+      animation: cardIn .25s ease;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .card-top {
+      padding: 20px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-tema {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      background: rgba(79, 163, 224, .1);
+      border: 1px solid rgba(79, 163, 224, .2);
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+
+    .card-nr {
+      font-size: 0.75rem;
+      color: var(--text3);
+    }
+
+    .card-mark {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .card-mark.stiut {
+      background: rgba(63, 185, 80, .15);
+      color: var(--green);
+      border: 1px solid rgba(63, 185, 80, .3);
+    }
+
+    .card-mark.nestiut {
+      background: rgba(248, 81, 73, .15);
+      color: var(--red);
+      border: 1px solid rgba(248, 81, 73, .3);
+    }
+
+    .card-body {
+      padding: 20px 24px;
+    }
+
+    .card-question {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+
+    /* ── USER ANSWER BOX ── */
+    .answer-section {
+      padding: 0 24px 20px;
+    }
+
+    .answer-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--text3);
+      margin-bottom: 8px;
+    }
+
+    .answer-textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      resize: vertical;
+      min-height: 90px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .answer-textarea:focus {
+      border-color: var(--accent2);
+    }
+
+    .answer-textarea:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-reveal {
+      padding: 10px 22px;
+      border-radius: 9px;
+      border: 1px solid var(--accent);
+      background: rgba(232, 168, 56, .1);
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      transition: all .15s;
+    }
+
+    .btn-reveal:hover {
+      background: rgba(232, 168, 56, .2);
+    }
+
+    .btn-reveal:disabled {
+      opacity: .35;
+      cursor: default;
+    }
+
+    /* ── CORRECT ANSWER ── */
+    .correct-answer {
+      margin: 0 24px 20px;
+      background: rgba(79, 163, 224, .05);
+      border: 1px solid rgba(79, 163, 224, .2);
+      border-radius: 10px;
+      padding: 16px 18px;
+      animation: fadeIn .3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .correct-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--accent2);
+      margin-bottom: 10px;
+    }
+
+    .correct-text {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: var(--text);
+      white-space: pre-line;
+    }
+
+    /* ── VOTE BUTTONS ── */
+    .vote-row {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .vote-label {
+      font-size: 0.8rem;
+      color: var(--text2);
+      flex: 1;
+    }
+
+    .btn-stiut,
+    .btn-nestiut {
+      padding: 10px 22px;
+      border-radius: 9px;
+      border: 1px solid;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all .15s;
+    }
+
+    .btn-stiut {
+      border-color: rgba(63, 185, 80, .4);
+      background: rgba(63, 185, 80, .08);
+      color: var(--green);
+    }
+
+    .btn-stiut:hover {
+      background: rgba(63, 185, 80, .18);
+    }
+
+    .btn-nestiut {
+      border-color: rgba(248, 81, 73, .4);
+      background: rgba(248, 81, 73, .08);
+      color: var(--red);
+    }
+
+    .btn-nestiut:hover {
+      background: rgba(248, 81, 73, .18);
+    }
+
+    /* ── NAV ── */
+    .nav-bar {
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .nav-btn {
+      padding: 9px 20px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .15s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      border-color: var(--accent2);
+      color: var(--text);
+    }
+
+    .nav-btn:disabled {
+      opacity: .25;
+      cursor: default;
+    }
+
+    .nav-pos {
+      font-size: 0.82rem;
+      color: var(--text3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── STATS VIEW ── */
+    #view-stats {
+      display: none;
+      padding: 28px 24px;
+      max-width: 780px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    #view-stats.active {
+      display: block;
+    }
+
+    .stats-header {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .stat-box .num {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    .stat-box .lbl {
+      font-size: 0.75rem;
+      color: var(--text3);
+      margin-top: 4px;
+    }
+
+    .stat-box.s-total .num {
+      color: var(--accent2);
+    }
+
+    .stat-box.s-stiut .num {
+      color: var(--green);
+    }
+
+    .stat-box.s-nestiut .num {
+      color: var(--red);
+    }
+
+    .stat-box.s-skip .num {
+      color: var(--text3);
+    }
+
+    .tema-section {
+      margin-top: 8px;
+    }
+
+    .tema-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tema-name {
+      font-size: 0.82rem;
+      color: var(--text2);
+      width: 260px;
+      flex-shrink: 0;
+    }
+
+    .tema-bar-bg {
+      flex: 1;
+      height: 7px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .tema-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--green);
+      transition: width .5s;
+    }
+
+    .tema-nums {
+      font-size: 0.75rem;
+      color: var(--text3);
+      width: 80px;
+      text-align: right;
+    }
+
+    .reset-btn {
+      margin-top: 24px;
+      padding: 10px 22px;
+      border-radius: 9px;
+      border: 1px solid rgba(248, 81, 73, .4);
+      background: rgba(248, 81, 73, .08);
+      color: var(--red);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all .15s;
+    }
+
+    .reset-btn:hover {
+      background: rgba(248, 81, 73, .18);
+    }
+
+    /* ── HIDE/SHOW ── */
+    #view-studiu.hidden {
+      display: none;
+    }
+
+    /* ── CACHE NOTICE ── */
+    .cache-badge {
+      font-size: 0.7rem;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cache-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
+
+    /* keyboard hint */
+    .kb-hint {
+      font-size: 0.7rem;
+      color: var(--text3);
+      text-align: center;
+      padding: 6px 0 0;
+      opacity: .6;
+    }
+
+    kbd {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.68rem;
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Buton pentru întoarcerea la Index -->
+  <div style="position:fixed; top:12px; right:12px; z-index:9999;">
+    <a href="index.html"
+      style="display:flex; align-items:center; gap:6px; background:#0a2540; color:#fff; text-decoration:none; padding:8px 16px; border-radius:40px; font-size:13px; font-weight:600; font-family:sans-serif; box-shadow:0 2px 8px rgba(0,0,0,0.2); transition:all 0.2s;">
+      🏠 Index
+    </a>
+  </div>
+  <div class="header">
+    <div class="logo">Manager <span>Transporturi</span> Marfă</div>
+    <div class="header-tabs">
+      <button class="tab-btn active" onclick="switchView('studiu')">📚 Studiu</button>
+      <button class="tab-btn" onclick="switchView('stats')">📊 Statistici</button>
+    </div>
+    <div class="cache-badge">
+      <span class="cache-dot"></span> salvat local
+    </div>
+  </div>
+
+  <div class="scoreboard" id="scoreboard">
+    <div class="score-pill">Total: <span class="score-num blue" id="sc-total">134</span></div>
+    <div class="score-pill">✅ <span class="score-num green" id="sc-stiut">0</span></div>
+    <div class="score-pill">❌ <span class="score-num red" id="sc-nestiut">0</span></div>
+    <div class="score-pill">— <span class="score-num" id="sc-skip" style="color:var(--text3)">0</span></div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="pct-label" id="pct-label">0%</div>
+  </div>
+
+  <!-- STUDY VIEW -->
+  <div class="main" id="view-studiu">
+    <div class="controls-bar">
+      <select class="filter-select" id="tema-filter" onchange="applyFilter()">
+        <option value="toate">Toate capitolele</option>
+      </select>
+      <button class="ctrl-btn" onclick="shuffleCards()">🔀 Amestecă</button>
+      <button class="ctrl-btn" onclick="showOnlyUnseen()">👁 Doar neștiute</button>
+      <div class="spacer"></div>
+      <span class="nav-counter-inline" id="nav-counter-inline">1 / 134</span>
+    </div>
+
+    <div class="card-area">
+      <div class="card-wrap">
+        <div class="card" id="main-card">
+          <div class="card-top">
+            <span class="card-tema" id="card-tema"></span>
+            <div>
+              <span class="card-nr" id="card-nr"></span>
+              <span class="card-mark" id="card-mark" style="display:none"></span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-question" id="card-question"></div>
+          </div>
+
+          <div class="answer-section">
+            <div class="answer-label">Răspunsul tău (opțional)</div>
+            <textarea class="answer-textarea" id="user-answer"
+              placeholder="Scrie răspunsul tău înainte de a vedea varianta corectă..."></textarea>
+            <div class="btn-row">
+              <button class="btn-reveal" id="btn-reveal" onclick="reveal()">
+                👁 Arată răspunsul corect
+              </button>
+              <button class="btn-reveal" style="border-color:var(--border);color:var(--text2);background:transparent"
+                onclick="skipCard()">
+                Sari peste →
+              </button>
+            </div>
+            <div class="kb-hint">
+              <kbd>Enter</kbd>+<kbd>Shift</kbd> rând nou &nbsp;·&nbsp; <kbd>Ctrl</kbd>+<kbd>↵</kbd> afișează răspunsul
+            </div>
+          </div>
+
+          <div id="correct-wrap" style="display:none">
+            <div class="correct-answer">
+              <div class="correct-label">✔ Răspuns corect</div>
+              <div class="correct-text" id="correct-text"></div>
+            </div>
+            <div class="vote-row">
+              <span class="vote-label">Ai știut?</span>
+              <button class="btn-stiut" onclick="vote('stiut')">✅ Da, știam!</button>
+              <button class="btn-nestiut" onclick="vote('nestiut')">❌ Nu știam</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-bar">
+          <button class="nav-btn" id="btn-prev" onclick="navigate(-1)">← Anterior</button>
+          <span class="nav-pos" id="nav-pos">1 / 134</span>
+          <button class="nav-btn" id="btn-next" onclick="navigate(1)">Următor →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS VIEW -->
+  <div id="view-stats">
+    <div class="stats-header">📊 Progresul tău</div>
+    <div class="stats-grid">
+      <div class="stat-box s-total">
+        <div class="num" id="st-total">134</div>
+        <div class="lbl">Total cazuri</div>
+      </div>
+      <div class="stat-box s-stiut">
+        <div class="num" id="st-stiut">0</div>
+        <div class="lbl">Știute ✅</div>
+      </div>
+      <div class="stat-box s-nestiut">
+        <div class="num" id="st-nestiut">0</div>
+        <div class="lbl">Neștiute ❌</div>
+      </div>
+      <div class="stat-box s-skip">
+        <div class="num" id="st-skip">0</div>
+        <div class="lbl">Sărite / Neatinse</div>
+      </div>
+    </div>
+    <div class="tema-section" id="tema-section"></div>
+    <button class="reset-btn" onclick="resetAll()">↺ Resetează tot progresul</button>
+  </div>
+
+  <script>
+    const STUDII = [{ "nr": 1, "tema": "Elemente de drept civil", "intrebare": "Conform prevederilor Convenției referitoare la contractul de transport internațional de mărfuri pe șosele (CMR), la care România a aderat, care este termenul în care destinatarul mărfii poate consideră marfa pierdută, fără prezentarea unei dovezi în acest sens?", "raspuns": "Destinatarul poate să considere marfa pierdută dacă aceasta nu a fost livrată în termen de 30 de zile de la expirarea termenului de livrare sau, în cazul în care nu a fost stabilit un termen, în 60 de zile de la primirea mărfii de către transportator.\n\nÎntrebarea 2 din 134" }, { "nr": 2, "tema": "Elemente de drept civil", "intrebare": "Conform Convenției CMR, care este termenul maxim în care destinatarul mărfii poate să solicite despăgubiri pentru că marfa primită a fost livrată cu întârziere față de termenul stabilit în scrisoarea de transport tip CMR?", "raspuns": "Destinatarul poate să solicite despăgubiri pentru întârziere la livrare doar dacă a fost adresată o rezervă în scris, în termen de cel mult 21 de zile de la data punerii mărfii la dispoziția destinatarului.\n\nÎntrebarea 3 din 134" }, { "nr": 3, "tema": "Elemente de drept civil", "intrebare": "Conform prevederilor Convenției referitoare la contractul de transport internațional de mărfuri pe șosele (CMR), la care România a aderat, care este termenul maxim în care destinatarul mărfii poate să facă o reclamație că marfa primită, în cazul pierderilor sau avariilor neaparente, nu este în starea descrisă de scrisoarea de transport tip CMR?", "raspuns": "Termenul maxim pentru acest tip de reclamație este de 7 zile de la primirea mărfii, în afară de duminici și sărbători legale. \n\nÎntrebarea 4 din 134" }, { "nr": 4, "tema": "Elemente de drept civil", "intrebare": "Conform prevederilor Convenției referitoare la contractul de transport internațional de mărfuri pe șosele (CMR), la care România a aderat, în care situații transportatorul poate să procedeze la vânzarea mărfii fără să aștepte instrucțiuni de la persoana care are dreptul să dispună asupra ei?", "raspuns": "Transportatorul poate să procedeze la vânzarea mărfii fără să aștepte instrucțiuni de la persoana care are dreptul să dispună asupra mărfii atunci când:\n\n• cheltuielile pentru păstrare sunt disproporționate față de valoarea mărfii;\n\n• natura perisabilă a mărfii sau starea ei o justifică;\n\n• nu a primit din partea persoanei care are dreptul să dispună de marfă instrucțiuni contrare.\n\nÎntrebarea 5 din 134" }, { "nr": 5, "tema": "Elemente de drept civil", "intrebare": "Care pot fi indicațiile pe care un expeditor le poate menționa în scrisoare de transport tip CMR în afară de cele obligatorii ? (Pentru un răspuns corect precizați minim patru astfel de indicații).", "raspuns": "Indicațiile pe care un expeditor le poate menționa în scrisoare CMR, în afară de cele obligatorii, pot fi:\n\ntermenul în care transportul trebuie să fie efectuat;\n\ncheltuielile pe care expeditorul le ia asupra sa;\n\ntotalul sumelor ramburs de perceput la livrarea mărfii;\n\ninterzicerea transbordării;\n\nlista documentelor remise transportatorului.\n\nÎntrebarea 6 din 134" }, { "nr": 6, "tema": "Elemente de drept civil", "intrebare": "Care sunt datele pe care trebuie să le conțină în mod obligatoriu scrisoare de transport tip CMR? (Pentru un răspuns corect precizați minim șase astfel de indicații).", "raspuns": "Datele pe care trebuie să le conțină în mod obligatoriu scrisoare de transport tip CMR sunt:\n\nnumele și adresa expeditorului;\n\nnumele și adresa transportatorului;\n\nlocul și data întocmirii;\n\nlocul și data primirii mărfii și locul prevăzut pentru livrarea acesteia;\n\nnumele și adresa destinatarului;\n\nnumărul coletelor, marcajele speciale și numerele lor;\n\ngreutatea brută a mărfii.\n\nÎntrebarea 7 din 134" }, { "nr": 7, "tema": "Elemente de drept civil", "intrebare": "În ce condiții transportatorul care a plătit despăgubiri, conform prevederilor Convenției CMR, are drept de regres, pentru suma plătită, împreună cu dobânzile și cheltuielile suportate, contra transportatorilor care au participat la executarea contractului de transport​?", "raspuns": "Transportatorul care a plătit despăgubiri, are drept de regres contra transportatorilor care au participat la executarea contractului astfel:\n\ntransportatorul prin fapta căruia s-a produs paguba va suporta singur despăgubirea;\n\ndacă paguba s-a produs prin fapta a doi sau mai mulți transportatori, fiecare dintre ei va plati o sumă proporțională cu partea sa de răspundere;\n\ndacă mai mulți transportatori sunt implicați, dar nu se poate stabili exact cât revine fiecăruia, răspunderea se împarte proporțional cu partea de remunerație;\n\ndacă nu se poate identifica deloc care transportator a cauzat paguba, despăgubirea se repartizează între toți transportatorii, proporțional cu partea de remunerație.\n\nÎntrebarea 8 din 134" }, { "nr": 8, "tema": "Elemente de drept civil", "intrebare": "Care sunt datele pe care poate să le conțină scrisoare de transport tip CMR, în afară de cele obligatorii? (Pentru un răspuns corect precizați minim patru astfel de indicații).", "raspuns": "Datele pe care poate să le conțină scrisoare CMR, în afară de cele obligatorii, pot fi:\n\ninterzicerea transbordării;\n\ncheltuielile pe care expeditorul le ia asupra sa;\n\ntotalul sumelor ramburs de perceput la eliberarea mărfii;\n\nvaloarea declarată a mărfii și suma care reprezintă interesul special la eliberare;\n\ninstrucțiunile expeditorului către transportator cu privire la asigurarea mărfii;\n\ntermenul convenit în care transportul trebuie să fie efectuat;\n\nlista documentelor remise transportatorului.\n\nÎntrebarea 9 din 134" }, { "nr": 9, "tema": "Elemente de drept civil", "intrebare": "În conformitate cu prevederile Convenției CMR, expeditorul are dreptul de dispoziție asupra mărfii, în special să ceară transportatorului oprirea transportului, schimbarea locului prevăzut pentru eliberare sau să elibereze marfa unui alt destinatar decât cel indicat în scrisoarea CMR. Care sunt condițiile la care este supus exercițiul dreptului de dispoziție? (Precizați minim două condiții, pentru un răspuns corect).", "raspuns": "Exercițiul dreptului de dispoziție este supus următoarelor condiții:\n\nexpeditorul trebuie să prezinte transportatorului primul exemplar al scrisorii CMR cu noile instrucțiuni;\n\nexpeditorul trebuie să-l despăgubească pe transportator pentru cheltuielile pe care le-a antrenat executarea noilor instrucțiuni;\n\nexecutarea acestor instrucțiuni trebuie să fie posibilă în momentul în care instrucțiunile parvin persoanei care trebuie să le execute și nu trebuie nici să împiedice exploatarea normală a întreprinderii transportatorului, nici să aducă prejudicii expeditorilor sau destinatarilor altor transporturi;\n\ninstrucțiunile nu trebuie niciodată să aibă efect divizarea transportului.\n\nÎntrebarea 10 din 134" }, { "nr": 10, "tema": "Elemente de drept civil", "intrebare": "În ce condiții transportatorul care a plătit despăgubiri, conform prevederilor Convenției CMR, are drept de regres, pentru suma plătită, împreună cu dobânzile și cheltuielile suportate, contra transportatorilor care au participat la executarea contractului de transport, dacă nu se poate stabili care dintre transportatori răspunde pentru pagubă?", "raspuns": "În cazul în care nu se poate stabili care dintre transportatori răspunde pentru pagubă, despăgubirea se repartizează între toți transportatorii, proporțional cu partea de remunerație ce revine fiecăruia.\n\nSau în alte cazuri:\n\ntransportatorul prin fapta căruia s-a produs paguba trebuie să suporte singur despăgubirea plătită de el sau de un alt transportator;\n\ndacă paguba s-a produs prin fapta a doi sau mai mulți transportatori, fiecare dintre ei trebuie să plătească o sumă proporțională cu partea sa de răspundere; dacă evaluarea părților de răspundere este imposibilă, fiecare dintre ei este răspunzător proporțional cu partea de remunerare a transportului care îi revine;\n\ndacă nu se poate stabili care dintre transportatori răspunde pentru pagubă, despăgubirea se repartizează între toți transportatorii, în proporția fixată la punctul de mai sus.\n\nÎntrebarea 11 din 134" }, { "nr": 11, "tema": "Elemente de drept civil", "intrebare": "Menționați, pentru un răspuns corect, patru cazuri în care tribunalul poate pronunța dizolvarea societății la solicitarea oricărei persoane interesate, precum și a Oficiului Național al Registrului Comerțului.", "raspuns": "La cererea oricărei persoane interesate, precum și a Oficiului National al Registrului Comerțului, tribunalul va putea pronunța dizolvarea societății în cazurile în care:\n\n• societatea nu mai are organe statutare sau acestea nu se mai pot întruni;\n\n• societatea nu a depus, în cel mult 6 luni de la expirarea termenelor legale, situațiile financiare anuale;\n\n• societatea și-a încetat activitatea, nu are sediul social cunoscut ori nu îndeplinește condițiile referitoare la sediul social sau asociații au dispărut ori nu au domiciliul cunoscut sau reședința cunoscută;\n\n• societatea s-a aflat mai mult de 3 ani în inactivitate temporară, anunțată organelor fiscale și înscrisă în registrul comerțului; termenul de 3 ani curge de la data înscrierii în registrul comerțului a mențiunii privind starea de inactivitate temporară a societății;\n\n• societatea nu și-a completat capitalul social, în condițiile legii.\n\nÎntrebarea 12 din 134" }, { "nr": 12, "tema": "Elemente de drept civil", "intrebare": "În cazul în care operatorul de transport întârzie să livreze marfa la timpul convenit prin scrisoarea de transport tip CMR, dacă cel în drept face dovada că din această întârziere a rezultat un prejudiciu, transportatorul este obligat să plătească daune. Care este valoarea maximă a acestora?", "raspuns": "În caz de întârziere, dacă cel în drept face dovada că din această întârziere a rezultat un prejudiciu, transportatorul este ținut să plătească daune care nu pot depăși prețul transportului.\n\nÎntrebarea 13 din 134" }, { "nr": 13, "tema": "Elemente de drept civil", "intrebare": "Conform prevederilor Convenției referitoare la contractul de transport internațional de mărfuri pe șosele (CMR), în ce situații transportatorul este exonerat de răspundere dacă pierderea sau avaria rezultă din riscurile particulare inerente uneia din următoarele fapte: manipularea, încărcarea, stivuirea sau descărcarea mărfii?", "raspuns": "Transportatorul este exonerat de răspundere dacă:\n\n• manipularea, încărcarea sau stivuirea mărfii se face de către expeditor;\n\n• manipularea, stivuirea sau descărcarea mărfii se face de către destinatar;\n\n• manipularea, stivuirea, încărcarea sau descărcarea mărfii se face de către o persoană care acționează în contul expeditorului sau am destinatarului.\n\nÎntrebarea 14 din 134" }, { "nr": 14, "tema": "Elemente de drept civil", "intrebare": "Care sunt indicațiile obligatorii pe care trebuie să le conțină scrisoarea de transport tip CMR pentru care expeditorul răspunde pentru toate cheltuielile și daunele pricinuite transportatorului din cauza inactivității sau insuficienței lor?", "raspuns": "Expeditorul răspunde pentru toate cheltuielile și daunele pricinuite transportatorului din cauza inactivității sau insuficienței indicațiilor următoare:\n\n• numele și adresa expeditorului;\n\n• locul și data primirii mărfii și locul prevăzut pentru eliberarea acesteia;\n\n• numele și adresa destinatarului;\n\n• denumirea curentă a naturii mărfii și felul ambalajului, iar pentru mărfurile periculoase, denumirea lor general recunoscută;\n\n• numărul coletelor, marcajele speciale și numerele lor;\n\n• greutatea brută sau cantitatea altfel exprimată a mărfii;\n\n• cheltuielile aferente transportului ori oricăror alte indicații sau instrucțiuni date de el pentru emiterea scrisorii de trăsură.\n\nÎntrebarea 15 din 134" }, { "nr": 15, "tema": "Elemente de drept civil", "intrebare": "În conformitate cu prevederile din Convenția CMR, care sunt obligațiile expeditorului?", "raspuns": "Expeditorul trebuie să pună la dispoziția transportatorului toate documentele necesare ( de ex. factura, certificat sanitar, etc) și să-i furnizeze toate informațiile cerute.\n\nÎntrebarea 16 din 134" }, { "nr": 16, "tema": "Elemente de drept civil", "intrebare": "În conformitate cu prevederile din Convenția CMR, care sunt răspunderile expeditorului?", "raspuns": "• expeditorul răspunde pentru toate cheltuielile și daunele pricinuite transportatorului din cauza inexactității sau insuficienței indicațiilor prevăzute în Convenția CMR în articolul 6 paragraful 1 b), d), e), f), g), h) și j); indicațiilor menționate în articolul 6 paragraful 2 și oricăror alte indicații sau instrucțiuni date de el pentru emiterea scrisorii de trăsură sau pentru a fi inserate în aceasta;\n\n• expeditorul este răspunzător față de transportator pentru daunele pricinuite persoanelor, materialului sau altor mărfuri, precum și pentru cheltuielile cauzate de defectuozitatea ambalajului mărfii, afară de cazul când defectuozitatea, fiind aparentă sau cunoscută transportatorului în momentul primirii mărfii, transportatorul nu a făcut rezerve cu privire la aceasta;\n\n• expeditorul este răspunzător față de transportator pentru toate daunele care ar putea rezulta din lipsa, insuficiența sau din neregularitatea documentelor necesare pentru îndeplinirea formalităților de vamă si a altora care trebuie făcute înainte de eliberarea mărfii, remise de expeditor transportatorului, în afară de cazul în care culpa este a transportatorului.\n\nÎntrebarea 17 din 134" }, { "nr": 17, "tema": "Elemente de drept civil", "intrebare": "În conformitate cu prevederile din Convenția CMR, care sunt obligațiile transportatorului?", "raspuns": "La primirea mărfii, transportatorul este obligat să verifice:\n\n• exactitatea mențiunilor din scrisoarea de transport referitoare la numărul de colete, marcajul și numerele lor;\n\n• starea aparentă a mărfii și a ambalajului.\n\nÎntrebarea 18 din 134" }, { "nr": 18, "tema": "Elemente de drept civil", "intrebare": "În conformitate cu prevederile din Convenția CMR, care sunt răspunderile transportatorului?", "raspuns": "• transportatorul este răspunzător pentru pierderea totală sau parțială sau pentru avarie, produse între momentul primirii mărfii și cel al eliberării acesteia, cât și pentru întârzierea în eliberare;\n\n• transportatorul este răspunzător ca și un comisionar de consecințele pierderii sau utilizării inexacte a documentelor menționate în scrisoarea de trăsură și care o însoțesc sau care i s-au predat, totuși despăgubirea pusă în sarcina sa nu o va depăși pe aceea care ar fi datorat-o în caz de pierdere a mărfii.\n\nÎntrebarea 19 din 134" }, { "nr": 19, "tema": "Elemente de drept civil", "intrebare": "În conformitate cu prevederile din Convenția CMR, care sunt obligațiile destinatarului?", "raspuns": "Destinatarul este obligat să plătească creanțele care rezultă din scrisoarea de transport și este obligat, la primirea mărfii, să verifice conformitatea stării acesteia cu mențiunile din scrisoarea CMR.\n\nÎntrebarea 20 din 134" }, { "nr": 20, "tema": "Elemente de drept civil", "intrebare": "În conformitate cu prevederile din Convenția CMR, care sunt răspunderile destinatarului?", "raspuns": "Dacă destinatarul a primit marfa fără să fi constatat starea ei în contradictoriu cu transportatorul sau dacă cel mai târziu în momentul livrării, când este vorba de pierderi ori avarii aparente, nu a făcut rezerve transportatorului, se prezumă, până la proba contrarie, că a primit marfa în starea descrisă în scrisoarea de transport.\n\nÎntrebarea 21 din 134" }, { "nr": 21, "tema": "Elemente de drept comercial", "intrebare": "Menționați, pentru un răspuns corect, patru anumite operații care declanșează și pregătesc încetarea existentei societății comerciale?", "raspuns": "O societate comercială cu răspundere limitată (SRL) se dizolvă prin:\n\n• trecerea timpului stabilit pentru durata societății;\n\n• imposibilitatea realizării obiectului de activitate al societății sau realizarea acestuia;\n\n• declararea nulității societății;\n\n• hotărârea adunării generale;\n\n• hotărârea tribunalului, la cererea oricărui asociat, pentru motive temeinice, precum neînțelegerile grave dintre asociați, ce împiedică funcționarea societății;\n\n• falimentul societății;\n\n• alte cauze prevăzute de lege sau de actul constitutiv al societății.\n\n​SRL-ul, pe lângă motivele enumerate mai sus, se dizolvă prin falimentul, incapacitatea, excluderea, retragerea sau decesul unuia dintre asociați, când, datorită acestor cauze, numărul asociaților s-a redus la unul singur.\n\nÎntrebarea 22 din 134" }, { "nr": 22, "tema": "Elemente de drept comercial", "intrebare": "(Pentru un răspuns corect precizați minim patru activități preliminare și enumerați patru tipuri de societăți comerciale).", "raspuns": "Operaţiuni preliminare înființării unei societăți comerciale:\n\n• se alege obiectul de activitate, forma juridică, durata de funcționare, modul de dizolvare și lichidare;\n\n• rezervarea denumirii la registrul comerțului;\n\n• întocmirea actului constitutiv și numirea administratorului;\n\n• stabilirea sediului social prin întocmirea contractului de comodat.\n\nTipuri de societăți comerciale:\n\n• societate în nume colectiv SNC;\n\n• societate în comandită simplă SCS;\n\n• societate pe acțiuni SA;\n\n• societate în comandită pe acțiuni SCA;\n\n• societate cu răspundere limitată SRL.\n\nÎntrebarea 23 din 134" }, { "nr": 23, "tema": "Elemente de drept comercial", "intrebare": "Pentru un răspuns corect precizați minim patru registre, în afară de registrul asociaților care au constituit SRL-ul.", "raspuns": "• Registrul-jurnal;\n\n• Registrul-inventar;\n\n• Registrul Cartea mare;\n\n• Registrul general de evidentă a salariaților;\n\n• Registrul unic de control;\n\n• Registrul de casă.\n\nÎntrebarea 24 din 134" }, { "nr": 24, "tema": "Elemente de drept comercial", "intrebare": "Care sunt condițiile pe care trebuie să le îndeplinească un agent economic pentru a fi considerat comerciant?", "raspuns": "Pentru a fi considerat comerciant, un agent economic trebuie să îndeplinească următoarele condiții: \n\n• să facă acte de comerț;\n\n• să realizeze acte de comerț în mod obișnuit, ceea ce implică repetabilitatea operațiunilor respective;\n\n• să transforme realizarea actelor de comerț în profesia sa de bază sau accesorie;\n\n• să acționeze în numele său personal.\n\nÎntrebarea 25 din 134" }, { "nr": 25, "tema": "Elemente de drept comercial", "intrebare": "Care sunt incapacitățile, prevăzute de legislația națională, care determină restricții referitoare la persoanele care efectuează și desfășoară o activitate de comerț? (Pentru un răspuns corect precizați cel puțin 3 situați care generează incapacități pentru anumite persoane).", "raspuns": "Nu au voie să facă comerț:\n\n• persoanele afectate de interdicții legale ca urmare a unor condamnări suferite pentru crime sau delicte contra onestității și bunăvoinței, precum și cele condamnate pentru delicte fiscale sau economice;\n\n• persoanele care au suferit anumite interdicții judiciare datorită faptului că s-au dovedit a fi foarte risipitori sau că fac parte din rândul persoanelor atinse de alienare mintală;\n\n• minorii.\n\nÎntrebarea 26 din 134" }, { "nr": 26, "tema": "Elemente de drept comercial", "intrebare": "Care sunt incompatibilitățile, prevăzute de legislația națională, care stipulează imposibilitatea exercitării actelor de comerț, concomitent cu anumite profesii? (Pentru un răspuns corect precizați cel puțin trei profesii incompatibile cu actele de comerț).", "raspuns": "Exercitarea comerțului este incompatibilă cu realizare concomitentă a unor profesii, cum ar fi cea de avocat, magistrat, notar, funcționar public, militar etc.\n\nÎntrebarea 27 din 134" }, { "nr": 27, "tema": "Elemente de drept comercial", "intrebare": "Menționați două activități care pot fi încadrate ca monopol de stat.", "raspuns": "Constituie monopol de stat:\n\n• fabricarea și comercializarea armamentului, munițiilor și explozibililor;\n\n• producerea și comercializarea stupefiantelor;\n\n• producerea și emisiunea de mărci poștale și timbre fiscale.\n\nÎntrebarea 28 din 134" }, { "nr": 28, "tema": "Elemente de drept comercial", "intrebare": "Menționați, dintre prerogativele comerciantului, cel puțin două care fac referire la posibilitatea de a beneficia de măsuri speciale cu privire la urmărirea contractelor comerciale.", "raspuns": "Prerogativele comerciantului\n\n• posibilitatea de a beneficia de măsuri speciale cu privire la urmărirea contractelor comerciale;\n\n• posibilitatea inserării în contractele sale a unei clauze de arbitraj;\n\n• posibilitatea apelării la instanțe specializate sau proceduri simplificate pentru litigii comerciale.\n\nÎntrebarea 29 din 134" }, { "nr": 29, "tema": "Elemente de drept comercial", "intrebare": "Care sunt activitățile vizate de procedura falimentului? (Pentru un răspuns corect precizați minim trei activități).", "raspuns": "Printre activitățile vizate de procedura falimentului se numără și acestea:\n\n• activitățile de comerț;\n\n• activitățile industriale;\n\n• activitățile de prestări servicii;\n\n• activitățile de transport;\n\n• activitățile bancare și de asigurări.\n\nÎntrebarea 30 din 134" }, { "nr": 30, "tema": "Elemente de drept social", "intrebare": "Cum se consideră perioada de timp necesară conducătorului auto pentru a se deplasa la locul de îmbarcare într-un vehicul care intră în domeniul de aplicare a Regulamentului (CE) nr. 561/2006 sau pentru a se întoarce din acel loc, atunci când acesta nu se află la locul de reședință al conducătorului auto, nici la sediul angajatorului unde se află locul normal de staționare al conducătorului auto, ce obligație are acesta și de când decurgea aceasta, dacă vehiculul este dotat cu aparat tahograf digital?", "raspuns": "Perioada de timp necesară conducătorului pentru a se deplasa la locul de îmbarcare într-un vehicul care intră în domeniul de aplicare a prezentului regulament sau pentru a se întoarce din acel loc, atunci când acesta nu se află nici la locul de reședință a conducătorului, nici la sediul angajatorului unde se află locul normal de staționare al conducătorului, nu se consideră repaus sau pauză, cu excepția cazului în care conducătorul se află pe un feribot sau în tren și are acces la o cușetă. Această perioadă se consideră perioadă de disponibilitate și va începe să curgă din momentul în care conducătorul auto își începe deplasarea către locul de îmbarcare sau din momentul în care acesta părăsește vehiculul, pentru a se întoarce din acel loc iar înregistrarea pe cardul tahografic al conducătorului auto se va face folosind funcția de introducere manuală a datelor a tahografului digital în momentul când conducătorul auto are acces la tahograful digital.\n\nÎntrebarea 31 din 134" }, { "nr": 31, "tema": "Elemente de drept social", "intrebare": "Cum se consideră perioada de timp necesara conducătorului auto ce conduce un vehicul care nu intră în domeniul de aplicare a Regulamentului (CE) nr. 561/2006, pentru a se deplasa la locul de îmbarcare într-un vehicul care intră în domeniul de aplicare a acestui regulament sau pentru a se întoarce din acel loc, atunci când acesta nu se află nici la locul de reședință al conducătorului auto, nici la sediul angajatorului unde se află locul normal de staționare al conducătorului auto, ce obligație are acesta și de când decurgea aceasta, dacă vehiculul este dotat cu aparat tahograf analog?", "raspuns": "Perioada de timp necesară conducătorului ce conduce un vehicul care nu intră în domeniul de aplicare a prezentului regulament pentru a se deplasa la locul de îmbarcare într-un vehicul care intră în domeniul de aplicare a prezentului regulament sau pentru a se întoarce din acel loc, atunci când acesta nu se află nici la locul de reședință al conducătorului, nici la sediul angajatorului unde se află locul normal de staționare al conducătorului, se consideră altă muncă. Conducătorul auto trebuie să înregistreze manual această perioadă de timp pe foile de înregistrare din momentul în care această perioadă de timp începe și până are acces din nou la tahograful analogic.\n\nÎntrebarea 32 din 134" }, { "nr": 32, "tema": "Elemente de drept social", "intrebare": "Care ar fi o formă de manifestare a concurenței neloiale în domeniul legislației sociale?", "raspuns": "Nerespectarea perioadelor de conducere și de odihnă, remunerarea conducătorilor auto în funcție de distanța parcursă, practici de administrare ilicite.\n\nÎntrebarea 33 din 134" }, { "nr": 33, "tema": "Elemente de drept social", "intrebare": "Având în vedere cele de mai sus precizați care este durata odihnei zilnice pe care trebuie luată de către cei doi conducători auto, într-un interval de 30 de ore, ca să beneficieze de prevederea enunțată anterior?", "raspuns": "Pentru a putea utiliza această derogare, membrii unui echipaj trebuie să efectueze o perioadă de repaus zilnic normală de cel puțin 11 ore într-un interval de 30 de ore.\n\nÎntrebarea 34 din 134" }, { "nr": 34, "tema": "Elemente de drept social", "intrebare": "În ce zi și la ce oră se poate ajunge în cel mai scurt timp la Roma cu respectarea prevederilor Regulamentului (CE) nr. 561/2006 dacă se utilizează un singur conducător auto și viteza medie de deplasare este de 60 km/h. (Justificați răspunsul prin desfășurarea cursei).", "raspuns": "Autocamionul ajunge la Roma joi la ora 16.30.\n\nJustificare:\n\n2400km/60 km/h = 40 ore de conducere efectivă sunt necesare pentru a ajunge la destinație;\n\n• Luni 7.30 plecare + 4.5 ore conducere + 45 min pauză + 4.5 ore conducere + 9 ore odihnă zilnică redusă;\n\n• Marți 2.15 plecare + 4.5 ore conducere + 45 min pauză + 4.5 ore conducere + 9 ore odihnă zilnică redusă;\n\n• Marți 21.00 plecare + 4.5 ore conducere + 45 min pauză + 4.5 ore conducere + 9 ore odihnă zilnică redusă;\n\n• Miercuri 15.45 plecare + 4.5 ore conducere + 45 min pauză + 4.5 ore conducere + 11 ore odihnă zilnică normală;\n\n• Joi 12.30 plecare + 4 ore de conducere = ajunge la destinație joi la ora 16.30.\n\nÎntrebarea 35 din 134" }, { "nr": 35, "tema": "Elemente de drept social", "intrebare": "Precizați minim trei componente ale perioadei dedicate activităților de transport rutier.", "raspuns": "• conducerea autovehiculului;\n\n• încărcarea și descărcarea;\n\n• ajutorul acordat pasagerilor la urcarea și coborârea din vehicul;\n\n• curățenia și întreținerea tehnică;\n\n• toate celelalte activități vizând asigurarea siguranței vehiculului, a încărcăturii sale și a pasagerilor sau îndeplinirea obligațiilor legale ori de reglementare direct legate de operațiunea de transport aflată în desfășurare, inclusiv supravegherea încărcării și descărcării, formalitățile administrative legate de poliție, vamă, serviciul de imigrare etc.\n\nÎntrebarea 36 din 134" }, { "nr": 36, "tema": "Elemente de drept social", "intrebare": "Ce obligație are conducătorul auto într-o astfel de situație?", "raspuns": "Conducătorul auto trebuie să indice manual natura și cauza abaterii de la Regulament (în orice limbă comunitară) pe diagrama tahograf sau pe un imprimat scos din memoria tahografului sau în registrul său de sarcini, până la sosirea la locul de oprire corespunzător. Aceste documente vor fi semnate de conducătorul auto.\n\nÎntrebarea 37 din 134" }, { "nr": 37, "tema": "Elemente de drept social", "intrebare": "În ce condiții, în conformitate cu prevederile Regulamentului (CE) nr. 561/2006, un conducător auto care efectuează un transport internațional de marfă poate efectua repausul într-un vehiculul rutier, pe care acesta îl conduce? Pentru un răspuns corect precizați, de asemenea, care sunt tipurile de repaus ce sunt permise a se efectua într-un vehicul rutier.", "raspuns": "În cazul în care un conducător solicită acest lucru, perioadele de repaus zilnic și perioadele de repaus săptămânal reduse departe de baza de staționare a vehiculului pot fi efectuate la bordul vehiculului dacă:\n\n• conducătorul auto solicită acest lucru;\n\n• autovehiculul este dotat cu cabină de dormit și se află în staționare.\n\nÎntrebarea 38 din 134" }, { "nr": 38, "tema": "Elemente de drept social", "intrebare": "În conformitate cu prevederile Hotărârea de Guvern nr. 38/2008, cum va înregistra un conducător auto, perioadele de timp în care acesta nu poate dispune liber de timpul său și i se cere să fie la postul său de lucru, gata să întreprindă activitatea sa normală, îndeplinind anumite sarcini asociate serviciului, în special în timpul perioadelor când așteaptă să se facă încărcarea sau descărcarea bagajelor călătorilor, dacă durata previzibilă a acestora este cunoscută dinainte​?", "raspuns": "Această perioadă face parte din timpul de muncă al conducătorului auto și va fi înregistrată folosind tahograful de la bordul vehiculului ca „Altă muncă”.\n\nÎntrebarea 39 din 134" }, { "nr": 39, "tema": "Elemente de drept social", "intrebare": "În ce zi și la ce oră se poate ajunge în cel mai scurt timp la cu respectarea prevederilor Regulamentului CE nr. 561/2006 dacă viteza medie de deplasare este de 50 km/h? (Justificați răspunsul prin desfășurarea cursei).", "raspuns": "Autocamionul ajunge la Wiesbaden joi la ora 5:45.\n\nJustificare:\n\n1850km : 50km/h = 37 ore de conducere efectivă necesare pentru a ajunge la destinaţie.\n\n• I-ul program: luni 10:00 + 9 ore conducere + 45 min pauză + 9 ore repaus zilnic = marți 4:45\n\n• II-lea program: marți 4:45 + 9 ore conducere + 45 min pauză + 9 ore repaus zilnic = marți 23:30\n\n• III-lea program: marți 23:30 + 9 ore conducere + 45 min pauza + 9 ore repaus zilnic = miercuri 18:15\n\n• IV-lea program: miercuri 18:15 + 10 ore conducere + 2x45 min pauze = joi 5:45\n\n• Autocamionul ajunge la Wiesbaden joi la ora 5:45.\n\nÎntrebarea 40 din 134" }, { "nr": 40, "tema": "Elemente de drept social", "intrebare": "În ce condiții perioada de timp necesară conducătorului auto pentru a se deplasa la locul de îmbarcare sau pentru a se întoarce din acel loc, atunci când acesta nu se află la locul de reședință a conducătorului auto, nici la sediul angajatorului unde se află locul normal de staționare al conducătorului auto poate fi considerată repaus sau pauză?", "raspuns": "Se consideră repaus sau pauză numai în cazul în care conducătorul auto se află pe un feribot sau în tren și are acces la o cușetă.\n\nÎntrebarea 41 din 134" }, { "nr": 41, "tema": "Elemente de drept social", "intrebare": "Indicați două fapte care pot atrage reținerea cartelei (cardului) tahograf utilizat de către conducătorul auto în momentul controlului.", "raspuns": "Cardul tahograf al unui conducător auto se reține dacă:\n\n• cardul este fals;\n\n• cardul a fost declarat pierdut sau furat;\n\n• cardul aparține altei persoane.\n\nÎntrebarea 42 din 134" }, { "nr": 42, "tema": "Elemente de drept social", "intrebare": "În ce zi și la ce oră se poate ajunge în cel mai scurt timp la Roma respectând prevederilor Regulamentului (CE) nr. 561/2006 dacă utilizați un singur conducător auto, plecarea din București este luni la ora 05:30, iară viteza medie de deplasare este de 60 km/h? (Justificați răspunsul prin desfășurarea cursei).", "raspuns": "Autocamionul ajunge la Roma joi la ora 22:00.\n\nJustificare:\n\n2760 km : 60 km/h = 46 ore de conducere necesare pentru a ajunge la destinație.\n\n• I-ul program: luni 5:30 + 9 ore conducere + 45 min pauză + 9 ore repaus zilnic = marți 0:15;\n\n• II-lea program: marți 0:15 + 9 ore conducere + 45 min pauză + 9 ore repaus zilnic = marți 19:00;\n\n• III-lea program: marți 19:00 + 9 ore conducere + 45 min pauză + 9 ore repaus zilnic = miercuri 13:45;\n\n• IV-lea program: miercuri 13:45 + 9 ore conducere + 45 min pauză + 11 ore repaus zilnic = joi 10:30;\n\n• V-lea program: joi 10:30 + 10 ore conducere + 2 x 45min pauze = joi 22:00.\n\nÎntrebarea 43 din 134" }, { "nr": 43, "tema": "Elemente de drept social", "intrebare": "În ce zi și la ce oră se poate ajunge în cel mai scurt timp la Roma respectând prevederilor Regulamentului (CE) nr. 561/2006 dacă utilizați un singur conducător auto, plecarea din București este luni la ora 06:30, iară viteza medie de deplasare este de 60 km/h? (Justificați răspunsul prin desfășurarea cursei).", "raspuns": "Autocamionul ajunge la Roma joi la ora 23:00.\n\nJustificare:\n\n2760 km : 60 km/h = 46 ore de conducere efectivă sunt necesare pentru a ajunge la destinație.\n\n• I-ul program: luni 6:30 + 9 ore conducere + 45 min pauză + 9 ore repaus zilnic = marți 1:15;\n\n• II-lea program: marți 1:15 + 9 ore conducere + 45 min pauză + 9 ore repaus zilnic = marți 20:00;\n\n• III-lea program: marți 20:00 + 9 ore conducere + 45 min pauză + 9 ore repaus zilnic = miercuri 14:45;\n\n• IV-lea program: miercuri 14:45 + 9 ore conducere + 45 min pauză + 11 ore repaus zilnic = joi 11:30;\n\n• V-lea program: joi 11:30 + 10 ore conducere + 2 x 45min pauze = joi 23:00.\n\nÎntrebarea 44 din 134" }, { "nr": 44, "tema": "Elemente de drept social", "intrebare": "În ce mod poate un conducătorul auto face această înregistrare în situația în care acesta urmează să conducă una din autocisternele utilizate de către operatorul de transport conform datelor menționate anterior? (Pentru un răspuns corect precizați cel puțin două moduri în care se poate face această înregistrare). Obs. Se va lua în calcul faptul că vehiculul respectiv este echipat cu tahograf digital.", "raspuns": "Conducătorul auto va înregistra aceste perioade care nu intră în sfera de aplicare a Reg. 561/2006 se înregistrează ca \"Alte activități\":\n\n• cu funcția de introducere manuală a datelor a tahografului digital;\n\n• pe un imprimat scos din memoria tahografului digital;\n\n• prin Formularul privind atestarea activităților - conform Regulamentului CE nr. 561/2006.\n\nÎntrebarea 45 din 134" }, { "nr": 45, "tema": "Elemente de drept fiscal", "intrebare": "Conform prevederilor OG nr. 15/2002 privind aplicarea tarifului de utilizare și a tarifului de trecere pe rețeaua de drumuri naționale din România, cu modificările și completările ulterioare, în ce condiții rovigneta își menține valabilitatea în cazul schimbării numărului de înmatriculare al vehiculului?", "raspuns": "În cazul schimbării numărului de înmatriculare, rovinieta își menține valabilitatea numai în condițiile în care utilizatorul solicită efectuarea modificării în baza de date, în scris. Pentru efectuarea modificării, utilizatorul se va prezenta la unul dintre punctele de lucru ce aparțin de Compania Națională de Administrare a Infrastructurii Rutiere S.A (C.N.A.I.R.) cu cerere scrisă, conform formularului tip și cartea de identitate a autovehiculului în copie și originalul acesteia pentru verificarea conformității.\n\nÎntrebarea 46 din 134" }, { "nr": 46, "tema": "Elemente de drept fiscal", "intrebare": "În ce situații se consideră îndeplinită condiția de a nu înregistra obligații fiscale restante la bugetul general consolidat de către operatorilor economici eligibili pentru restituirea de accize? Pentru un răspuns corect precizați două situații în care se consideră îndeplinită condiția de a nu înregistra obligații fiscale restante la bugetul general consolidat.", "raspuns": "Se consideră îndeplinită condiția de a nu înregistra obligații fiscale restante la bugetul de stat dacă sunt îndeplinite următoarele condiții:\n\n• la momentul înregistrării în Registrul vehiculelor și al operatorilor economici eligibili pentru restituirea de accize nu au obligații de plată restante;\n\n• la momentul efectuării restituirii de accize nu au obligații de plată restante la bugetul general consolidat;\n\n• în certificatul de atestare fiscală operatorul economic are înscrise obligații de plată care sunt mai mici sau egale cu sumele pe care acesta le are de încasat.\n\nÎntrebarea 47 din 134" }, { "nr": 47, "tema": "Elemente de drept fiscal", "intrebare": "În ce condiții, în conformitate cu prevederile din Codul fiscal valabil în anul 2016, transportul rutier de mărfuri este supus unui nivel al accizelor diferențiat prin diminuarea nivelului standard prevăzut pentru motorină utilizată drept carburant pentru motor?", "raspuns": "Este supusă unui nivel al accizelor diferențiat motorina utilizată drept carburant pentru motor în scopul unui transport rutier de mărfuri în cont propriu sau pentru alte persoane, cu autovehicule ori ansambluri de vehicule articulate destinate exclusiv transportului rutier de mărfuri și cu o greutate brută maximă autorizată de cel puțin 7,5 tone.\n\nÎntrebarea 48 din 134" }, { "nr": 48, "tema": "Elemente de drept fiscal", "intrebare": "Ce reprezintă TVA (taxa pe valoare adăugată) în conformitate cu prevederile din Codul fiscal al României, valabil în anul 2016?", "raspuns": "Taxa pe valoarea adăugată este un impozit indirect, pe consum, datorat la bugetul statului și care este suportat de consumatorul final de bunuri și servicii.\n\nÎntrebarea 49 din 134" }, { "nr": 49, "tema": "Elemente de drept fiscal", "intrebare": "Care sunt elementele specifice ale TVA (taxa pe valoare adăugată) în conformitate cu prevederile din Codul fiscal al României, valabil în anul 2016?", "raspuns": "• denumirea impozitului - TVA se aplică asupra valorii adăugate creată de firmă;\n\n• persoanele impozabile;\n\n• materia impozabilă;\n\n• sfera de cuprindere;\n\n• suportatorul impozitului (TVA) este consumatorul de bunuri și servicii: persoane fizice care sunt consumatori finali, persoanele juridice care nu sunt înregistrate ca plătitori de TVA și persoane fizice autorizate (PFA) care nu sunt înregistrate ca plătitori de TVA.\n\nÎntrebarea 50 din 134" }, { "nr": 50, "tema": "Elemente de drept fiscal", "intrebare": "Care sunt elementele care nu sunt cuprinse în baza de calcul a TVA(taxa pe valoare adăugată) în conformitate cu prevederile din Codul fiscal al României, valabil în anul 2016?", "raspuns": "Baza de calcul pentru impozitare nu cuprinde următoarele:\n\n• rabaturile, remizele, risturnele, sconturile și alte reduceri de preț, acordate de furnizori direct clienților la data exigibilității taxei;\n\n• sumele reprezentând daune-interese, stabilite prin hotărâre judecătorească definitivă/definitivă și irevocabilă, după caz, penalizările și orice alte sume solicitate pentru neîndeplinirea totală sau parțială a obligațiilor contractuale, dacă sunt percepute peste prețurile și/sau tarifele negociate;\n\n• dobânzile, percepute după data livrării sau prestării, pentru plăți cu întârziere;\n\n• valoarea ambalajelor care circulă între furnizorii de marfă și clienți, prin schimb, fără facturare;\n\n• sumele achitate de o persoană impozabilă în numele și în contul altei persoane și care apoi se decontează acesteia, inclusiv atunci când locatorul asigură el însuși bunul care face obiectul unui contract de leasing financiar sau operațional și refacturează locatarului costul exact al asigurării, precum și sumele încasate de o persoană impozabilă în numele și în contul unei alte persoane.\n\nÎntrebarea 51 din 134" }, { "nr": 51, "tema": "Elemente de drept fiscal", "intrebare": "Când se calculează TVA (taxa pe valoare adăugată) în conformitate cu prevederile din Codul fiscal al României, valabil în anul 2016?", "raspuns": "Taxa pe valoare adăugată (TVA) se calculează:\n\n• în momentul livrării bunurilor și al prestării serviciilor, atunci când taxa se stabilește de furnizor;\n\n• în momentul achiziției bunurilor atunci când se aplică taxarea inversă, când taxa se stabilește de cumpărător;\n\n• în momentul vămuirii bunurilor, iar calculul taxei cade în sarcina organelor vamale.\n\nÎntrebarea 52 din 134" }, { "nr": 52, "tema": "Elemente de drept fiscal", "intrebare": "Care este termenul scadent de plată al TVA (taxa pe valoare adăugată), respectiv când acesta trebuie achitat la bugetul statului, în conformitate cu prevederile din Codul fiscal al României, valabil în anul 2016?", "raspuns": "Termenul scadent de plată al TVA (taxa pe valoare adăugată) este până în 25 ale lunii următoare, atunci când perioada fiscală este luna calendaristică și până în 25 a primei luni a trimestrului următor, atunci când această perioadă fiscală este trimestrială; în momentul când se generează dreptul de import pentru bunurile respective, conform legislației vamale.\n\nÎntrebarea 53 din 134" }, { "nr": 53, "tema": "Elemente de drept fiscal", "intrebare": "Precizați două tehnici utilizate pentru stabilirea bazei de impozitare a TVA (taxa pe valoare adăugată) în conformitate cu prevederile din Codul fiscal al României, valabil în anul 2016?", "raspuns": "Printre tehnicile utilizate pentru stabilirea bazei de impozitare a TVA (taxa pe valoare adăugată) se numără și:\n\n• tehnica directă (calcul valoare TVA când se cunoaște valoarea produsului);\n\n• tehnica indirectă (calcul TVA și baza de impozitare când se cunoaște prețul final de vânzare).\n\nÎntrebarea 54 din 134" }, { "nr": 54, "tema": "Elemente de drept fiscal", "intrebare": "Impozitarea vehiculelor este un instrument economico-financiar prin care se promovează vehicule cu grad redus de poluare, în măsura în care se creează avantaje pentru înscrierea și menținerea în circulație a acestor vehicule. Dați cel puțin două exemple de categorii de vehicule cărora li se poate aplica impozit anual diferențiat?", "raspuns": "Următoarele două categorii de vehicule li se aplică impozit anual diferențiat:\n\n• autovehiculele acționate electric sunt supuse unui regim de impozitare anual distinct față de autovehiculele cu motor exclusiv termic;\n\n• mijloacele de transport hibride sunt supuse unui regim de impozitare anual diferențiat față de autovehiculele cu motor exclusiv termic.\n\nÎntrebarea 55 din 134" }, { "nr": 55, "tema": "Elemente de drept fiscal", "intrebare": "Statele membre ale Uniunii Europene pot stabili taxe de utilizarea infrastructurii rutiere în diverse forme. Care sunt cele două tipuri de taxe pentru utilizarea infrastructurii rutiere din România?", "raspuns": "• Tarif de utilizare, se achită în funcție de tipul vehiculului și se aplică în mod nediscriminatoriu utilizatorilor români și străini pentru toate vehiculele înmatriculate temporar sau definitiv care utilizează rețeaua de drumuri naționale din România pe parcursul unei perioade date.\n\n• Tarif de trecere, se achită în funcție de tipul vehiculului și se aplică în mod nediscriminatoriu utilizatorilor români și străini pentru toate vehiculele înmatriculate temporar sau definitiv care utilizează o anumită distanță de pe un sector de drum, pod, tunel sau trecătoare de munte care fac parte din rețeaua de drumuri naționale din România.\n\nÎntrebarea 56 din 134" }, { "nr": 56, "tema": "Elemente de drept fiscal", "intrebare": "Pentru care venituri au obligativitatea plății impozitului, persoane fizice rezidente care au domiciliul în România?", "raspuns": "Impozitul pe venit se aplică veniturilor obținute din orice sursă (de exemplu: venituri din salarii, din drept de proprietate intelectuală, din cedarea folosinței bunurilor, din activități independente, etc), atât din România, cât si din afara României.\n\nÎntrebarea 57 din 134" }, { "nr": 57, "tema": "Elemente de drept fiscal", "intrebare": "Pentru care venituri au obligativitatea plății impozitului, persoane fizice rezidente care nu au domiciliul în România?", "raspuns": "În cazul persoanelor fizice rezidente care nu au domiciliul în România, impozitul pe venit se aplică veniturilor obținute din orice sursă (de ex: salarii, drept de proprietate intelectuală, cedarea folosinței bunurilor, activități independente, etc) obținute în România.\n\nÎntrebarea 58 din 134" }, { "nr": 58, "tema": "Elemente de drept fiscal", "intrebare": "Pentru ce activități desfășurate de către persoanele fizice nerezidente trebuie plătit impozitul pe veniturile realizate?", "raspuns": "În cazul persoanelor fizice nerezidente care desfășoară activitate independentă prin intermediul unui sediu permanent în România, impozitul pe pe veniturile realizate se aplică venitului net atribuibil sediului permanent sau venitului salarial net din activitatea dependentă, dacă persoana fizică nerezidentă desfășoară o astfel de activitate.\n\nÎntrebarea 59 din 134" }, { "nr": 59, "tema": "Elemente de drept fiscal", "intrebare": "Enumerați patru categorii de venituri supuse impozitării din categoria veniturilor în bani, cât și din echivalentul în lei al veniturilor în natură?", "raspuns": "• venituri din activități independente;\n\n• venituri din salarii și asimilate salariilor;\n\n• venituri din cedarea folosinței bunurilor;\n\n• venituri din investiții;\n\n• venituri din pensii;\n\n• venituri din activități agricole, silvicultură și piscicultură;\n\n• venituri din premii și din jocuri de noroc;\n\n• venituri din transferul proprietăților imobiliare;\n\n• venituri din alte surse.\n\nÎntrebarea 60 din 134" }, { "nr": 60, "tema": "Elemente de drept fiscal", "intrebare": "Cine contribuie în România la bugetul asigurărilor sociale, la fondul de sănătate, la fondul pentru șomaj și la bugetul de stat?", "raspuns": "Cei care contribuie la bugetele/fondurile enumerate mau sus sunt:\n\n• cetățenii români sau străini, pe perioada în care au domiciliul ori reședința în România;\n\n• persoanele fizice și juridice care au calitatea de angajatori;\n\n• ANOFM, pentru persoanele care beneficiază de indemnizație de șomaj;\n\n• Casa Națională de Pensii, pentru persoanele care realizează venituri din pensii.\n\nÎntrebarea 61 din 134" }, { "nr": 61, "tema": "Elemente de drept fiscal", "intrebare": "Dați două exemple de modalități de plata taxelor de utilizare a infrastructurii rutiere, din afara României, pentru vehicule cu masa totală maximă autorizată mai mare de 3,5 tone și explicați cum se face verificarea plății taxelor?", "raspuns": "Taxele de utilizare a infrastructurii rutiere, din afara României, pentru vehicule cu masa totală maximă autorizată mai mare de 3,5 tone se pot achita online, cu numerar la punctele de vânzare sau la intrarea/ieșirea de pe autostrăzi, la automate speciale.\n\nVerificarea se face automat pe baza unor camere video care recunosc numărul de înmatriculare al vehiculului, căutând apoi în baza de date dacă există vigneta valabilă. Prin prezentarea la control a vignetei sau a unui document de plată.\n\nÎntrebarea 62 din 134" }, { "nr": 62, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Care este prețul minim/km pe care trebuie să-l solicitați pentru efectuarea unei curse dus – întors, dacă luați în calcul costurile din enunț, distanța dintre localitățile între care se efectuează cursa este de 650 km, viteza medie de deplasare este de 50 km/oră și transportul trebuie să se realizeze cu un profit de 21%?", "raspuns": "• 650 km x 2 = 1300 km x 25L / 100 km = 325 L motorină;\n\n• Cost motorină: 325 L x 1,2 E / L = 390 E;\n\n• Cost service: 1300 km x 0,15 E / km = 195 E;\n\n• 1300 km / 50 km/h = 26 ore conducere;\n\n• Cost salar conducător auto: 26 ore x 2,5 E / oră = 65 E;\n\n• Costuri fixe: 50 E x 2 = 100 E;\n\n• Total costuri: 390 + 195 + 65 + 100 = 750 E;\n\n• Profit: 750 x 21 / 100 = 157,5 E;\n\n• Total cursa: 750 + 157,5 = 907,5 E;\n\n• Preț per km: 907,5 / 1300 = 0,698 E/km.\n\nÎntrebarea 63 din 134" }, { "nr": 63, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Menționați toate documente în baza cărora operatorul de transport poate demonstra îndeplinirea cerinței privind capacitatea financiară și calculați nivelul financiar care ar asigura îndeplinirea acestei cerințe, dacă efectuați transporturi rutiere cu parcul auto din enunț?", "raspuns": "Condiția de capacitate financiară se consideră îndeplinită daca întreprinderea demonstrează:\n\n• că dispune anual de capital și rezerve în valoare de 9000 euro pentru primul autovehicul utilizat;\n\n• că dispune anual de capital și rezerve în valoare de 5000 euro pentru fiecare autovehicul suplimentar.\n\nCapacitatea financiară se poate demonstra prin:\n\n• bilanț contabil certificat de un expet contabil autorizat sau;\n\n• scrisoare de garanție bancară sau;\n\n• asigurare profesională (asigurare de risc financiar).\n\nÎntrebarea 64 din 134" }, { "nr": 64, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Ce reprezintă bilanțul contabil al unei societăți?", "raspuns": "Bilanțul contabil este o situație financiară care prezintă situația activelor, pasivelor și capitalurile proprii ale unei companii/instituții la un anumit moment.\n\nÎntrebarea 65 din 134" }, { "nr": 65, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "În conformitate cu prevederile referitoare la condițiile de livrare a mărfurilor (INCOTERMS 2010) în situația în care expeditorul menționează pe scrisoarea de transport CMR, condiția de livrare DDP (Delivered Duty Paid) în ce moment își îndeplinește vânzătorul obligația de livrare a mărfurilor și cine răspunde de riscurile de pierdere sau de deteriorare a mărfii, precum și orice alte cheltuieli suplimentare cauzate de evenimente care au avut loc după ce marfa a fost predată operatorului de transport rutier​?", "raspuns": "DDP (Delivered Duty Paid) Descriere: Vânzătorul își îndeplinește obligația de livrare în momentul în care marfa a fost pusă la dispoziția cumpărătorului, la locul convenit din țara importatoare. Vânzătorul trebuie să suporte toate cheltuielile și riscurile legate de aducerea mărfii în acest loc inclusiv a taxelor vamale, a altor taxe și speze oficiale care se plătesc la import, precum și a costurilor și riscurilor de îndeplinire a formalităților vamale. Acest termen poate fi folosit indiferent de modalitatea de transport.\n\nÎntrebarea 66 din 134" }, { "nr": 66, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "În conformitate cu prevederile referitoare la condițiile de livrare a mărfurilor (INCOTERMS 2010) în situația în care expeditorul menționează pe scrisoarea de transport CMR, condiția de livrare EXW (EX WORS) în ce moment își îndeplinește vânzătorul obligația de livrare a mărfurilor și cine răspunde de riscurile de pierdere sau de deteriorare a mărfii la încărcarea în vehiculul de transport, inclusiv plata transportului și costul asigurării, precum și orice alte cheltuieli suplimentare cauzate de evenimente care au avut loc după ce marfa a fost predată operatorului de transport rutier?", "raspuns": "EXW - Ex Works - Franco fabrică: Presupune obligații minime pentru vânzător care trebuie să pună marfa la dispoziția cumpărătorului la sediul său fără a răspunde de încărcarea mărfii în mijlocul de transport al cumpărătorului. Cumpărătorul suportă toate riscurile pe care le comportă preluarea mărfii și transportarea acestora la destinație. Cumpărătorul asigură plata transportului și costul asigurării și toate cheltuielile suplimentare.\n\nÎntrebarea 67 din 134" }, { "nr": 67, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Sistemele de tranzit al mărfurilor care se pot folosi în cadrul Uniuni Vamale Europene sunt în mod obligatoriu acoperite de o garanție. Pentru un răspuns corect precizați două tipuri de garanții și menționați ce trebuie să acopere aceasta?", "raspuns": "Există două tipuri diferite de garanții în sistemul T: garanții individuale și garanții globale.\n\nGaranția individuală asigură acoperire numai pentru o singură deplasare în sistem T. Ea trebuie să acopere valoarea totală a datoriei vamale care poate apărea, calculată pe baza celor mai mari tarife aplicabile mărfurilor de același tip în Statul Membru de plecare.\n\nGaranția globală poate oferi acoperire pentru mai multe curse în sistem T pentru o anumită perioadă de timp. Garanția este fixată pentru a acoperi suma maximă a datoriilor și a altor taxe care sunt exigibile într-o perioadă de cel puțin o săptămână, pe baza tranzacțiilor anterioare și tendințelor anticipate în operațiunile comerciale. Această valoare maximă se numește „sumă de referință“.\n\nÎntrebarea 68 din 134" }, { "nr": 68, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Ce elemente din Bilanț sunt incluse la calculul capacității financiare? (Se vor enumera cel puțin cinci elemente pentru un răspuns corect).", "raspuns": "Următoarele elemente din Bilanț se regăsesc printre cele incluse la calculul capacității financiare:\n\n• Capitalul propriu;\n\n• Aporturi de capital;\n\n• Rezerve;\n\n• Rezerve din reevaluare;\n\n• Prime de capital;\n\n• Rezultatul reportat (profitul anilor anteriori, rămas nedistribuit);\n\n• Rezultatul exercițiului financiar (profitul anului curent).\n\nÎntrebarea 69 din 134" }, { "nr": 69, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Ce reprezintă cheltuielile de exploatare în cadrul prețului de cost și ce elemente pot fi cuprinse în acestea? (Pentru un răspuns corect precizați minim cinci elemente).", "raspuns": "Cheltuielile de exploatare în cadrul prețului de cost sunt cheltuieli directe generate de realizarea obiectului de activitate.\n\nCheltuieli de exploatare în cadrul prețului de cost sunt:\n\n• combustibil;\n\n• ulei;\n\n• piese de schimb;\n\n• anvelope;\n\n• costul de achiziție al autovehiculelor și uzura acestora;\n\n• salariile șoferilor;\n\n• asigurările autovehiculelor;\n\n• taxe de drum.\n\nÎntrebarea 70 din 134" }, { "nr": 70, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Ce elemente obligatorii trebuie să conțină o cambie, știind că acest titlu de credit este un înscris sub semnătură privată?", "raspuns": "Cambia trebuie să cuprindă obligatoriu următoarele elemente:\n\n• denumirea de cambie;\n\n• ordinul pur și simplu de a plăti o suma bine determinată exprimată într-o valută și înscrisă în cifre și litere (dacă suma în cifre nu este aceeași cu suma în litere, rămâne valabilă aceasta din urmă, iar în cazul cand în cambie suma în cifre și litere este trecută de mai multe ori, rămâne valabilă cea mai mică);\n\n• numele, prenumele și adresa trasului (persoanei care trebuie să plătească);\n\n• scadența care poate fi la o zi fixă calendaristică, la vedere, la un anumit termen de la vedere, adică la prezentare, la un anumit termen de la data emiterii, iar dacă nu este indicată scadența se consideră că se plătește la vedere;\n\n• locul unde urmează să se efectueze plata;\n\n• numele, prenumele și adresa beneficiarului (o cambie nu poate fi emisă la purtător);\n\n• data (anul, luna și ziua) și locul emiterii;\n\n• semnătura trăgătorului care în ultimă instanță atestă valabilitatea cambiei.\n\nLipsa unuia dintre aceste elemente poate duce la pierderea valabilității cambiei.\n\nÎntrebarea 71 din 134" }, { "nr": 71, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "În conformitate cu prevederile referitoare la condițiile de livrare a mărfurilor (INCOTERMS 2010) în situația în care expeditorul menționează pe scrisoarea de transport CMR, condiția de livrare CPT (Carriage Paid To) în ce moment riscurile de pierdere sau de deteriorare a mărfii, precum și orice alte cheltuieli suplimentare cauzate de evenimente care au avut loc după ce marfa a fost predată operatorului de transport rutier trec de la vânzător la cumpărător?", "raspuns": "CPT (Carriage Paid To) Descriere:\n\nVânzătorul plătește pentru transportul mărfii la destinația convenită.\n\nRiscurile de pierdere sau de deteriorare a mărfii, precum și orice alte cheltuieli suplimentare cauzate de evenimente care au avut loc după ce marfa a fost predată cărăușului trec de la vânzător la cumpărător în momentul în care marfa a fost predată cărăușului.\n\nÎn cazul în care pentru transportul mărfii se folosesc cărăuși succesivi, riscurile trec de la vânzător la cumpărător în momentul în care marfa a fost predată primului cărăuș.\n\nTermenul CPT implică obligația vânzătorului de vămuire a mărfii pentru export.\n\nAcest termen poate fi folosit pentru toate modurile de transport, inclusiv pentru transportul multimodal.\n\nÎntrebarea 72 din 134" }, { "nr": 72, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "În conformitate cu prevederile referitoare la condițiile de livrare a mărfurilor (INCOTERMS 2010) în situația în care expeditorul menționează pe scrisoarea de transport CMR, condiția de livrare CIP (Carriage and Insurance Paid) în ce moment riscurile de pierdere sau de deteriorare a mărfii, precum și orice alte cheltuieli suplimentare cauzate de evenimente care au avut loc după ce marfa a fost predată operatorului de transport rutier trec de la vânzător la cumpărător și ce obligație are suplimentar vânzătorul.", "raspuns": "CIP (Carriage and Insurance Paid) Descriere:\n\nVânzătorul are aceleași obligații ca la termenul CPT dar suplimentar el trebuie sa efectueze și asigurarea pentru acoperirea riscului de pierdere sau deteriorare a mărfii pe timpul transportului.\n\nVânzătorul încheie contractul și plătește prima de asigurare.\n\nCumpărătorul trebuie să ia notă că în cazul CIP vânzătorul este obligat să obțină prima de asigurare pentru acoperire minimă.\n\nTermenul CIP implică obligația vânzătorului de vămuire a mărfii pentru export.\n\nAcest termen poate fi folosit pentru toate modurile de transport, inclusiv pentru transportul multimodal.\n\nÎntrebarea 72 din 134" }, { "nr": 73, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Ce reprezintă contul de profit și pierderi al unui operator de transport rutier?", "raspuns": "Contul de profit și pierdere este o situație financiară întocmită pentru o anumită perioadă de timp și care reflectă veniturile și cheltuielile, inclusiv dobânzile și amortismentul, respectivei societăți.\n\nÎntrebarea 74 din 134" }, { "nr": 74, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Ce reprezintă cheltuielile financiare în cadrul prețului de cost și ce elemente pot fi cuprinse în acestea? (Pentru un răspuns corect precizați minim cinci elemente).", "raspuns": "Cheltuielile financiare în cadrul prețului de cost reprezintă costuri indirecte.\n\nCheltuielile financiare reprezintă:\n\n• Dobânzile aferente creditelor și împrumuturilor;\n\n• Comisioanele și alte costuri bancare;\n\n• Pierderile din diferențe de curs valutar;\n\n• Sconturile acordate clienților;\n\n• Pierderile din titluri de valoare și alte investiții financiare;\n\n• Cheltuieli privind provizioanele pentru investiții financiare;\n\n• Cheltuieli cu decontările prin efecte comerciale (cambii, bilete la ordin etc.).\n\nÎntrebarea 75 din 134" }, { "nr": 75, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Ce transporturi de mărfuri sunt stabilite a se efectua în sistemul de tranzit comunitar intern al mărfurilor, conform procedurii T1​?", "raspuns": "Procedura T1 se aplică transportului mărfurilor necomunitare între două puncte situate pe teritoriul vamal al Uniunii Europene. Acest regim suspendă plata taxelor vamale la import, a altor taxe și a măsurilor de politică comercială, până în momentul în care mărfurile ajung la destinația finală din cadrul Uniunii.\n\nÎntrebarea 76 din 134" }, { "nr": 76, "tema": "Gestiunea comercială și financiară a întreprinderii", "intrebare": "Ce transporturi de mărfuri sunt stabilite a se efectua în sistemul de tranzit comunitar intern al mărfurilor, conform procedurii T2​?", "raspuns": "Regimul T2 se folosește pentru mărfuri unionale (adică deja în liberă circulație în UE). Aceste mărfuri pot circula între două puncte din Uniunea Europeană, chiar dacă trec printr-o țară din afara UE, fără să-și piardă statutul de marfă unională.\n\nRegimul T2 se aplică, de asemenea, mărfurilor care circulă din Uniune către o țară de tranzit comun, care urmează regimul de export.\n\nRegimul T2 nu se aplică dacă transportul este făcut integral pe cale maritimă sau aeriană.\n\nÎntrebarea 77 din 134" }, { "nr": 77, "tema": "Accesul la piață", "intrebare": "În conformitate cu Manualul de utilizare a contigentului de autorizații CEMT cât timp se păstrează în carnetul de drum foile de proces verbal? (Pentru un răspuns corect precizați ce se face cu foaia de proces verbal după expirarea termenului de păstrare în carnetul de drum, în cazul utilizării unei autorizații multilaterale CEMT cu valabilitate pentru anul calendaristic curent).", "raspuns": "Filele completate ale carnetului de drum (prima filă original, de culoare verde, cu scrisul în original) trebuie păstrate în carnetul de drum până la expirarea perioadei de valabilitate a autorizației CEMT corespunzătoare. Pe baza datelor cuprinse în filele respective, operatorul de transport întocmește raportul lunar privind utilizarea autorizațiilor CEMT anuale.\n\nFILELE DIN CARNETELE DE DRUM CEMT NU SE MAI TRANSMIT LA SEDIUL M.T.I. !\n\nRaportarea curselor se face prin aplicația dedicată gestionată de Autoritatea Rutieră Română (ARR): [http://cemt.arr.ro/](http://cemt.arr.ro/). Obligația raportării electronice implică și transmiterea copiilor scanate a foilor de drum CEMT care fac obiectul raportării respective.\n\nRaportarea curselor efectuate într-o lună calendaristică se face în termen de cel mult 30 de zile de la expirarea lunii de raportare.\n\nÎn cazul în care o cursă începe într-o lună și se termină în luna următoare, raportarea cursei respective se face în luna și pentru luna în care cursa se termină.\n\nOperatorii de transport deținători de autorizații CEMT vor păstra, de asemenea, la sediul lor, în tot anul calendaristic următor, carnetele de drum cu filele originale, corespunzătoare autorizațiilor CEMT repartizate în anul precedent.\n\nOperatorii de transport deținători de autorizații CEMT vor pune la dispoziția Direcției Transport Rutier din cadrul M.T., la solicitarea acestuia, carnetele de drum care fac obiectul perioadei obligatorii de păstrare menționată anterior.\n\nÎntrebarea 78 din 134" }, { "nr": 78, "tema": "Accesul la piață", "intrebare": "În ce situații o autorizație CEMT nu este valabilă? (Pentru un răspuns corect menționați minim patru de astfel de situații.)", "raspuns": "Autorizațiile CEMT se consideră nevalabile în următoarele cazuri:\n\n• pe autorizația CEMT nu figurează una din următoarele mențiuni obligatorii:\n\n• denumirea și adresa completă a operatorului de transport rutier;\n\n• semnătura și ștampila organului emitent;\n\n• datele referitoare la începutul perioadei de valabilitate și sfârșitul perioadei de  valabilitate a autorizației CEMT; \n\n• data de eliberare a autorizației CEMT.\n\n• autorizația CEMT nu este însoțită de carnetul de drum completat corespunzător;\n\n• autorizațiile CEMT nu sunt însoțite de certificatele valabile care să ateste conformitatea cu tipul autorizațiilor respective; \n\n• autorizația CEMT prezintă deteriorări, ștersături, astfel încât elementele de identificare sunt ilizibile;\n\n• autorizația CEMT se utilizează pentru efectuarea transporturilor rutiere de mărfuri cu încălcarea prevederilor referitoare la restricțiile în utilizarea autorizațiilor CEMT; \n\n• autorizația CEMT se utilizează pentru derularea a mai mult de 3 curse consecutive, cu încărcătură, între statele CEMT, fără întoarcerea, în intervalul respectiv, pe teritoriul statului de înmatriculare.\n\nÎntrebarea 79 din 134" }, { "nr": 79, "tema": "Accesul la piață", "intrebare": "Care sunt cerințele pe care trebuie să le îndeplinească vehicule, conform Convenției TIR, pentru a fi agreate la transportul internațional de mărfuri sub sigiliul vamal, dacă se ia în considerare compartimentul destinat încărcăturii? (Menționați, pentru un răspuns corect, minim trei cerințe).", "raspuns": "Pot fi agreate pentru transportul internațional de mărfuri sub sigiliu vamal numai vehiculele ale căror compartimente rezervate încărcăturii sunt construite și echipate astfel încât:\n\n• nici o marfă să nu poată fi scoasă sau introdusă din partea sigilată a vehiculului fără a lăsa urme vizibile de efracție sau fără ruperea sigiliului vamal;\n\n• sigiliul vamal să poată fi aplicat într-un mod simplu și eficace;\n\n• să nu aibă un spatii ascunse care să permită dosirea mărfurilor;\n\n• toate spațiile susceptibile de a conține mărfuri să fie ușor accesibile pentru controlul vamal.\n\nÎntrebarea 80 din 134" }, { "nr": 80, "tema": "Accesul la piață", "intrebare": "Care sunt condițiile și cerințele minimale de autorizare a persoanelor fizice sau juridice pentru a putea utiliza carnetul TIR, conform prevederilor Convenției TIR? (Pentru un răspuns corect menționați minim patru condiții sau cerințe minimale).", "raspuns": "Condițiile și cerințele minimale pe care trebuie să le respecte persoanele care doresc să acceadă la regimul TIR sunt:\n\n• să facă dovada experienței sau a capacității de a efectua cu regularitate transporturi internaționale (deținătorul unei licențe comunitare, etc.);\n\n• bonitate financiară;\n\n• să facă dovada cunoașterii modului în care se aplică Convenția TIR;\n\n• lipsa unor abateri grave sau repetate de la legislația vamală sau fiscală.\n\nÎntrebarea 81 din 134" }, { "nr": 81, "tema": "Accesul la piață", "intrebare": "Când se consideră că o societate comercială nu utilizează în mod regulat regimul TIR?", "raspuns": "Se consideră că o societate comercială nu folosește în mod regulat regimul TIR, în situația în care asociația sa garantă nu i-a mai eliberat carnete TIR în ultimele 12 luni​.\n\nÎntrebarea 82 din 134" }, { "nr": 82, "tema": "Accesul la piață", "intrebare": "Aveți dreptul sa efectuați cele două transporturi? Dacă ați face numai transportul pe traseul Salzburg – Graz în ce perioadă maximă de timp, trebuie efectuat acesta?", "raspuns": "Nu avem dreptul să efectuăm ambele transporturi. Dacă efectuăm doar unul dintre cele două transporturi, trebuie să îl efectuăm în maxim 3 zile.\n\nÎntrebarea 83 din 134" }, { "nr": 83, "tema": "Accesul la piață", "intrebare": "Aveți dreptul să efectuați cele două transporturi? Dacă ați face numai transportul pe ruta Linz - Graz în ce perioadă maximă de timp, trebuie efectuat acesta?", "raspuns": "Cele două transporturi pot fi efectuate. Transportul Linz - Graz trebuie efectuat în termen de maxim 7 zile de la descărcarea la Linz.\n\nÎntrebarea 84 din 134" }, { "nr": 84, "tema": "Accesul la piață", "intrebare": "După ce perioada de timp întreprinderea și/sau managerul de transport care și-au/și-a pierdut buna reputație pentru încălcările grave prevăzute în anexa nr. IV la Regulamentul (CE) nr. 1.071/2009 fiind declarate/declarat inapte/inapt conform art. 14 din Regulamentul (CE) nr. 1.071/2009, pot/poate fi reabilitate/reabilitat?", "raspuns": "Buna reputație se poate redobândi după perioada de 1 an de la pierderea ei, atât de întreprindere, cât și de managerul de transport.\n\nÎntrebarea 85 din 134" }, { "nr": 85, "tema": "Accesul la piață", "intrebare": "Ce sisteme de tranzit al mărfurilor se pot folosi în cadrul Uniuni Vamale Europene la care România a aderat și pentru ce transporturi de mărfuri sunt stabilite a se utiliza acestea? Pentru un răspuns corect precizați două sisteme de tranzit ce se pot utiliza.", "raspuns": "În cadrul Uniuni Vamale Europene la care România a aderat se pot folosi:\n\n• Sistemul de Tranzit Comunitar T 1, pentru bunurile necomunitare ce se transportă între două birouri vamale ale Uniunii Europene;\n\n• Sistemul de Tranzit Comun T2, pentru bunurile comunitare ce se transportă între două birouri vamale ale Uniunii Europene, fiind extins ulterior și țârilor AELS și grupului Vişegrad.\n\nÎntrebarea 86 din 134" }, { "nr": 86, "tema": "Accesul la piață", "intrebare": "Ce documente trebuie să dețină conducătorul auto la bordul cisternei cu care efectuează un transport de motorină, între Ploiești și București dacă acesta nu este resortisant al unui stat membru al Uniunii? Obs. Se va avea în vedere și ce aparat tahograf este montat pe cisternă, sau pe alte vehicule cu care se transportă diferite mărfuri generale sau periculoase.", "raspuns": "• Legitimația de serviciu valabilă a conducătorului auto;\n\n• Certificatul de competență profesională a conducătorului auto (CPI dacă a obținut categoria C după data de 09.09.2009 și este la prima atestate, sau CPC dacă a obținut categoria C înainte de data de 09.09.2009 sau a obținut categoria C după această dată și este la a doua atestare);\n\n• Certificatul de competentă profesională ADR (specializarea cisterne);\n\n• Atestatul de conducător auto pentru cetățenii neresortisanti ai UE;\n\n• Cardul tahografic al conducătorului auto, dacă vehiculul este dotat cu tahograf digital sau dacă in ultimele 56 de zile a condus vehicule cu tahograf digital;\nNOTĂ: Începând cu 31 decembrie 2024, conform modificărilor aduse de Regulamentul (UE) 2020/1054 la Regulamentul (CE) nr. 561/2006, conducătorii auto sunt obligați să păstreze și să prezinte, la cererea autorităților de control, orice informație înregistrată manual și orice document imprimat în timpul zilei în curs și pe parcursul celor 56 de zile precedente. Anterior acestei modificări, conducătorii auto erau obligați să păstreze și să prezinte înregistrările tahografice pentru ziua în curs și pentru cele 28 de zile anterioare.\n\n• Actul din care reiese dreptul la muncă în RO al conducătorului auto;\n\n• Copia conformă a licenței comunitare;\n\n• Documentul de transport: scrisoarea CMR;\n\n• Instrucțiunile scrise (fișa de siguranță) pentru transportul produselor periculoase;\n\n• Contractul de închiriere/leasing al vehiculului în original sau în copie conformă cu originalul;\n\n• Certificatul de agreare al cisternei.\n\nÎntrebarea 87 din 134" }, { "nr": 87, "tema": "Accesul la piață", "intrebare": "Ce documente trebuie să transmită operatorul de transport care deține o licență comunitară și la care agenție teritorială a Autorității Rutiere Române – ARR, dacă acesta este înregistrat ca societate comercială în județul Prahova iar sediul unde acesta își păstrează documentele și în care aceasta desfășoară activitatea administrativă și operativă în legătură cu transportul rutier este la un punct de lucru din municipiul București, în situația în care dorește să efectueze transport de mărfuri periculoase cu vehiculele pe care le deține conform datelor menționate anterior, după obținerea licenței comunitare?", "raspuns": "În vederea efectuării transportului rutier de mărfuri periculoase, operatorul de transport rutier va depune sau va transmite prin poștă, cu confirmare de primire, la A.R.R. agenția București, următoarele documente:\n\n• dovada angajării, decizia de numire și certificatul de atestare profesională a consilierului de siguranță;\n\n• certificatul de agreare eliberat de Regia Autonomă \"Registrul Auto Român\", pentru vehiculele pentru care este necesar a se elibera respectivul certificat (cisterne sau vehicule ce transporta mărfuri din clasa 1);\n\n• certificatul de atestare profesională al conducătorului auto, specific mărfurilor periculoase care vor fi transportate;\n\n• autorizația eliberată de Comisia Națională pentru Controlul Activităților Nucleare, pentru vehiculele care transportă mărfuri periculoase din clasa 7;\n\n• certificatul de inspecție tehnică, în cazul suprastructurilor specializate pentru transportul recipientelor cu gaze lichefiate sau cu alte mărfuri periculoase.\n\nÎntrebarea 87 din 134" }, { "nr": 88, "tema": "Accesul la piață", "intrebare": "Ce documente trebuie să depuneți și la care agenție teritorială a Autorității Rutiere Române – ARR în vederea obținerii licenței comunitare, dacă întreprinderea este înregistrată în municipiul București și are două puncte de lucru în județul Prahova, iar sediul unde întreprinderea își păstrează documentele și în care aceasta desfășoară activitatea administrativă și operativă în legătura cu transportul rutier este la un punct de lucru din județul Prahova?", "raspuns": "Pentru obținerea licenței comunitare și a copiilor conforme ale acesteia, întreprinderea va depune sau va transmite prin poștă, cu confirmare de primire, la Autoritatea Rutieră Română - A.R.R. din județul Prahova, o cerere însoțită de următoarele:\n\n• documente care atestă înregistrarea la Oficiul Național al Registrului Comerțului, supunerea la impozit pe profit/venit și, după caz, codul de TVA;\n\n• document doveditor privind deținerea sediului;\n\n• cartea de identitate a vehiculului, certificatul de înmatriculare și dovada efectuării ITP în termen de valabilitate;\n\n• document privind asigurarea întreținerii tehnice a vehiculelor rutiere utilizate;\n\n• cazierul judiciar și declarație pe propria răspundere a managerului de transport, din care să reiasă că nu a fost sancționat pentru încălcările grave ale normelor de transport;\n\n• cazierul judiciar și declarație pe propria răspundere a întreprinderii din care să reiasă că nu a fost sancționată pentru încălcările grave ale normelor de transport;\n\n• document privind îndeplinirea condiției de capacitate financiară;\n\n• certificatul de competentă profesională al managerului de transport;\n\n• dovada plății tarifului de eliberare a licenței și a copiei conforme a acesteia.\n\nÎntrebarea 89 din 134" }, { "nr": 89, "tema": "Accesul la piață", "intrebare": "Ce condiții trebuie să îndeplinească o întreprindere care efectuează transport rutier internațional de mărfuri contra cost, pentru a se considera respectată cerința privind bună reputație?", "raspuns": "Se consideră îndeplinită cerința privind buna reputație, dacă:\n\n• întreprinderea sau managerul de transport nu au suferit condamnări sau sancțiuni pentru încălcarea normelor în vigoare privind dreptul comercial, circulația rutieră sau normele de transport;\n\n• dacă managerul de transport și-a pierdut buna reputație, a fost declarat inapt dar a intervenit reabilitarea.\n\nÎntrebarea 90 din 134" }, { "nr": 90, "tema": "Accesul la piață", "intrebare": "Menționați cinci abateri grave, care fac referire la timpii de conducere și odihnă, utilizarea aparatelor tahograf și cartelelor tahograf de către conducătorii auto, cuprinse în această anexă.", "raspuns": "Conform prevederilor din Anexa IV din Regulamentul (CE) nr. 1071/2009:\n\n• Depășirea timpului de conducere de șase zile sau de două săptămâni;\n\n• Depășirea timpului maxim de conducere zilnic fără o pauză corespunzătoare;\n\n• Lipsa tahografului sau a unui dispozitiv de limitare a vitezei la bordul vehiculului;\n\n• Utilizarea unui echipament fraudulos capabil să modifice înregistrările tahografului sau ale limitatorului de viteză;\n\n• Falsificarea diagramelor tahograf sau a datelor descărcate de pe tahograf sau de pe cartela conducătorului auto;\n\n• Conducerea, de către un conducător auto care folosește o cartelă falsificată, al cărei posesor nu este sau care a fost obținută pe baza unor declarații false.\n\nÎntrebarea 91 din 134" }, { "nr": 91, "tema": "Accesul la piață", "intrebare": "Menționați cinci abateri grave, care nu fac referire la timpii de conducere și odihnă, utilizarea aparatelor tahograf și cartelelor tahograf de către conducătorii auto, cuprinse în această anexă.", "raspuns": "Conform prevederilor din Anexa IV din Regulamentul (CE) nr. 1071/2009:\n\n• Conducerea autovehiculului fără un certificat valabil de inspecție tehnică, dacă un astfel de document este solicitat de legislația comunitară\n\n• Conducerea autovehiculului cu o deficiență foarte serioasă la nivelul sistemului de frânare, al mecanismului de direcție, al roților/pneurilor, al suspensiei sau al șasiului și care determină decizia de imobilizare a vehiculului\n\n• Transportul de persoane sau de marfă fără a deține un permis de conducere valabil\n\n• Transportul de persoane sau de marfă de către o întreprindere care nu este deținătoarea unei licențe comunitare valabile\n\n• Transportul de mărfuri cu depășirea masei maxime autorizate a vehiculului\n\n• Transportarea de mărfuri periculoase pentru care transportul este interzis sau cu vehicule nemarcate, dacă se ia decizia imobilizării vehiculului.\n\nÎntrebarea 92 din 134" }, { "nr": 92, "tema": "Accesul la piață", "intrebare": "Ce condiții trebuie să îndeplinească întreprinderea pentru a se considera îndeplinită cerința privind sediul?", "raspuns": "Conform art. 13 (modificat prin O.G. nr. 12/31.01.2022), cerința unui sediu real și stabil pe teritoriul României este îndeplinită numai dacă întreprinderea îndeplinește cumulativ următoarele:\n\n• Sediu în România + păstrarea documentelor la sediu: are un sediu pe teritoriul României, în incinta căruia păstrează originale (pe suport electronic sau fizic) ale principalelor documente: contracte de transport, documente ale vehiculelor, documente contabile, de personal și contracte de muncă, asigurări sociale, alocări și detașări conducători auto, cabotaj, durate de conducere și repaus etc., la care I.S.C.T.R. trebuie să aibă acces;\n\n• Întoarcerea vehiculelor în 8 săptămâni: organizează activitatea astfel încât vehiculele folosite în transport internațional să revină la unul dintre centrele operaționale din România în cel mult 8 săptămâni de la plecare;\n\n• Înregistrare legală: este înregistrată la Oficiul Național al Registrului Comerțului;\n\n• Regim fiscal în România: este supusă impozitului pe profit/venit și, după caz, deține cod de înregistrare în scopuri de TVA dacă i se aplică art. 316 din Codul fiscal;\n\n• Vehicule înmatriculate/autorize în România: dispune de unul sau mai multe vehicule înmatriculate ori puse în circulație și autorizate pentru utilizare în România (proprietate, rate, închiriere sau leasing;\n\n• Activitate efectivă și permanentă în România: își desfășoară efectiv și permanent activitățile administrative și comerciale la sediul din România și își gestionează operațiunile de transport în mod efectiv și permanent din România, folosind echipamente tehnice corespunzătoare.\n\n• Resurse permanente proporționale cu volumul: are la dispoziție în permanență și în mod obișnuit un număr de vehicule (conforme punctului 5) și conducători auto al căror loc de staționare obișnuit este la un centru operațional din România; numărul lor este proporțional cu volumul operațiunilor de transport.\n\nCerința privind sediul este considerată îndeplinită doar dacă toate condițiile de mai sus (punctele 1-7) sunt respectate cumulativ. Neîndeplinirea oricăreia dintre ele duce la neîndeplinirea cerinței privind sediul.\n\nÎntrebarea 93 din 134" }, { "nr": 93, "tema": "Accesul la piață", "intrebare": "Ce obligație are un manager de transport dacă în ultimi cinci ani nu a mai condus o întreprindere de transport rutier de marfă, în conformitate OG nr. 27/2011 privind transporturile rutiere, cu modificările și completările ulterioare?", "raspuns": "Deținătorii de certificate de competentă profesională care nu au mai condus o întreprindere de transport rutier de marfă sau o întreprindere de transport rutier de persoane în ultimii 5 ani au obligația de a urma cursuri de pregătire profesională periodică, care se finalizează printr-o evaluare privind actualizarea cunoștințelor.\n\nÎntrebarea 94 din 134" }, { "nr": 94, "tema": "Accesul la piață", "intrebare": "Ce condiții trebuie să îndeplinească o întreprindere care efectuează transport rutier internațional de mărfuri contra cost, pentru a se considera respectată cerința privind competența profesională?", "raspuns": "Se consideră îndeplinită cerința privind competența profesională, dacă întreprinderea care exercită ocupația de operator de transport rutier desemnează o persoană fizică ca manager de transport și care îndeplinește cumulativ următoarele condiții:\n\n• este titulară a certificatului de competentă profesională;\n\n• îndeplinește cerința de bună reputație;\n\n• conduce permanent și efectiv activitățile de transport ale întreprinderii;\n\n• este angajat, director, proprietar sau acționar al întreprinderii;\n\n• este rezidentă în Uniunea Europeană.\n\nÎntrebarea 95 din 134" }, { "nr": 95, "tema": "Accesul la piață", "intrebare": "Ce documente are obligația operatorul de transport rutier, conform legislației în vigoare, să dețină la sediul situat pe teritoriul României în incinta căruia își păstrează documentele de lucru? (Pentru un răspuns corect precizați minim trei astfel de documente, cu excepția cărților de identitate ale vehiculelor, avizele medicale și psihologice valabile pentru persoanele cu funcții care concură la siguranța circulației, toate documentele din care reiese menținerea condițiilor de acces la profesie și la piață, documentele doveditoare din care să rezulte angajarea în condiții legale a persoanelor cu funcții care concură la siguranța circulației).", "raspuns": "Pentru operatorul de transport marfă:\n\n• formularul de expediție și formularul pentru aprobarea transportului de deșeuri, pentru anul în curs și anul precedent;\n\n• tichetele de cântar pentru anul în curs și anul precedent;\n\n• autorizațiile speciale de transport AST privind transportul mărfurilor indivizibile cu depășirea maselor și/sau dimensiunilor maxime admise;\n\n• scrisorile de transport (C.M.R.), pentru anul în curs și anul precedent;\n\n• documentele privind întreținerea vehiculelor pentru o perioadă de 18 luni, care să conțină minimum informațiile privind: informări legate de sesizările conducătorilor auto privind starea tehnică a vehiculului, rezoluții ale managerului de transport, modalitatea de soluționare și documente justificative, după caz.\n\nÎntrebarea 96 din 134" }, { "nr": 96, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "În cazul transporturilor efectuate contra cost în baza Acordului cu privire la transportul internațional de produse perisabile (ATP), când se face controlului conformității cu Normele pentru mijloacele de transport izoterme, refrigeratoare, frigorifice sau calorice ? (Precizați minim două situații în care se face acest control).", "raspuns": "Controlul se va efectua:\n\n• înaintea puneri în exploatare a mijlocului de transport;\n\n• periodic, cel puțin o data la șase ani;\n\n• de fiecare data când autoritatea competenta a țării unde este înmatriculat mijlocul de transport o solicită.\n\nÎntrebarea 97 din 134" }, { "nr": 97, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Care sunt indicațiile minimale pe care trebuie să le conțină mărcile de identificare montate pe un furgon izoterm? (Precizați minim patru astfel de indicații, pentru un răspuns corect).", "raspuns": "Furgoanele izoterme sau mijloacele de transport izoterme, refrigeratoare, frigorifice sau calorice și dispozitivul lor termic vor trebui dotate fiecare, în mod permanent, prin grija constructorilor, cu mărci de identificare cuprinzând indicații minimale, după cum urmează:\n\n• denumirea ATP;\n\n• țara constructorului sau literele folosite în circulația rutieră internațională;\n\n• numele sau firma constructorului;\n\n• numărul de serie;\n\n• luna și anul de fabricație.\n\nÎntrebarea 98 din 134" }, { "nr": 98, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Care sunt obligațiile utilizatorului în cazul unui transport de bunuri divizibile? (Pentru un răspuns corect precizați minim trei obligații ale utilizatorului).", "raspuns": "Obligațiile utilizatorului sunt următoarele:\n\n• să nu transporte bunuri divizibile de la furnizorii care nu cântăresc sau nu eliberează tichet de cântar pentru toate vehiculele\n\n• să comunice furnizorului, în scris, valorile maselor totale maxime admise pentru vehiculele utilizate\n\n• să transbordeze încărcătura, pe propria cheltuială, în unul sau mai multe vehicule, astfel încât să fie respectate masele pe axe maxime admise în situația în care se constată de către personalul de control circulația vehiculelor cu depășirea maselor maxime pe axe\n\n• să nu transporte materiale vrac cu vehicule din dotarea cărora le lipsește prelata, iar în cazul în care vehiculele sunt prevăzute prin construcție cu obloane, acestea trebuie să fie asigurate cu sisteme de închidere care să asigure etanșeitatea.\n\nÎntrebarea 99 din 134" }, { "nr": 99, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "În baza cărui document operatorul de transport rutier poate efectua transportul de mărfuri care nu sunt indivizibile și ce condiții trebuie îndeplinite cumulativ pentru eliberarea acestuia, dacă este depășită cel puțin una dintre masele sau dimensiunile maxime admise, conform prevederilor din Ordonanța nr. 43/1997 privind regimul drumurilor, cu modificările și completările ulterioare? Pentru un răspuns corect precizați minim patru dintre aceste condiții.", "raspuns": "Circulația pe drumurile publice a vehiculelor rutiere, înmatriculate sau înregistrate în România sau în alte state, cu depășirea masei totale maxime admise, maselor maxime admise pe axe și/sau a dimensiunilor maxime admise se poate efectua numai în baza autorizației speciale de transport, AST, eliberată în prealabil.\n\nAutorizația specială de transport AST se eliberează pentru transporturi de mărfuri care nu sunt indivizibile, dacă este depășită cel puțin una dintre masele sau dimensiunile maxime admise și sunt îndeplinite, cumulativ, următoarele condiții:\n\n• masa totală să nu depășească cu mai mult de 25% masa totală maximă admisă;\n\n• masa pe axe să nu depășească masa maximă ce poate fi autorizată;\n\n• lungimea să nu depășească cu mai mult de 3,0 metri lungimea maximă admisă;\n\n• lățimea să nu depășească 3,20 metri;\n\n• să nu fie depășită înălțimea maximă admisă.\n\nÎntrebarea 100 din 134" }, { "nr": 100, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Pentru care categorii de autovehicule este obligatorie dotarea cu limitatoare de viteză?", "raspuns": "Pentru autovehiculele ori ansamblurile de vehicule destinate transportului rutier de mărfuri a căror masă totală maximă autorizată este mai mare de 3,5 tone și pentru autovehiculele destinate transportului de persoane având mai mult de 9 locuri pe scaune, inclusiv locul conducătorului auto.\n\nÎntrebarea 101 din 134" }, { "nr": 101, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Operatorul de transport rutier este obligat să dețină la sediu declarat, în incinta căruia își păstrează principalele documente de lucru și documentele privind întreținere vehiculelor utilizate la efectuarea transporturilor rutiere. Care sunt informațiile minime pe care le cuprind și pentru care interval de timp​?", "raspuns": "Documentele privind întreținerea vehiculelor se păstrează pentru o perioadă de 18 luni și trebuie să conțină minimum informațiile privind:\n\n• sesizările conducătorilor auto privind starea tehnică a vehiculului;\n\n• rezoluții ale managerului de transport;\n\n• modalitatea de soluționare;\n\n• documente justificative.\n\nÎntrebarea 102 din 134" }, { "nr": 102, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Ce obligație are un operator de transport rutier, conform legislației în vigoare, în ceea ce privește aparatul tahograf și limitatorul de viteză montat pe vehiculele cu care efectuează transport rutier de marfă? Precizați minim două obligații pentru un răspuns corect. Cum se sancționează, conform legislației în vigoare din domeniul transporturilor rutiere plecarea în cursă cu aparatul tahograf sau limitatorul de viteză ne funcționale?", "raspuns": "• să monteze, numai prin agenți economici autorizați, aparate tahograf și limitatoare de viteză la vehiculele pentru care acestea sunt obligatorii;\n\n• să nu permită plecarea în cursă a vehiculelor care au tahograful/limitatorul de viteză defect;\n\n• să nu permită intervenția persoanelor neautorizate asupra limitatoarelor de viteză și/sau asupra aparatelor tahograf.\n\nPlecarea în cursă cu aparatul tahograf sau limitatorul de viteză nefuncționale este abatere foarte gravă și se sancționează cu amendă contravențională și suspendarea atestatului/certificatului care atestă competența/calificarea profesională a conducătorului auto.\n\nÎntrebarea 103 din 134" }, { "nr": 103, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Care dintre autovehiculele din dotarea întreprinderii trebuie să fie dotate cu tahograf și cu ce tip de aparat tahograf se înlocuiește un tahograf defect care nu se mai poate repara, aflat în dotarea unei autocisterne care are MTMA de 16 tone, în cazul în care se efectuează transport rutier de mărfuri contra cost cu toate vehiculele deținute? (Justificați răspunsul prin indicarea tipurilor de aparate tahograf cu care sunt echipate autovehiculele la care este obligatorie dotarea cu tahograf, în condițiile în care aparatele tahograf ce echipează autovehiculele sunt cele originale cu care acestea au fost livrate de către constructor).", "raspuns": "Toate autovehiculele care au MTMA mai mare de 3,5t trebuie dotate cu aparate tahograf, inclusiv ansamblele de vehicule a căror MTMA depășește 3,5t.\n\nAutovehiculele sau ansamblele de vehicule menționate mai sus, care sunt fabricate până în anul 2006 inclusiv sunt dotate din fabrică cu tahografe analogice, iar cele fabricate începând cu anul 2007 sunt dotate din fabrică cu tahografe digitale.\n\nDupă defectarea unui tahograf (indiferent că este analogic sau digital) acesta va fi înlocuit în mod obligatoriu cu un tahograf digital.\n\nÎntrebarea 104 din 134" }, { "nr": 104, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "În conformitate cu prevederile legale în vigoare precizați pe ce sectoare de drum circulația autovehiculelor cu mase și/sau gabarite depășite nu este permisă?", "raspuns": "Este interzisă circulația autovehiculelor cu mase și/sau gabarite depășite în conformiate cu prevederle legale în vigore :\n\n• pe sectoarele de drum unde sunt instalate indicatoare de interzicere, restricție sau limitare a accesului acestora, dacă vehiculul sau ansamblul de vehicule atinge ori depășește lățimea, înălțimea, lungimea sau masele pe axe ori masa totală maximă admisă\n\n• când vizibilitatea este redusă sau partea carosabilă este acoperită cu polei, gheață sau zăpadă.\n\nÎntrebarea 105 din 134" }, { "nr": 105, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Care sunt documentele ce trebuie prezentate la stația de inspecție tehnică în vederea executării acesteia?", "raspuns": "Documentele ce trebuie prezentate la stația de inspecție tehnică în vederea executării acesteia sunt:\n\n• certificatul de înmatriculare sau dovada înlocuitoare a certificatului de înmatriculare, eliberată de autoritățile competente și completată în mod corespunzător cu datele necesare identificării sau, după caz, autorizația provizorie de circulație;\n\n• asigurare RCA valabilă\n\n• cartea de identitate a vehiculului.\n\n• carte de identitate a persoanei care prezintă autovehiculul la inspecție.\n\nÎntrebarea 106 din 134" }, { "nr": 106, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Câte depășiri ale maselor maxime admise s-au înregistrat și care sunt acestea? Cum se sancționează abaterile constatate și în ce condiții se poate relua deplasarea?", "raspuns": "S-au înregistrat 2 depășiri ale maselor maxime admise:\n\n• pe axa spate (13 tone în loc de 11.5)\n\n• masa totală maximă ansamblu de vehicule ( 45 în loc de 40 tone).\n\nAceste depășiri se sancționează cu amendă contravențională și imobilizarea ansamblului.\n\nSe poate relua deplasarea doar după reașezarea mărfii în vehicul pentru nu mai depăși masa pe axa motoare și după descărcarea surplusului de 5t pentru a nu depăși masa totală admisă." }, { "nr": 107, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "În conformitate cu prevederile OMLPTL nr. 458/2002 pentru aprobarea Normelor metodologice privind clasificarea pe categorii a autobuzelor și microbuzelor utilizate pentru transporturile publice de persoane prin servicii regulate în trafic național, cu modificările și completările ulterioare, precizați care sunt documentele necesare a fi depuse la Registrul Auto Român – RAR în vederea efectuării operațiunilor de clasificare a autocarelor pe care le deține operatorul de transport rutier?", "raspuns": "Documentele  necesare clasificării sunt:\n\n• cererea de clasificare completată de către deținător;\n\n• copie conformă a licenței comunitare;\n\n• copie de pe cartea de identitate a vehiculului;\n\n• copie de pe certificatul de înmatriculare cu inspecția tehnică periodică valabilă;\n\n• copie de pe contractul (leasing, închiriere) încheiat între titularul licenței comunitare și deținătorul autobuzului/ microbuzului, după caz.\n\nÎntrebarea 108 din 134" }, { "nr": 108, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Indicați prin ce măsuri se sancționează cele constatate cu ocazia controlului în trafic în conformitate cu prevederile din legislația specifică din domeniul transporturilor rutiere.", "raspuns": "Această abatere se sancționează prin amendă contravențională și suspendarea dreptului de a circula cu vehiculul respectiv, prin reținerea certificatului de înmatriculare și a plăcuțelor de înmatriculare, și anularea ITP-ului.\n\nÎntrebarea 109 din 134" }, { "nr": 109, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "În ce situații, conform prevederilor legale în vigoare, aveți obligația de a prezenta la o reprezentanță a RA Registrul Auto Român - RAR, autovehiculul sau ansamblul de vehicule conform structurii parcului auto pe care-l are în dotare operatorul de transport, pentru efectuarea inspecției tehnice periodice (ITP)? Obs. Se va lua în calcul și situația în care operatorul a fost sancționat pentru circulația cu ITP expirat, constatarea unor defecțiuni grave la diverse sisteme ale vehiculului, transport mărfuri periculoase, etc.", "raspuns": "Aveți obligația de a vă prezenta la RAR pentru efectuarea ITP în următoarele situații:\n\n• când vehiculele sunt agreate pentru transportul de mărfuri periculoase;\n\n• când vehiculele sunt destinate exclusiv transportului de butelii de gaze;\n\n• când remorcile-cisternă lente sunt destinate transportului de mărfuri periculoase;\n\n• când sunt vehicule istorice;\n\n• când autovehiculele sunt destinate competițiilor sportive;\n\n• când vehiculele au caracteristici speciale;\n\n• când vehiculele sunt înregistrate ca mașini sau utilaje autopropulsate pentru lucrări cu o viteză maximă ce depășește 25 km/h;\n\n• când vehiculele sunt radiate din evidență care au fost înmatriculate ori înregistrate anterior în România, în vederea înmatriculării sau a înregistrării acestora;\n\n• când vehiculele sunt înmatriculate în alte state;\n\n• în vederea redobândirii certificatului de înmatriculare sau a certificatului de înregistrare reținute ca urmare a circulației pe drumurile publice cu ITP expirat sau cu defecțiuni tehnice majore.\n\nÎntrebarea 110 din 134" }, { "nr": 110, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Cum este definit un container, conform prevederilor Convenției TIR? (Pentru un răspuns corect menționați minim trei condiții sau cerințe minimale).", "raspuns": "Prin \"container\" se înțelege un mijloc de transport (cadru, cisternă mișcătoare sau alt mijloc asemănător):\n\n• constituit dintr-un compartiment, în întregime sau parțial închis, destinat să conțină mărfuri;\n\n• are caracter permanent, suficient de rezistent pentru a permite folosirea sa repetată;\n\n• special conceput pentru a facilita transportul mărfurilor, fără descărcare și reîncărcare;\n\n• conceput astfel încât să poată fi ușor de manipulat;\n\n• conceput astfel încât să fie ușor de încărcat și de descărcat;\n\n• cu un volum interior de cel puțin 1 metru cub.\n\nTermenul \"container\" nu cuprinde nici ambalajele uzuale, nici vehiculele.\n\nÎntrebarea 111 din 134" }, { "nr": 111, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Conform legislației în vigoare în ce alte situații se impune verificarea aparatului tahograf digital? Pentru un răspuns corect menționați cel puțin trei astfel de situații?", "raspuns": "În cazul tahografelor se impune efectuarea unei verificări de către operatorii economici autorizați:\n\n• după orice reparare a tahografului;\n\n• după orice modificare a coeficientului caracteristic al autovehiculului;\n\n• după orice modificare a circumferinței efective a anvelopelor;\n\n• atunci când ceasul care indică ora universală coordonată (UTC) prezintă o eroare mai mare de 20 de minute;\n\n• atunci când s-a schimbat numărul de înmatriculare al autovehiculului.\n\nÎn cazul tahografelor digitale, verificările trebuie să includă și o calibrare.\n\nÎntrebarea 112 din 134" }, { "nr": 112, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Care sunt dimensiunile maxime admise ale unui ansamblu de vehicule, utilizat la transport rutier internațional de marfă pe drumuri europene reabilitate? ( Lungime, lățime și înălțime).", "raspuns": "• Lungime maximă = 18.75 m;\n\n• Lățime = 2.55 m (2,60 m pentru cele cu caroserie izotermă);\n\n• Înălțime = 4 m.\n\nÎntrebarea 113 din 134" }, { "nr": 113, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Care este masa totală maxim admisă pe un drum european, pentru un tren rutier cu patru osii, compus dintr-un autovehicul cu două osii și o remorcă cu două osii?", "raspuns": "Masa totală maxim admisă este de 36t.\n\nÎntrebarea 114 din 134" }, { "nr": 114, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Care este suma maselor maxime admise pe osiile componente, în cazul unei osi triple (tridem) pentru o semiremorcă la care distanța dinte acestea este mai mică sau egală cu 1,3 metri, în cazul transporturilor efectuate pe un drum modernizat?", "raspuns": "Suma maselor maxime admise pe osiile componente, în cazul unei osii triple pentru o semiremorcă la care distanța dintre acestea este mai mică sau egală cu 1,3m pe un drum modernizat este de 19t.\n\nÎntrebarea 115 din 134" }, { "nr": 115, "tema": "Standarde tehnice și aspecte tehnice ale funcționării", "intrebare": "Cine efectuează certificarea autenticității unui vehicul destinat transportului de mărfuri, și când este obligatorie efectuarea acesteia?", "raspuns": "Certificarea autenticității se efectuează de către R.A.R pentru:\n\n• vehiculele rutiere utilizate care sunt sau au fost ultima dată înmatriculate într-un alt stat și care se supun omologării și/sau eliberării CIV în vederea înmatriculării în România;\n\n• vehiculele rutiere utilizate care nu sunt supuse înmatriculării în țara de proveniență și care se supun omologării și/sau eliberării CIV în vederea înmatriculării în România;\n\n• orice vehicul rutier, la cerere.\n\nÎntrebarea 116 din 134" }, { "nr": 116, "tema": "Siguranță rutieră", "intrebare": "Precizați minim două condiții care trebuie verificate de către operatorul de transport, după încărcarea mărfii, înainte de plecarea în cursă.", "raspuns": "Să se asigure în prealabil că vehiculul rutier cu care se efectuează transportul respectă următoarele condiții:\n\n• ușile laterale sau/și ușile din spatele vehiculului pentru încărcarea/descărcarea mărfurilor, obloanele, rampa escamotabilă, prelatele, roata de rezervă, cât și celelalte echipamente specifice vehiculului respectiv sunt bine fixate;\n\n• încărcătura nu trebuie să împiedice conducerea vehiculului în condiții de siguranță;\n\n• centrul de greutate al încărcăturii să fie cât mai aproape de centrul vehiculului rutier.\n\nSă efectueze transportul numai după ce s-a asigurat că ambalajul mărfii este destul de rezistent pentru siguranța transportului. În cazul în care ambalajul mărfii nu este destul de rezistent, va cere expeditorului o ambalare suplimentară suficient de rezistentă.\n\nÎntrebarea 117 din 134" }, { "nr": 117, "tema": "Siguranță rutieră", "intrebare": "Ce obligație au operatorii de transport rutier în ceea ce privește condițiile pe care trebuie să le îndeplinească elementele de fixare a mărfii? (Pentru un răspuns corect precizați minim trei condiții).", "raspuns": "Să se asigure că elementele de fixare a mărfii respectă următoarele condiții:\n\n• îndeplinesc corect funcțiile pentru care au fost construite;\n\n• sunt adaptate pentru fixarea mărfii respective;\n\n• nu prezintă noduri și/sau elemente deteriorate, uzate, slăbite;\n\n• sunt conforme cu standardele europene și/sau internaționale în vigoare în domeniu.\n\nÎntrebarea 118 din 134" }, { "nr": 118, "tema": "Siguranță rutieră", "intrebare": "Care este vârsta minimă pentru a conduce un autovehicul categoria C1E? (sau CE, sau D1E, sau DE)?", "raspuns": "Vârsta minimă pentru obținerea permisului de conducere este:\n\n• 18 ani împliniți, pentru categoriile C1, C1E și Tr;\n\n• 21 de ani, pentru categoriile C și CE (prin excepție, începând cu 2 februarie 2023, aceste categorii pot fi obținute și de la vârsta de 18 ani, în anumite condiții);\n\n• 21 de ani, pentru categoriile D1 și D1E;\n\n• 24 de ani, pentru categoriile D și DE (prin excepție, începând cu 2 februarie 2023, aceste categorii pot fi obținute și de la vârsta de 21 de ani, în anumite condiții);\n\n• 24 de ani, pentru categoriile Tb și Tv.\n\nÎntrebarea 119 din 134" }, { "nr": 119, "tema": "Siguranță rutieră", "intrebare": "Pentru a exercita ocupația de conducător auto, acesta trebuie să dețină un certificat de pregătire profesională. Enumerați minim cinci tipuri de certificate de pregătire profesională pentru conducătorii auto?", "raspuns": "• certificatul de calificare profesională inițială, CPI, transport marfă;\n\n• certificatul de calificare profesională inițială, CPI, transport persoane;\n\n• certificatul de calificare profesională continuă, CPC, transport marfă;\n\n• certificatul de calificare profesională continuă, CPC, transport persoane;\n\n• certificat A.D.R. (curs de bază, specializarea cisternă, specializarea clasa 1 și specializarea clasa 7);\n\n• certificat pentru transport cu troleibuzul;\n\n• certificat pentru transport de vehicule avariate.\n\nÎntrebarea 120 din 134" }, { "nr": 120, "tema": "Siguranță rutieră", "intrebare": "Când este obligatorie examinare medicală și psihologică a conducătorilor auto? (Pentru un răspuns corect precizați și periodicitatea acestor examinări, în cazul transporturilor rutiere).", "raspuns": "Examinarea medicală și psihologică este obligatorie pentru funcțiile cu atribuții în siguranța transporturilor (inclusiv conducătorii auto) și se efectuează pentru:\n\n• admiterea în unitățile de pregătire (calificare) pentru funcții cu atribuții în siguranța transporturilor;\n\n• angajarea într-o funcție cu atribuții în siguranța transporturilor;\n\n• examinarea periodică a personalului cu atribuții în siguranța transporturilor;\n\n• schimbarea funcției cu atribuții în siguranța transporturilor în cazul în care baremul medical și/sau psihologic este superior față de cel stabilit pentru funcția deținută anterior;\n\n• controlul medical și psihologic la termenele de revizuire stabilite de comisiile medicale și psihologice în siguranța transporturilor pentru personalul care a avut aviz restrictiv.\n\nPentru transportul rutier la grupa de vârstă 18 – 65 ani se vor efectua controlul medical periodic și controlul psihologic la interval de 1 an.\n\nÎntrebarea 121 din 134" }, { "nr": 121, "tema": "Siguranță rutieră", "intrebare": "Precizați ce verificări se impun a se efectua în ceea ce privește echipamentul minimal de siguranță.", "raspuns": "Se verifică dacă echipamentul minimal de siguranță conține cel puțin următoarele: extinctor, trusă medicală, triunghiuri reflectorizante, vestă reflectorizantă, cale de blocare a roților, lanternă portabilă și se găsesc la bordul vehiculului, într-un loc accesibil și cunoscut de conducătorul auto.\n\nReferitor la stingătoarele de incendiu, acestea trebuie verificate periodic de către persoane autorizate, de asemenea trebuie reîncărcate după fiecare utilizare.\n\nReferitor la trusele medicale, acestea au un termen de valabilitate limitat și trebuie înlocuite sau completate periodic.\n\nÎntrebarea 122 din 134" }, { "nr": 122, "tema": "Siguranță rutieră", "intrebare": "Precizați ce verificări se impun a se efectua în ceea ce privește conducerea preventivă, înainte de plecarea în cursă, de către conducătorul auto?", "raspuns": "Se impun următoarele verificări:\n\n• sistemul de iluminare-semnalizare: să funcționeze și să fie curat;\n\n• starea anvelopelor: gradul de uzură, presiunea, integritatea fizică (gâlme, tăieturi, rupturi);\n\n• sistemul de frânare: nivelul lichidului de frână, starea furtunelor, eficacitate;\n\n• compartimentul motor: nivelul uleiului, al lichidului de răcire, lichidul de spălat parbrizul;\n\n• caroserie: să nu lipsească elemente de caroserie, toate lăzile de depozitare să fie închise și blocate, ușile compartimentului pentru marfă să fie închise.\n\nÎntrebarea 123 din 134" }, { "nr": 123, "tema": "Siguranță rutieră", "intrebare": "În situația unui accident cu victime, precizați care ar fi procedurile de conduită pe care trebuie să le urmeze un conducător auto, angajat al operatorului de transport rutier, în vederea acordării primului ajutor?", "raspuns": "• Evitarea expunerii la risc, protecția personală și a celorlalți participanți la trafic, delimitarea zonei și alertarea autorităților.\n\n• scoaterea victimei din vehicul prin ridicare\n\n• eliberarea căilor respiratorii, asigurarea funcției respiratorie, oprirea hemoragiilor, imobilizarea fracturilor, dezinfectarea rănilor\n\n• transportul victimei la spital dacă nu există altă posibilitate de transport.\n\nÎntrebarea 124 din 134" }, { "nr": 124, "tema": "Siguranță rutieră", "intrebare": "Ce trebuie avut în vedere în ceea ce privește cercetarea conducătorului auto implicat în accident?", "raspuns": "Pentru conducătorul auto se verifică:\n\n• permisul de conducere și cartea de identitate;\n\n• certificatele de pregătire profesională;\n\n• avize medicale și psihologice;\n\n• calitatea de angajat al operatorului de transport.\n\nÎntrebarea 125 din 134" }, { "nr": 125, "tema": "Siguranță rutieră", "intrebare": "Procesul de cercetare al unui accident rutier în care a fost implicat un conducător auto mai multe etape. Ce trebuie avut în vedere în ceea ce privește cercetarea operatorului de transport implicat în accident?", "raspuns": "Pentru operatorul de transport trebuie avut în vedere:\n\n• verificarea licenței comunitare și a copiilor conforme\n\n• verificarea ITP, a RCA și a celorlalte documente prevăzute de lege\n\n• verificarea certificatelor specifice ( de agreare, de clasificare)\n\n• verificarea documentelor de transport.\n\nÎntrebarea 126 din 134" }, { "nr": 126, "tema": "Siguranță rutieră", "intrebare": "Operatorul de transport trebuie să se asigure că pe timpul transportului este realizată arimarea mărfurilor. Ce înseamnă ancorarea directă a mărfurilor?", "raspuns": "Legarea mărfurilor prin intermediul sistemelor de fixare a încărcăturii ( chingi, lanțuri, cabluri de oțel) care se prind de punctele de ancorare (zale, cârlige, inele) de pe unitățile transportoare.\n\nÎntrebarea 127 din 134" }, { "nr": 127, "tema": "Siguranță rutieră", "intrebare": "Operatorul de transport trebuie să se asigure că pe timpul transportului este realizată arimarea mărfurilor. Explicați când se aplică ancorarea directă a mărfurilor​?", "raspuns": "Ancorarea directă se aplică când sunt permise doar mișcări reduse (controlate) ale încărcăturii și pentru a crea o forță pe direcție opusă forței de inerție.\n\nÎntrebarea 128 din 134" }, { "nr": 128, "tema": "Siguranță rutieră", "intrebare": "Operatorul de transport trebuie să se asigure că pe timpul transportului este realizată arimarea mărfurilor. Ce înseamnă ancorarea pe diagonală a mărfurilor​?", "raspuns": "Unitățile de încărcătură care au puncte de ancorare rigide pot fi asigurate cu ajutorul a patru sisteme de ancorare directe. Fiecare sistem de ancorare conectează un punct de ancorare de pe încărcătură cu un punct de ancorare de pe vehicul, aproximativ în direcția diagonalelor platformei de încărcare.\n\nÎntrebarea 129 din 134" }, { "nr": 129, "tema": "Siguranță rutieră", "intrebare": "Ce înseamnă ancorarea în paralel a mărfurilor​?", "raspuns": "Pentru conectarea celor 8 puncte de ancorare de pe vehicul cu cele 8 puncte de ancorare de pe încărcătură sunt folosite 8 sisteme de ancorare.\n\nCele 8 sisteme de ancorare sunt cuplate două câte două, în paralel, și au lungimi egale.\n\nDouă sisteme de ancorare paralele împiedică deplasarea pe direcție înspre înainte, două sisteme de ancorare paralele împiedică deplasarea pe direcție înspre înapoi, iar două sunt folosite pe partea stângă și două pe partea dreaptă.\n\nÎntrebarea 130 din 134" }, { "nr": 130, "tema": "Siguranță rutieră", "intrebare": "Ce înseamnă ancorarea cu jumătate de buclă a mărfurilor?", "raspuns": "Ancorarea cu jumătate de buclă (uneori denumită ancorarea cu buclă) este metoda cea mai folosită pentru a împiedica deplasările pe transversală a pieselor lungi de încărcătură.\n\nSunt folosite cel puțin 3 și, de preferat, 4 sisteme de ancorare.\n\nFiecare sistem de ancorare începe la un punct de ancorare din apropiere a vehiculului, trece pe sub încărcătură și trece din nou peste încărcătură, și se termină în același punct de ancorare sau într-un punct de ancorare apropiat.\n\nSe recomandă utilizarea a două sisteme de ancorare în fața încărcăturii lungi și a două sisteme de ancorare aproape de capătul acesteia.\n\nDouă sisteme de ancorare încep pe partea dreaptă, iar două încep pe partea stângă.\n\nAceste sisteme de ancorare au un efect limitat asupra împiedicării alunecării încărcăturii pe direcție longitudinală.\n\nÎntrebarea 131 din 134" }, { "nr": 131, "tema": "Siguranță rutieră", "intrebare": "Ce înseamnă ancorarea elastică a mărfurilor?", "raspuns": "Ancorarea elastică poate fi folosită pentru a împiedica deplasările (alunecare și înclinare) într-o singură direcție, adeseori pe direcția înspre înainte sau înspre înapoi.\n\nUn singur sistem de ancorare începe dintr-un punct de ancorare de pe o parte a vehiculului, trece pe lângă partea frontală/posterioară a încărcăturii și este fixat pe un punct de încărcare de pe cealaltă parte a vehiculului sau de pe partea opusă a punctului de ancorare.\n\nÎntrebarea 132 din 134" }, { "nr": 132, "tema": "Siguranță rutieră", "intrebare": "Operatorul de transport trebuie să se asigure că pe timpul transportului este realizată arimarea mărfurilor. Ce condiții trebuie să respecte elementele de fixare a mărfurilor​?", "raspuns": "Elementele de fixare a mărfii trebuie să respecte următoarele condiții:\n\n• îndeplinesc corect funcțiile pentru care au fost construite;\n\n• sunt adaptate pentru fixarea mărfii respective;\n\n• nu prezintă noduri și/sau elemente deteriorate, uzate, slăbite;\n\n• sunt conforme cu standardele europene și/sau internaționale în vigoare în domeniu.\n\nÎntrebarea 133 din 134" }, { "nr": 133, "tema": "Siguranță rutieră", "intrebare": "Ce condiții trebuie să respecte sistemul de fixare a mărfurilor?", "raspuns": "Operatorul de transport trebuie să se asigure că sistemul de fixare a încărcăturii utilizat pentru înconjurarea, fixarea sau menținerea încărcăturii pe/sau într-un vehicul este adaptat la mărimea, forma, consistența și caracteristicile încărcăturii.\n\nDe asemenea, trebuie  să se asigure că dispozitivul de fixare sau de înșurubare utilizat pentru fixarea încărcăturii este fixat în așa fel încât acesta să nu poată să fie deșurubat sau desprins.\n\nDispozitivul de înșurubare integrat utilizat pentru fixarea unei încărcături trebuie să îndeplinească următoarele condiții:\n\n• să fie proiectat și construit în scopul pentru care este folosit;\n\n• să fie utilizat și întreținut conform specificațiilor producătorului și standardelor europene și/sau internaționale în domeniu.\n\nÎntrebarea 134 din 134" }, { "nr": 134, "tema": "Siguranță rutieră", "intrebare": "La ce valoare a forțelor trebuie să reziste sistemul de fixare a mărfurilor, în funcție de accelerațiile/decelerațiile la care este supus vehiculul​?", "raspuns": "Operatorul de transport trebuie să efectueze transportul asigurând un sistem de fixare a încărcăturii astfel încât acesta să reziste la forțele exercitate atunci când vehiculul este supus la următoarele accelerații:\n\n• decelerare de 0,8 x g (accelerație gravitațională) spre față;\n\n• decelerare de 0,5 x g (accelerație gravitațională) spre spate;\n\n• accelerare de 0,5 x g (accelerație gravitațională) spre ambii pereți laterali.\n\nAtunci când asupra unui element component al sistemului de fixare se exercită o forță determinată conform celor trei puncte de mai sus, forța exercitată asupra acestui element de fixare nu poate depăși sarcina nominală pentru care acesta a fost construit." }];
+
+    // ── STATE ──
+    let filtered = [...STUDII];
+    let idx = 0;
+    let scores = {};   // nr -> 'stiut'|'nestiut'|'skip'
+    let userAnswers = {}; // nr -> string
+    let revealed = false;
+
+    // ── STORAGE ──
+    function saveState() {
+      try {
+        localStorage.setItem('mgr_scores', JSON.stringify(scores));
+        localStorage.setItem('mgr_useranswers', JSON.stringify(userAnswers));
+        localStorage.setItem('mgr_idx', idx);
+      } catch (e) { }
+    }
+    function loadState() {
+      try {
+        const s = localStorage.getItem('mgr_scores');
+        if (s) scores = JSON.parse(s);
+        const u = localStorage.getItem('mgr_useranswers');
+        if (u) userAnswers = JSON.parse(u);
+        const i = localStorage.getItem('mgr_idx');
+        if (i) idx = Math.min(parseInt(i), filtered.length - 1);
+      } catch (e) { }
+    }
+
+    // ── INIT ──
+    (function init() {
+      // Populate filter
+      const sel = document.getElementById('tema-filter');
+      const teme = [...new Set(STUDII.map(s => s.tema))];
+      teme.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t; opt.textContent = t;
+        sel.appendChild(opt);
+      });
+
+      loadState();
+      renderCard();
+      updateScoreboard();
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', e => {
+        if (document.activeElement.tagName === 'TEXTAREA') {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            if (!revealed) reveal();
+          }
+          return;
+        }
+        if (e.key === 'ArrowRight' || e.key === 'l') navigate(1);
+        if (e.key === 'ArrowLeft' || e.key === 'h') navigate(-1);
+        if (e.key === ' ') { e.preventDefault(); if (!revealed) reveal(); }
+      });
+    })();
+
+    // ── FILTER ──
+    function applyFilter() {
+      const val = document.getElementById('tema-filter').value;
+      filtered = val === 'toate' ? [...STUDII] : STUDII.filter(s => s.tema === val);
+      idx = 0;
+      renderCard();
+      updateScoreboard();
+    }
+
+    function showOnlyUnseen() {
+      filtered = STUDII.filter(s => !scores[s.nr] || scores[s.nr] === 'nestiut');
+      idx = 0;
+      document.getElementById('tema-filter').value = 'toate';
+      renderCard();
+      updateScoreboard();
+    }
+
+    function shuffleCards() {
+      filtered = filtered.sort(() => Math.random() - 0.5);
+      idx = 0;
+      renderCard();
+    }
+
+    // ── RENDER ──
+    function renderCard() {
+      const card = filtered[idx];
+      if (!card) return;
+
+      revealed = false;
+      document.getElementById('correct-wrap').style.display = 'none';
+      document.getElementById('btn-reveal').disabled = false;
+
+      // Animate
+      const el = document.getElementById('main-card');
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = 'cardIn .22s ease';
+
+      document.getElementById('card-tema').textContent = card.tema;
+      document.getElementById('card-nr').textContent = 'Nr. ' + card.nr;
+
+      // Mark badge
+      const mark = document.getElementById('card-mark');
+      const sc = scores[card.nr];
+      if (sc === 'stiut') { mark.textContent = '✅ Știut'; mark.className = 'card-mark stiut'; mark.style.display = 'inline-block'; }
+      else if (sc === 'nestiut') { mark.textContent = '❌ Neștiut'; mark.className = 'card-mark nestiut'; mark.style.display = 'inline-block'; }
+      else { mark.style.display = 'none'; }
+
+      document.getElementById('card-question').textContent = card.intrebare;
+
+      // Restore user answer if exists
+      const ua = document.getElementById('user-answer');
+      ua.value = userAnswers[card.nr] || '';
+      ua.disabled = false;
+
+      updateNav();
+    }
+
+    function reveal() {
+      const card = filtered[idx];
+      revealed = true;
+      document.getElementById('btn-reveal').disabled = true;
+      document.getElementById('user-answer').disabled = true;
+
+      // Save user answer
+      const ua = document.getElementById('user-answer').value.trim();
+      if (ua) { userAnswers[card.nr] = ua; saveState(); }
+
+      document.getElementById('correct-text').textContent = card.raspuns;
+      document.getElementById('correct-wrap').style.display = 'block';
+      document.getElementById('correct-wrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function vote(val) {
+      const card = filtered[idx];
+      scores[card.nr] = val;
+      saveState();
+      updateScoreboard();
+
+      // Auto-advance after short delay
+      setTimeout(() => {
+        if (idx < filtered.length - 1) navigate(1);
+        else renderCard(); // refresh badge on last card
+      }, 350);
+    }
+
+    function skipCard() {
+      const card = filtered[idx];
+      if (!scores[card.nr]) { scores[card.nr] = 'skip'; saveState(); updateScoreboard(); }
+      navigate(1);
+    }
+
+    function navigate(dir) {
+      idx = Math.max(0, Math.min(idx + dir, filtered.length - 1));
+      saveState();
+      renderCard();
+    }
+
+    function updateNav() {
+      const pos = idx + 1, total = filtered.length;
+      document.getElementById('nav-pos').textContent = pos + ' / ' + total;
+      document.getElementById('nav-counter-inline').textContent = pos + ' / ' + total;
+      document.getElementById('btn-prev').disabled = idx === 0;
+      document.getElementById('btn-next').disabled = idx === filtered.length - 1;
+    }
+
+    // ── SCOREBOARD ──
+    function updateScoreboard() {
+      const stiut = Object.values(scores).filter(v => v === 'stiut').length;
+      const nestiut = Object.values(scores).filter(v => v === 'nestiut').length;
+      const skip = Object.values(scores).filter(v => v === 'skip').length;
+      const parcurse = stiut + nestiut;
+      const pct = Math.round(parcurse / 134 * 100);
+
+      document.getElementById('sc-total').textContent = filtered.length;
+      document.getElementById('sc-stiut').textContent = stiut;
+      document.getElementById('sc-nestiut').textContent = nestiut;
+      document.getElementById('sc-skip').textContent = skip;
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('pct-label').textContent = pct + '%';
+
+      // Stats view
+      document.getElementById('st-total').textContent = 134;
+      document.getElementById('st-stiut').textContent = stiut;
+      document.getElementById('st-nestiut').textContent = nestiut;
+      document.getElementById('st-skip').textContent = 134 - stiut - nestiut;
+
+      // Per-tema
+      const teme = [...new Set(STUDII.map(s => s.tema))];
+      const sec = document.getElementById('tema-section');
+      sec.innerHTML = '';
+      for (const t of teme) {
+        const inTema = STUDII.filter(s => s.tema === t);
+        const stiuteT = inTema.filter(s => scores[s.nr] === 'stiut').length;
+        const pctT = Math.round(stiuteT / inTema.length * 100);
+        const row = document.createElement('div');
+        row.className = 'tema-row';
+        row.innerHTML = `
+      <div class="tema-name">${t}</div>
+      <div class="tema-bar-bg"><div class="tema-bar-fill" style="width:${pctT}%"></div></div>
+      <div class="tema-nums">${stiuteT}/${inTema.length} &nbsp;<span style="color:var(--accent)">${pctT}%</span></div>
+    `;
+        sec.appendChild(row);
+      }
+    }
+
+    // ── VIEW SWITCH ──
+    function switchView(v) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', (i === 0 && v === 'studiu') || (i === 1 && v === 'stats')));
+      document.getElementById('view-studiu').classList.toggle('hidden', v !== 'studiu');
+      document.getElementById('view-stats').style.display = v === 'stats' ? 'block' : 'none';
+      if (v === 'stats') updateScoreboard();
+    }
+
+    // ── RESET ──
+    function resetAll() {
+      if (!confirm('Ștergi tot progresul? Această acțiune nu poate fi anulată.')) return;
+      scores = {}; userAnswers = {};
+      localStorage.removeItem('mgr_scores');
+      localStorage.removeItem('mgr_useranswers');
+      localStorage.removeItem('mgr_idx');
+      idx = 0;
+      filtered = [...STUDII];
+      renderCard();
+      updateScoreboard();
+    }
+  </script>
+</body>
+
+</html>

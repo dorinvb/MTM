@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Studii de caz - Audio | Manager Transport Mărfuri</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            color: #1a2c3e;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e8b13b;
+        }
+
+        .logo-icon {
+            background: #e8b13b;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 22px;
+            color: #0a2540;
+            margin: 0 auto 10px;
+            font-family: 'Sora', sans-serif;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0a2540;
+        }
+
+        h1 span {
+            color: #e8b13b;
+        }
+
+        .sub {
+            color: #5a7d9a;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .player-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .player-item {
+            background: #fff;
+            border-radius: 1rem;
+            border: 1px solid #dce5ec;
+            padding: 1rem;
+            transition: all 0.2s;
+        }
+
+        .player-item:hover {
+            border-color: #e8b13b;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .track-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .track-nr {
+            background: #0a2540;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .track-name {
+            color: #1a2c3e;
+        }
+
+        audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        audio:focus {
+            outline: none;
+        }
+
+        .btn-index {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0a2540;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn-index:hover {
+            background: #e8b13b;
+            color: #0a2540;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #5a7d9a;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #dce5ec;
+        }
+
+        @media(max-width:640px) {
+            .track-title {
+                font-size: 0.8rem;
+            }
+
+            .track-nr {
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <a href="index.html" class="btn-index">🏠 Înapoi la Index</a>
+
+        <div class="header">
+            <div class="logo-icon">🎧</div>
+            <h1>Studii de caz <span>Audio</span></h1>
+            <div class="sub">15 fișiere audio cu studiile de caz pe capitole</div>
+        </div>
+
+        <div class="player-list">
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">01</span><span class="track-name">CAPITOLUL 1 - Elemente
+                        de drept civil – partea 1</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 1 -Elemente de drept civil – partea 1.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">02</span><span class="track-name">CAPITOLUL 1 - Elemente
+                        de drept civil – partea 2</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 1 -Elemente de drept civil – partea 2.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">03</span><span class="track-name">CAPITOLUL 2 - Elemente
+                        de drept comercial</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 2 -Elemente de drept comercial.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">04</span><span class="track-name">CAPITOLUL 3 - Elemente
+                        de drept social – partea 1</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 3 -Elemente de drept social – partea 1.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">05</span><span class="track-name">CAPITOLUL 3 - Elemente
+                        de drept social – partea 2</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 3 -Elemente de drept social – partea 2.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">06</span><span class="track-name">CAPITOLUL 4 - Elemente
+                        de drept fiscal – partea 1</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 4 - Elemente de drept fiscal – partea 1.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">07</span><span class="track-name">CAPITOLUL 4 - Elemente
+                        de drept fiscal – partea 2</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 4 - Elemente de drept fiscal – partea 2.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">08</span><span class="track-name">CAPITOLUL 5 -
+                        Gestiunea comercială și financiară – partea 1</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 5 - Gestiunea comercială și financiară – partea 1 .mp3"
+                        type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">09</span><span class="track-name">CAPITOLUL 5 -
+                        Gestiunea comercială și financiară - partea 2</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 5 - Gestiunea comercială și financiară - partea 2 .mp3"
+                        type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">10</span><span class="track-name">CAPITOLUL 6 - Accesul
+                        la piață – partea 1</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 6 - Accesul la piață – partea 1.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">11</span><span class="track-name">CAPITOLUL 6 - Accesul
+                        la piață – partea 2</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 6 - Accesul la piață – partea 2.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">12</span><span class="track-name">CAPITOLUL 7 -
+                        Standarde tehnice și aspecte tehnice – partea 1</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 7 - Standarde tehnice și aspecte tehnice – partea 1 .mp3"
+                        type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">13</span><span class="track-name">CAPITOLUL 7 -
+                        Standarde tehnice și aspecte tehnice – partea 2</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 7 - Standarde tehnice și aspecte tehnice – partea 2 .mp3"
+                        type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">14</span><span class="track-name">CAPITOLUL 8 -
+                        Siguranță rutieră – partea 1</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 8 - Siguranță rutieră – partea 1.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+
+            <div class="player-item">
+                <div class="track-title"><span class="track-nr">15</span><span class="track-name">CAPITOLUL 8 -
+                        Siguranță rutieră – partea 2</span></div>
+                <audio controls preload="none">
+                    <source src="audio/CAPITOLUL 8 - Siguranță rutieră – partea 2.mp3" type="audio/mpeg">
+                    Browserul nu suportă elementul audio.
+                </audio>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            📁 Fișierele MP3 trebuie plasate într-un folder numit <strong>audio/</strong> în același director cu acest
+            fișier.<br>
+            🎵 Ascultă lecțiile și consolidează-ți cunoștințele pentru examenul ARR.
+        </div>
+    </div>
+
+</body>
+
+</html>

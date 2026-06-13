@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Manager Transport Mărfuri | Resurse</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Sora:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            color: #1a2c3e;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #e8b13b;
+        }
+
+        .logo-icon {
+            background: #e8b13b;
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 28px;
+            color: #0a2540;
+            margin: 0 auto 12px;
+            font-family: 'Sora', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0a2540;
+        }
+
+        h1 span {
+            color: #e8b13b;
+        }
+
+        .sub {
+            color: #5a7d9a;
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 1rem;
+            border: 1px solid #dce5ec;
+            padding: 1.3rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.15);
+            border-color: #e8b13b;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin: 8px 0 4px;
+        }
+
+        .card-desc {
+            font-size: 0.75rem;
+            color: #5a7d9a;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #eef2f5;
+            border-radius: 40px;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #5a7d9a;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #dce5ec;
+        }
+
+        @media(max-width:640px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .logo-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-icon">MT</div>
+            <h1>Manager Transport <span>Mărfuri</span></h1>
+            <div class="sub">Resurse complete pentru pregătirea examenului ARR</div>
+        </div>
+
+        <div class="grid">
+            <a href="1.Rezumat_curs_manager_transport_marfa.html" class="card" target="_blank">
+                <div class="card-icon">📖</div>
+                <div class="card-title">Rezumat curs</div>
+                <div class="card-desc">Rezumat complet al cursului, structurat pe capitole, cu informații esențiale și
+                    tabele sinoptice.</div>
+                <span class="badge">📄 1 fișier</span>
+            </a>
+
+            <a href="2.Studiu_studii_de_caz.html" class="card" target="_blank">
+                <div class="card-icon">⚖️</div>
+                <div class="card-title">Studii de caz</div>
+                <div class="card-desc">134 studii de caz pe capitole: drept civil, comercial, social, fiscal, gestiune,
+                    acces la piață, standarde tehnice, siguranță rutieră.</div>
+                <span class="badge">📄 1 fișier</span>
+            </a>
+
+            <a href="3.Chestionare_intrebari.html" class="card" target="_blank">
+                <div class="card-icon">✏️</div>
+                <div class="card-title">Chestionare / Întrebări</div>
+                <div class="card-desc">373 întrebări grilă oficiale ARR. 3 moduri: Citire, Examen, Flashcard. Progres
+                    salvat automat.</div>
+                <span class="badge">📄 1 fișier</span>
+            </a>
+
+            <a href="4.Practica_studii_de_caz.html" class="card" target="_blank">
+                <div class="card-icon">🃏</div>
+                <div class="card-title">Practică / Studii de caz</div>
+                <div class="card-desc">Aceleași 134 studii de caz în format interactiv. Scrie răspunsul, vezi soluția
+                    corectă, marchează dacă știai.</div>
+                <span class="badge">📄 1 fișier</span>
+            </a>
+
+            <a href="5.Curs_manager_transport_marfa.html" class="card" target="_blank">
+                <div class="card-icon">📚</div>
+                <div class="card-title">Curs complet</div>
+                <div class="card-desc">Cursul original, structurat pe capitole, cuprinde toată materia necesară pentru
+                    examenul de manager transport.</div>
+                <span class="badge">📄 1 fișier</span>
+            </a>
+
+            <a href="6.CMR_Scrisoare_de_Transport.html" class="card" target="_blank">
+                <div class="card-icon">📄</div>
+                <div class="card-title">CMR - Scrisoare de transport</div>
+                <div class="card-desc">Documentație și modele privind scrisoarea de transport CMR, utilizată în
+                    transportul internațional de mărfuri.</div>
+                <span class="badge">📄 1 fișier</span>
+            </a>
+
+            <a href="7.Studii_de_caz_audio.html" class="card" target="_blank">
+                <div class="card-icon">🎧</div>
+                <div class="card-title">Studii de caz - Audio</div>
+                <div class="card-desc">15 fișiere audio cu studiile de caz pe capitole. Ascultă și învață pe drum sau în
+                    timpul liber.</div>
+                <span class="badge">🎵 15 fișiere MP3</span>
+            </a>
+        </div>
+
+        <div class="sub" style="text-align:center;margin-top:0.5rem;">
+            💡 Toate fișierele sunt independente și funcționează offline.<br>
+            🔄 Progresul tău (scoruri, flashcarduri) se salvează automat în browser.
+        </div>
+
+        <footer>
+            Platformă de învățare pentru certificarea Manager Transport Mărfuri · ARR
+        </footer>
+    </div>
+</body>
+
+</html>
